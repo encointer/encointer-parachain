@@ -123,8 +123,19 @@ pub fn staging_test_net(id: ParaId) -> ChainSpec {
 	)
 }
 
-pub fn rococo_test_net(id: ParaId, root: Option<AccountId>) -> ChainSpec {
-	let root_key = root.unwrap_or_else(|| get_account_id_from_seed::<sr25519::Public>("Alice"));
+pub fn rococo_test_net(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
+	// encointer_root
+	let mut root_account: AccountId =  hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
+	let mut endowed_accounts = vec![root_account.clone()];
+
+	if use_well_known_keys {
+		root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
+		endowed_accounts = vec![
+			get_account_id_from_seed::<sr25519::Public>("Alice"),
+			get_account_id_from_seed::<sr25519::Public>("Bob"),
+			get_account_id_from_seed::<sr25519::Public>("Charlie"),
+		];
+	}
 
 	ChainSpec::from_genesis(
 		"Encointer Rococo",
@@ -132,10 +143,8 @@ pub fn rococo_test_net(id: ParaId, root: Option<AccountId>) -> ChainSpec {
 		ChainType::Live,
 		move || {
 			testnet_genesis(
-				root_key.clone(),
-				vec![
-					root_key.clone(),
-				],
+				root_account.clone(),
+				endowed_accounts.clone(),
 				id,
 			)
 		},

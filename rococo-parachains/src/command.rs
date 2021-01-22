@@ -20,7 +20,6 @@ use crate::{
 };
 use codec::Encode;
 use cumulus_primitives::{genesis::generate_genesis_block, ParaId};
-use hex_literal::hex;
 use log::info;
 use parachain_runtime::Block;
 use polkadot_parachain::primitives::AccountIdConversion;
@@ -42,14 +41,8 @@ fn load_spec(
 ) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
 	match id {
 		"staging" => Ok(Box::new(chain_spec::staging_test_net(para_id))),
-		"encointer-rococo" => Ok(Box::new(chain_spec::rococo_test_net(
-            para_id,
-            Some(hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into()),
-		))),
-		"encointer-rococo-alice" => Ok(Box::new(chain_spec::rococo_test_net(
-            para_id,
-            None
-        ))),
+		"encointer-rococo" => Ok(Box::new(chain_spec::rococo_test_net(para_id, false))),
+		"encointer-rococo-well-known-keys" => Ok(Box::new(chain_spec::rococo_test_net(para_id, true))),
 		"tick" => Ok(Box::new(chain_spec::ChainSpec::from_json_bytes(
 			&include_bytes!("../res/tick.json")[..],
 		)?)),
