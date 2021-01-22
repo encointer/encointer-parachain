@@ -123,7 +123,8 @@ pub fn staging_test_net(id: ParaId) -> ChainSpec {
 	)
 }
 
-pub fn rococo_test_net(id: ParaId) -> ChainSpec {
+pub fn rococo_test_net(id: ParaId, root: Option<AccountId>) -> ChainSpec {
+	let root_key = root.unwrap_or_else(|| get_account_id_from_seed::<sr25519::Public>("Alice"));
 
 	ChainSpec::from_genesis(
 		"Encointer Rococo",
@@ -131,9 +132,9 @@ pub fn rococo_test_net(id: ParaId) -> ChainSpec {
 		ChainType::Live,
 		move || {
 			testnet_genesis(
-				hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into(),
+				root_key.clone(),
 				vec![
-					hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into(),
+					root_key.clone(),
 				],
 				id,
 			)
