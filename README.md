@@ -32,10 +32,10 @@ cargo build --release
 
 # Export genesis state
 # --parachain-id 1862 as an example that can be chosen freely. Make sure to everywhere use the same parachain id
-./target/release/encointer-collator export-genesis-state --chain encointer-rococo --parachain-id 1862 > genesis-state
+./target/release/encointer-collator export-genesis-state --chain encointer-local --parachain-id 1862 > encointer-local-genesis.state
 
 # Export genesis wasm
-./target/release/encointer-collator export-genesis-wasm --chain encointer-rococo > genesis-wasm
+./target/release/encointer-collator export-genesis-wasm --chain encointer-local > encointer-local-genesis.wasm
 
 # Collator
 ./target/release/encointer-collator --collator --tmp --parachain-id 1862 --chain encointer-rococo --port 40335 --ws-port 9946 -- --execution wasm --chain ../polkadot/rococo-local-cfde-real-overseer.json --port 30337 --ws-port 9981
@@ -47,6 +47,31 @@ Go to [Polkadot Apps](https://polkadot.js.org/apps/) connect to the default loca
 **Note:** Change the `ParaId` to 1862 when registering the parachain.
 
 ![image](https://user-images.githubusercontent.com/2915325/99548884-1be13580-2987-11eb-9a8b-20be658d34f9.png)
+
+
+### Test Encointer Client
+```bash
+git clone https://github.com/encointer/encointer-node.git
+cargo build --release
+./target/release/encointer-client-notee -p 9946 get-phase
+# should print the phase
+./target/release/encointer-client-notee -p 9946 next-phase
+# should progress phase
+```
+
+### Deploy on rococo
+
+Prepare genesis state and wasm as follows:
+
+```bash
+# Export genesis state
+# --parachain-id 1862 as an example that can be chosen freely. Make sure to everywhere use the same parachain id
+./target/release/encointer-collator export-genesis-state --chain encointer-rococo --parachain-id 1862 > encointer-rococo-genesis.state
+
+# Export genesis wasm
+./target/release/encointer-collator export-genesis-wasm --chain encointer-rococo > encointer-rococo-genesis.wasm
+
+```
 
 ### Caveats
 * Don't forget to enable file upload if you perform drag and drop for the `genesisHead` and `validationCode`. If it is not enabled, Polkadot-js will interpret the path as a string and won't complain but the registration will fail.
