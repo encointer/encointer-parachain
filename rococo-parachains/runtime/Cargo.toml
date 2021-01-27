@@ -1,7 +1,10 @@
 [package]
 name = 'encointer-parachain-runtime'
-version = '0.1.0'
-authors = ["Parity Technologies <admin@parity.io>"]
+# minor revision must match node/client
+# patch revision must match runtime spec_version
+version = '0.2.5'
+authors = ["Encointer <info@encointer.org>"]
+license = "GPL-3.0"
 edition = '2018'
 
 [dependencies.encointer-scheduler]
