@@ -38,7 +38,7 @@ cargo build --release
 ./target/release/encointer-collator export-genesis-wasm --chain encointer-local > encointer-local-genesis.wasm
 
 # Collator
-./target/release/encointer-collator --collator --tmp --parachain-id 1862 --chain encointer-rococo --port 40335 --ws-port 9946 -- --execution wasm --chain ../polkadot/rococo-local-cfde-real-overseer.json --port 30337 --ws-port 9981
+./target/release/encointer-collator --collator --tmp --parachain-id 1862 --chain encointer-local --port 40335 --ws-port 9946 -- --execution wasm --chain ../polkadot/rococo-local-cfde-real-overseer.json --port 30337 --ws-port 9981
 ```
 
 ### Register the Parachain
@@ -77,6 +77,7 @@ Prepare genesis state and wasm as follows:
 * Don't forget to enable file upload if you perform drag and drop for the `genesisHead` and `validationCode`. If it is not enabled, Polkadot-js will interpret the path as a string and won't complain but the registration will fail.
 * Don't forget to add the argument `--chain encointer-rococo` for the custom chain config. This argument is omitted in the [Cumulus Workshop](https://substrate.dev/cumulus-workshop/).
 * The relay chain and the collator need to be about equally recent. This might require frequent rebasing of this repository on the `rococo-v1` branch.
+* Sanity check: The genesis state is printed when starting the collator. Make sure it matches the one from the `genesis.state` file.
 
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
