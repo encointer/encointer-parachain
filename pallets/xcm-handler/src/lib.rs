@@ -116,10 +116,20 @@ impl<T: Config> DownwardMessageHandler for Module<T> {
 	}
 }
 
+const LOG: &str = "encointer";
+
 impl<T: Config> HrmpMessageHandler for Module<T> {
 	fn handle_hrmp_message(sender: ParaId, msg: InboundHrmpMessage) {
+		frame_support::debug::RuntimeLogger::init();
 		let hash = msg.using_encoded(T::Hashing::hash);
 		frame_support::debug::print!("Processing HRMP XCM: {:?}", &hash);
+		frame_support::debug::debug!(
+			target: LOG,
+			"Received HRMP XCM, msg from: {:?}",
+			u32::from(sender)
+		);
+		frame_support::debug::debug!(target: LOG, "Received HRMP XCM, msg data: {:?}", &msg.data);
+		frame_support::debug::debug!(target: LOG, "Received HRMP XCM, hash: {:?}", &hash);
 		match VersionedXcm::decode(&mut &msg.data[..]).map(Xcm::try_from) {
 			Ok(Ok(xcm)) => {
 				let location = (
@@ -140,6 +150,8 @@ impl<T: Config> HrmpMessageHandler for Module<T> {
 impl<T: Config> SendXcm for Module<T> {
 	fn send_xcm(dest: MultiLocation, msg: Xcm) -> Result<(), XcmError> {
 		let msg: VersionedXcm = msg.into();
+		frame_support::debug::RuntimeLogger::init();
+		frame_support::debug::debug!(target: LOG, "Sending XCM: {:?}", msg);
 		match dest.first() {
 			// A message for us. Execute directly.
 			None => {
