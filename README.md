@@ -105,6 +105,7 @@ encointer-collator \
 # We need to build it from source. The one from the yarn registry does not work with our code.
 git clone https://github.com/paritytech/polkadot-launch
 cd plolkadot-launch
+yarn install
 yarn build
 
 # In the root directory of this repository simply execute
