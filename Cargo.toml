@@ -29,7 +29,7 @@ pallet-encointer-balances = { path = "../pallets/balances" }
 pallet-encointer-scheduler = { path = "../pallets/scheduler" }
 pallet-encointer-bazaar = { path = "../pallets/bazaar" }
 encointer-primitives = { path = "../pallets/primitives" }
-#pallet-encointer-sybil-gate = { path = "../pallets/sybil/gate" }
-#pallet-encointer-sybil-proof-issuer = { path = "../pallets/sybil/proof-issuer" }
+pallet-encointer-sybil-gate = { path = "../pallets/sybil/gate" }
+pallet-encointer-sybil-proof-issuer = { path = "../pallets/sybil/proof-issuer" }
 #[patch."https://github.com/scs/pallet-substratee-registry.git"]
 #pallet-substratee-registry = { path = "../pallet-substratee-registry" }
