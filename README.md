@@ -79,6 +79,27 @@ Prepare genesis state and wasm as follows:
 * The relay chain and the collator need to be about equally recent. This might require frequent rebasing of this repository on the `rococo-v1` branch.
 * Sanity check: The genesis state is printed when starting the collator. Make sure it matches the one from the `genesis.state` file.
 
+### Setup local testnet with polkadot-launch
+[polkadot-launch](https://github.com/paritytech/polkadot-launch) lets you easily setup a local testnet. The following procedure will setup a local testnet with three relay chain nodes and two encointer parachains. It will also setup up a XCM (cross chain messaging) channel between the two chains.
+
+**Note:** XCM is still a WIP here.
+
+**Note 2:** The `polkadot-launch-config.json` and the commands below assume that the polkadot-launch directory is on the same level as this repo's directory.
+
+**Preliminaries:** you need to have yarn and node installed
+
+```bash
+# We need to build it from source. The one from the yarn registry does not work with our code.
+git clone https://github.com/paritytech/polkadot-launch
+cd plolkadot-launch
+yarn build
+
+# In the root directory of this repository simply execute
+node ../polkadot-launch/dist/index.js polkadot-launch-config.json
+```
+
+This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`, `charlie.log`, which are the logs of the relay chain nodes and `1862.log`, `1863.log`, which are the logs of the two parachains. 
+
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
 * Parachains on Rococo in the [Polkadot Wiki](https://wiki.polkadot.network/docs/en/build-parachains-rococo#rococo-v1-parachain-requirements)
