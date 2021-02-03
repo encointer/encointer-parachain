@@ -43,6 +43,18 @@ git = "https://github.com/encointer/pallets"
 branch = "rococo"
 package = "encointer-primitives"
 
+[dependencies.encointer-sybil-proof-issuer]
+default-features = false
+git = "https://github.com/encointer/pallets"
+branch = "rococo"
+package = "pallet-encointer-sybil-proof-issuer"
+
+[dependencies.encointer-sybil-gate]
+default-features = false
+git = "https://github.com/encointer/pallets"
+branch = "rococo"
+package = "pallet-encointer-sybil-gate"
+
 [dependencies.fixed]
 default-features = false
 git = "https://github.com/encointer/substrate-fixed"
@@ -130,5 +142,7 @@ std = [
 	"encointer-communities/std",
 	"encointer-bazaar/std",
 	"encointer-primitives/std",
-    "fixed/std"    	
+	"encointer-sybil-proof-issuer/std",
+	"encointer-sybil-gate/std",
+    "fixed/std"
 ]
