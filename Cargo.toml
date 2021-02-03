@@ -19,3 +19,16 @@ members = [
 
 [profile.release]
 panic = "unwind"
+
+#only while debugging/developping
+#[patch."https://github.com/encointer/pallets"]
+#pallet-encointer-ceremonies = { path = "../pallets/ceremonies" }
+#pallet-encointer-communities = { path = "../pallets/communities" }
+#pallet-encointer-balances = { path = "../pallets/balances" }
+#pallet-encointer-scheduler = { path = "../pallets/scheduler" }
+#pallet-encointer-bazaar = { path = "../pallets/bazaar" }
+#encointer-primitives = { path = "../pallets/primitives" }
+#pallet-encointer-sybil-gate = { path = "../pallets/sybil/gate" }
+#pallet-encointer-sybil-proof-issuer = { path = "../pallets/sybil/proof-issuer" }
+#[patch."https://github.com/scs/pallet-substratee-registry.git"]
+#pallet-substratee-registry = { path = "../pallet-substratee-registry" }
