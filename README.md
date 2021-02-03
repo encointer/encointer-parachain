@@ -72,6 +72,19 @@ Prepare genesis state and wasm as follows:
 ./target/release/encointer-collator export-genesis-wasm --chain encointer-rococo > encointer-rococo-genesis.wasm
 
 ```
+then propose the parachain on rococo relay-chain
+
+run collator
+```
+encointer-collator \
+        --collator \
+        --chain encointer-rococo \
+        --parachain-id 1862 \
+        --rpc-cors all \
+        --name encointer-rococo-collator-1 \
+        -- --execution wasm --chain rococo 
+
+```
 
 ### Caveats
 * Don't forget to enable file upload if you perform drag and drop for the `genesisHead` and `validationCode`. If it is not enabled, Polkadot-js will interpret the path as a string and won't complain but the registration will fail.
