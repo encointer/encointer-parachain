@@ -29,15 +29,13 @@ use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT, Verify},
 	transaction_validity::{TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult,
-	MultiSignature
+	ApplyExtrinsicResult, MultiSignature,
 };
 use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
-// A few exports that help ease life for downstream crates.
 pub use frame_support::{
 	construct_runtime, parameter_types,
 	traits::Randomness,
@@ -50,14 +48,16 @@ pub use frame_support::{
 use frame_system::limits::{BlockLength, BlockWeights};
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
-pub use encointer_scheduler::Call as EncointerSchedulerCall;
-pub use encointer_ceremonies::Call as EncointerCeremoniesCall;
-pub use encointer_currencies::Call as EncointerCurrenciesCall;
+
+// A few exports that help ease life for downstream crates.
 pub use encointer_balances::Call as EncointerBalancesCall;
 pub use encointer_bazaar::Call as EncointerBazaarCall;
+pub use encointer_ceremonies::Call as EncointerCeremoniesCall;
+pub use encointer_communities::Call as EncointerCommunitiesCall;
+pub use encointer_scheduler::Call as EncointerSchedulerCall;
 
-pub use encointer_scheduler::CeremonyPhaseType;
-pub use encointer_balances::{BalanceType, BalanceEntry};
+pub use encointer_primitives::balances::{BalanceEntry, BalanceType};
+pub use encointer_primitives::scheduler::CeremonyPhaseType;
 
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
@@ -320,18 +320,20 @@ impl encointer_ceremonies::Config for Runtime {
 	type Signature = MultiSignature;
 }
 
-impl encointer_currencies::Config for Runtime {
+impl encointer_communities::Config for Runtime {
 	type Event = Event;
 }
 
 impl encointer_balances::Config for Runtime {
-	type Event = Event; 
+	type Event = Event;
 }
 
 impl encointer_bazaar::Config for Runtime {
-	type Event = Event; 
+	type Event = Event;
 }
 
+/// The address format for describing accounts.
+pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
 
 construct_runtime! {
 	pub enum Runtime where
@@ -350,14 +352,11 @@ construct_runtime! {
 		XcmHandler: cumulus_pallet_xcm_handler::{Module, Call, Event<T>, Origin},
 		EncointerScheduler: encointer_scheduler::{Module, Call, Storage, Config<T>, Event},
 		EncointerCeremonies: encointer_ceremonies::{Module, Call, Storage, Config<T>, Event<T>},
-		EncointerCurrencies: encointer_currencies::{Module, Call, Storage, Config<T>, Event<T>},
-		EncointerBalances: encointer_balances::{Module, Call, Storage, Event<T>},	
-		EncointerBazaar: encointer_bazaar::{Module, Call, Storage, Event<T>},			
+		EncointerCommunities: encointer_communities::{Module, Call, Storage, Config<T>, Event<T>},
+		EncointerBalances: encointer_balances::{Module, Call, Storage, Event<T>},
+		EncointerBazaar: encointer_bazaar::{Module, Call, Storage, Event<T>},
 	}
 }
-
-/// The address format for describing accounts.
-pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
 /// Block header type as expected by this runtime.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type as expected by this runtime.

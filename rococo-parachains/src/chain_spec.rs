@@ -16,15 +16,16 @@
 
 use cumulus_primitives_core::ParaId;
 use hex_literal::hex;
+use parachain_runtime::{
+	BalanceType, CeremonyPhaseType, EncointerCeremoniesConfig, EncointerCommunitiesConfig,
+	EncointerSchedulerConfig,
+};
 use rococo_parachain_primitives::{AccountId, Signature};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
-use parachain_runtime::{CeremonyPhaseType, BalanceType,
-	EncointerCeremoniesConfig, EncointerCurrenciesConfig, EncointerSchedulerConfig,
-};
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec = sc_service::GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
 
@@ -125,7 +126,8 @@ pub fn staging_test_net(id: ParaId) -> ChainSpec {
 
 pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 	// encointer_root
-	let mut root_account: AccountId =  hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
+	let mut root_account: AccountId =
+		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
 	let mut endowed_accounts = vec![root_account.clone()];
 	let mut chain_type = ChainType::Live;
 
@@ -143,25 +145,23 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 		"Encointer PC1",
 		"encointer-rococo-v1",
 		chain_type,
-		move || {
-			testnet_genesis(
-				root_account.clone(),
-				endowed_accounts.clone(),
-				id,
-			)
-		},
+		move || testnet_genesis(root_account.clone(), endowed_accounts.clone(), id),
 		Vec::new(),
 		// telemetry endpoints
-		None, 
+		None,
 		// protocol id
 		Some("encointer-rococo-v1"),
 		// properties
-		Some(serde_json::from_str(
-		r#"{
+		Some(
+			serde_json::from_str(
+				r#"{
 			"ss58Format": 42,
 			"tokenDecimals": 12,
 			"tokenSymbol": "ERT"
-		  }"#).unwrap()),
+		  }"#,
+			)
+			.unwrap(),
+		),
 		Extensions {
 			relay_chain: "rococo".into(),
 			para_id: id.into(),
@@ -188,25 +188,27 @@ fn testnet_genesis(
 				.map(|k| (k, 1 << 60))
 				.collect(),
 		}),
-		pallet_sudo: Some(parachain_runtime::SudoConfig { key: root_key.clone() }),
+		pallet_sudo: Some(parachain_runtime::SudoConfig {
+			key: root_key.clone(),
+		}),
 		parachain_info: Some(parachain_runtime::ParachainInfoConfig { parachain_id: id }),
-	    encointer_scheduler: Some(EncointerSchedulerConfig {
-            current_phase: CeremonyPhaseType::REGISTERING,
+		encointer_scheduler: Some(EncointerSchedulerConfig {
+			current_phase: CeremonyPhaseType::REGISTERING,
 			current_ceremony_index: 1,
 			ceremony_master: root_key.clone(),
 			phase_durations: vec![
-                (CeremonyPhaseType::REGISTERING, 600_000),
-                (CeremonyPhaseType::ASSIGNING, 600_000),
-                (CeremonyPhaseType::ATTESTING, 600_000),
-            ],
+				(CeremonyPhaseType::REGISTERING, 600_000),
+				(CeremonyPhaseType::ASSIGNING, 600_000),
+				(CeremonyPhaseType::ATTESTING, 600_000),
+			],
 		}),
 		encointer_ceremonies: Some(EncointerCeremoniesConfig {
 			ceremony_reward: BalanceType::from_num(1),
-			time_tolerance: 600_000, // +-10min
-			location_tolerance: 1_000, // [m] 
+			time_tolerance: 600_000,   // +-10min
+			location_tolerance: 1_000, // [m]
 		}),
-		encointer_currencies: Some(EncointerCurrenciesConfig {
-            currency_master: root_key,
-        }),
+		encointer_communities: Some(EncointerCommunitiesConfig {
+			community_master: root_key,
+		}),
 	}
 }

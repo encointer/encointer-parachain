@@ -19,11 +19,11 @@ git = "https://github.com/encointer/pallets"
 branch = "rococo"
 package = "pallet-encointer-ceremonies"
 
-[dependencies.encointer-currencies]
+[dependencies.encointer-communities]
 default-features = false
 git = "https://github.com/encointer/pallets"
 branch = "rococo"
-package = "pallet-encointer-currencies"
+package = "pallet-encointer-communities"
 
 [dependencies.encointer-balances]
 default-features = false
@@ -36,6 +36,12 @@ default-features = false
 git = "https://github.com/encointer/pallets"
 branch = "rococo"
 package = "pallet-encointer-bazaar"
+
+[dependencies.encointer-primitives]
+default-features = false
+git = "https://github.com/encointer/pallets"
+branch = "rococo"
+package = "encointer-primitives"
 
 [dependencies.fixed]
 default-features = false
@@ -121,7 +127,8 @@ std = [
 	"encointer-scheduler/std",
 	"encointer-ceremonies/std",
 	"encointer-balances/std",
-	"encointer-currencies/std",
+	"encointer-communities/std",
 	"encointer-bazaar/std",
+	"encointer-primitives/std",
     "fixed/std"    	
 ]
