@@ -162,16 +162,7 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 		// protocol id
 		Some("encointer-rococo-v1"),
 		// properties
-		Some(
-			serde_json::from_str(
-				r#"{
-			"ss58Format": 42,
-			"tokenDecimals": 12,
-			"tokenSymbol": "ERT"
-		  }"#,
-			)
-			.unwrap(),
-		),
+		None,
 		Extensions {
 			relay_chain: "rococo".into(),
 			para_id: id.into(),
