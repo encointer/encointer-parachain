@@ -31,5 +31,21 @@ pallet-encointer-bazaar = { path = "../pallets/bazaar" }
 encointer-primitives = { path = "../pallets/primitives" }
 pallet-encointer-sybil-gate = { path = "../pallets/sybil/gate" }
 pallet-encointer-sybil-proof-issuer = { path = "../pallets/sybil/proof-issuer" }
-#[patch."https://github.com/scs/pallet-substratee-registry.git"]
-#pallet-substratee-registry = { path = "../pallet-substratee-registry" }
+
+[patch."https://github.com/paritytech/polkadot"]
+xcm = { path = "../polkadot/xcm"}
+xcm-builder = { path = "../polkadot/xcm/xcm-builder"}
+xcm-executor = { path = "../polkadot/xcm/xcm-executor"}
+polkadot-runtime = { path = "../polkadot/runtime/polkadot" }
+polkadot-statement-table = { path = "../polkadot/statement-table" }
+polkadot-overseer = { path = "../polkadot/node/overseer" }
+polkadot-node-primitives = { path = "../polkadot/node/primitives" }
+polkadot-node-subsystem = { path = "../polkadot/node/subsystem" }
+polkadot-test-client = { path = "../polkadot/node/test/client" }
+polkadot-core-primitives = { path = "../polkadot/core-primitives" }
+polkadot-cli = { path = "../polkadot/cli" }
+polkadot-test-service = { path = "../polkadot/node/test/service" }
+polkadot-parachain = { path = "../polkadot/parachain" }
+polkadot-primitives = { path = "../polkadot/primitives" }
+polkadot-service = { path = "../polkadot/node/service"  }
+polkadot-test-runtime = { path = "../polkadot/runtime/test-runtime" }
