@@ -1694,8 +1694,6 @@ dependencies = [
  "pallet-encointer-ceremonies",
  "pallet-encointer-currencies",
  "pallet-encointer-scheduler",
- "pallet-encointer-sybil-gate",
- "pallet-encointer-sybil-proof-issuer",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
  "pallet-timestamp",
@@ -4570,42 +4568,6 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "sp-timestamp",
-]
-
-[[package]]
-name = "pallet-encointer-sybil-gate"
-version = "0.3.7"
-dependencies = [
- "encointer-primitives",
- "frame-support",
- "frame-system",
- "pallet-timestamp",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "xcm",
-]
-
-[[package]]
-name = "pallet-encointer-sybil-proof-issuer"
-version = "0.3.7"
-dependencies = [
- "encointer-primitives",
- "frame-support",
- "frame-system",
- "pallet-encointer-balances",
- "pallet-encointer-ceremonies",
- "pallet-encointer-communities",
- "pallet-encointer-scheduler",
- "pallet-timestamp",
- "parity-scale-codec",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "xcm",
 ]
 
 [[package]]
