@@ -337,7 +337,6 @@ impl encointer_bazaar::Config for Runtime {
 impl encointer_sybil_proof_issuer::Config for Runtime {
 	type Event = Event;
 	type XcmSender = XcmHandler;
-	type Signature = MultiSignature;
 }
 
 impl encointer_sybil_gate::Config for Runtime {
