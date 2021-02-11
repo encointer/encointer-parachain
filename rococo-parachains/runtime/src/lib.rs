@@ -370,8 +370,8 @@ construct_runtime! {
 		EncointerCommunities: encointer_communities::{Module, Call, Storage, Config<T>, Event<T>},
 		EncointerBalances: encointer_balances::{Module, Call, Storage, Event<T>},
 		EncointerBazaar: encointer_bazaar::{Module, Call, Storage, Event<T>},
-		// Module index = 14/15 is the default. But I want to be explicit here, as we currently use
-		// a hardcoded index int the sybil gate while developing/debugging.
+		// Module index = 14/15 is the default. But I want to be explicit here, such that we know
+		// for sure, what to enter in the polkadot-ui.
 		EncointerSybilProofIssuer: encointer_sybil_proof_issuer::{Module, Call, Event<T>} = 14,
 		EncointerSybilGate: encointer_sybil_gate::{Module, Call, Storage, Event<T>} = 15,
 	}
