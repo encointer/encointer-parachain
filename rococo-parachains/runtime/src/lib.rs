@@ -342,6 +342,7 @@ impl encointer_sybil_proof_issuer::Config for Runtime {
 impl encointer_sybil_gate::Config for Runtime {
 	type Event = Event;
 	type XcmSender = XcmHandler;
+	type Currency = Balances;
 	type Public = <MultiSignature as Verify>::Signer;
 	type Signature = MultiSignature;
 }
