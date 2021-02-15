@@ -10,49 +10,49 @@ edition = '2018'
 [dependencies.encointer-scheduler]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-scheduler"
 
 [dependencies.encointer-ceremonies]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-ceremonies"
 
 [dependencies.encointer-communities]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-communities"
 
 [dependencies.encointer-balances]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-balances"
 
 [dependencies.encointer-bazaar]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-bazaar"
 
 [dependencies.encointer-primitives]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "encointer-primitives"
 
 [dependencies.encointer-personhood-oracle]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-personhood-oracle"
 
 [dependencies.encointer-sybil-gate-template]
 default-features = false
 git = "https://github.com/encointer/pallets"
-branch = "master"
+branch = "rococo3"
 package = "pallet-encointer-sybil-gate-template"
 
 [dependencies.fixed]
@@ -69,26 +69,26 @@ parachain-info = { path = "../pallets/parachain-info", default-features = false 
 rococo-parachain-primitives = { path = "../primitives", default-features = false }
 
 # Substrate dependencies
-sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-api = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-version = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-session = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-offchain = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-block-builder = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-transaction-pool = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-sp-inherents = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-api = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-version = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-session = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-offchain = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-block-builder = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-transaction-pool = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+sp-inherents = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
 
-frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-frame-executive = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-pallet-balances = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-pallet-timestamp = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-pallet-sudo = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
-pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
+frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+frame-executive = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+pallet-balances = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+pallet-timestamp = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+pallet-sudo = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
+pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "master" }
 
 # Cumulus dependencies
 cumulus-pallet-parachain-system = { path = "../../pallets/parachain-system", default-features = false }
@@ -96,10 +96,10 @@ cumulus-primitives-core = { path = "../../primitives/core", default-features = f
 cumulus-pallet-xcm-handler = { path = "../../pallets/xcm-handler", default-features = false }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-xcm-builder = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-xcm-executor = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
+polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
+xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
+xcm-builder = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
+xcm-executor = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }
 
 [build-dependencies]
 substrate-wasm-builder = "3.0.0"

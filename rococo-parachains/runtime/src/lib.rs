@@ -55,8 +55,8 @@ pub use encointer_bazaar::Call as EncointerBazaarCall;
 pub use encointer_ceremonies::Call as EncointerCeremoniesCall;
 pub use encointer_communities::Call as EncointerCommunitiesCall;
 pub use encointer_scheduler::Call as EncointerSchedulerCall;
-pub use encointer_sybil_gate::Call as EncointerSybilGateCall;
-pub use encointer_sybil_proof_issuer::Call as EncointerSybilProofIssuerCall;
+pub use encointer_sybil_gate_template::Call as EncointerSybilGateTemplateCall;
+pub use encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
 
 pub use encointer_primitives::balances::{BalanceEntry, BalanceType};
 pub use encointer_primitives::scheduler::CeremonyPhaseType;
@@ -334,12 +334,12 @@ impl encointer_bazaar::Config for Runtime {
 	type Event = Event;
 }
 
-impl encointer_sybil_proof_issuer::Config for Runtime {
+impl encointer_personhood_oracle::Config for Runtime {
 	type Event = Event;
 	type XcmSender = XcmHandler;
 }
 
-impl encointer_sybil_gate::Config for Runtime {
+impl encointer_sybil_gate_template::Config for Runtime {
 	type Event = Event;
 	type XcmSender = XcmHandler;
 	type Currency = Balances;
@@ -372,8 +372,8 @@ construct_runtime! {
 		EncointerBazaar: encointer_bazaar::{Module, Call, Storage, Event<T>},
 		// Module index = 14/15 is the default. But I want to be explicit here, such that we know
 		// for sure, what to enter in the polkadot-ui.
-		EncointerSybilProofIssuer: encointer_sybil_proof_issuer::{Module, Call, Event<T>} = 14,
-		EncointerSybilGate: encointer_sybil_gate::{Module, Call, Storage, Event<T>} = 15,
+		EncointerPersonhoodOracle: encointer_personhood_oracle::{Module, Call, Event<T>} = 14,
+		EncointerSybilGateTemplate: encointer_sybil_gate_template::{Module, Call, Storage, Event<T>} = 15,
 	}
 }
 /// Block header type as expected by this runtime.
