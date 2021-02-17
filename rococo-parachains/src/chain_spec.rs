@@ -37,7 +37,7 @@ pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Pu
 }
 
 /// Helper function to reduce boilerplate
-fn endow(accounts: Vec<AccountId>, balance: Balance) -> Vec<(AccountId, Balance)> {
+fn endow(accounts: &Vec<AccountId>, balance: Balance) -> Vec<(AccountId, Balance)> {
 	accounts.iter().cloned().map(|k| (k, balance)).collect()
 }
 
@@ -77,7 +77,7 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 			testnet_genesis(
 				get_account_id_from_seed::<sr25519::Public>("Alice"),
 				endow(
-					vec![
+					&vec![
 						get_account_id_from_seed::<sr25519::Public>("Alice"),
 						get_account_id_from_seed::<sr25519::Public>("Bob"),
 						get_account_id_from_seed::<sr25519::Public>("Charlie"),
@@ -91,7 +91,7 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 						get_account_id_from_seed::<sr25519::Public>("Eve//stash"),
 						get_account_id_from_seed::<sr25519::Public>("Ferdie//stash"),
 					],
-					(1 << 60),
+					1 << 60,
 				),
 				id,
 			)
@@ -154,7 +154,7 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 		"Encointer PC1",
 		"encointer-rococo-v1",
 		chain_type,
-		move || testnet_genesis(root_account.clone(), endow(endowed_accounts, (1 << 60)), id),
+		move || testnet_genesis(root_account.clone(), endow(&endowed_accounts, 1 << 60), id),
 		Vec::new(),
 		// telemetry endpoints
 		None,
@@ -167,6 +167,47 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 			"ss58Format": 42,
 			"tokenDecimals": 12,
 			"tokenSymbol": "ERT"
+		  }"#,
+			)
+			.unwrap(),
+		),
+		Extensions {
+			relay_chain: "rococo".into(),
+			para_id: id.into(),
+		},
+	)
+}
+
+pub fn sybil_dummy_spec(id: ParaId) -> ChainSpec {
+	let root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
+	let endowed_accounts = vec![
+		(
+			get_account_id_from_seed::<sr25519::Public>("Alice"),
+			(1 << 60),
+		),
+		(
+			get_account_id_from_seed::<sr25519::Public>("Bob"),
+			10u128.pow(12),
+		),
+	];
+
+	ChainSpec::from_genesis(
+		"Sybil Dummy",
+		"sybil-dummy-rococo-v1",
+		ChainType::Local,
+		move || testnet_genesis(root_account.clone(), endowed_accounts.clone(), id),
+		Vec::new(),
+		// telemetry endpoints
+		None,
+		// protocol id
+		Some("sybil-dummy-rococo-v1"),
+		// properties
+		Some(
+			serde_json::from_str(
+				r#"{
+			"ss58Format": 42,
+			"tokenDecimals": 12,
+			"tokenSymbol": "DUM"
 		  }"#,
 			)
 			.unwrap(),

@@ -26,7 +26,7 @@
 		},
 		{
 			"bin": "./target/release/encointer-collator",
-			"chain": "encointer-local",
+			"chain": "sybil-dummy",
 			"id": "1863",
 			"wsPort": 9955,
 			"port": 31300,
