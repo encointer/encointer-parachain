@@ -54,7 +54,7 @@ pub use encointer_balances::Call as EncointerBalancesCall;
 pub use encointer_bazaar::Call as EncointerBazaarCall;
 pub use encointer_ceremonies::Call as EncointerCeremoniesCall;
 pub use encointer_communities::Call as EncointerCommunitiesCall;
-pub use encointer_personhood_oracle::Call as EncointerPersonhoodOrcacleCall;
+pub use encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
 pub use encointer_scheduler::Call as EncointerSchedulerCall;
 pub use encointer_sybil_gate::Call as EncointerSybilGateCall;
 

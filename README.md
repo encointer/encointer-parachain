@@ -119,7 +119,7 @@ The encointer parachain also features a `sybil-gate-template`, which shows how t
 
 * Launch the network with polkadot-launch as explained in the previous section.
 * Run the `bootscript_demo_community.sh` from the encointer-node repository.
-* After the script has finished, run the following command in the encointer-node repository, which will return a hex-encoded proof of attendance for Alice: `./target/release/encointer-client-notee get-proof-of-attendances --cid 41eSfKJrhrR6CYxPfUbwAN18R77WbxXoViRWQMAF4hJB //Alice 1`
+* After the script has finished, run the following command in the encointer-node repository, which will return a hex-encoded proof of attendance for Alice: `./target/release/encointer-client-notee get-proof-of-attendance --cid 41eSfKJrhrR6CYxPfUbwAN18R77WbxXoViRWQMAF4hJB //Alice -1`
 
 This was the preliminaries. Now we head to the polkadot-ui to perform the xcm. We open three tabs in the browser with the polkadot-ui.
 
@@ -131,21 +131,105 @@ The second and third tab should be connected to port `9944` and `9955`, which ar
 
 In parachain `1863` we go to extrinsics, choose the `encointer-sybil-template` pallet and send our request to the `personhood-oracle` of the other parachain. If successful, we should see a `PersonhoodUniquenessRatingRequestSentSuccess` event in the explorer.
 
-![img_2.png](img_2.png)
+![img_2.png](docs/img_2.png)
 
 Note: `pallet_personhood_oracle_index` is the pallet's module index in the encointer-parachain runtime. It is currently hardcoded to 14.
 
 In the other tab connected to parachain `1862` we don't need to do anything, but we can observe in the explorer if the request has been handled successfully by our `personhood-oracle`.
 
-![img_3.png](img_3.png)
+![img_3.png](docs/img_3.png)
 
 Shortly after the request was handled successfully by the other parachain, we should see the following events thrown by parachain `1862`.
 
-![img_1.png](img_1.png)
+![img_1.png](docs/img_1.png)
 
 Doing the same again, will result in a failure, as each account can be funded only once.
 
-![img_4.png](img_4.png)
+![img_4.png](docs/img_4.png)
+
+# Type Extensions for Polkadot-UI
+```
+{
+  "Address": "MultiAddress",
+  "LookupSource": "MultiAddress",
+  "CeremonyPhaseType": {
+    "_enum": [
+      "Registering",
+      "Assigning",
+      "Attesting"
+    ]
+  },
+  "ShopIdentifier": "Text",
+  "ArticleIdentifier": "Text",
+  "CeremonyIndexType": "u32",
+  "ParticipantIndexType": "u64",
+  "MeetupIndexType": "u64",
+  "AttestationIndexType": "u64",
+  "CommunityIdentifier": "Hash",
+  "BalanceType": "i128",
+  "BalanceEntry": {
+    "principal": "i128",
+    "last_update": "BlockNumber"
+  },
+  "CommunityCeremony": "(CommunityIdentifier,CeremonyIndexType)",
+  "CommunityPropertiesType": {
+    "name_utf8": "Vec<u8>",
+    "demurrage_per_block": "Demurrage"
+  },
+  "Demurrage": "i128",
+  "Location": {
+    "lat": "i64",
+    "lon": "i64"
+  },
+  "Reputation": {
+    "_enum": [
+      "Unverified",
+      "UnverifiedReputable",
+      "VerifiedUnlinked",
+      "VerifiedLinked"
+    ]
+  },
+  "ClaimOfAttendance": {
+    "claimant_public": "AccountId",
+    "ceremony_index": "CeremonyIndexType",
+    "community_identifier": "CommunityIdentifier",
+    "meetup_index": "MeetupIndexType",
+    "location": "Location",
+    "timestamp": "Moment",
+    "number_of_participants_confirmed": "u32"
+  },
+  "Attestation": {
+    "claim": "ClaimOfAttendance",
+    "signature": "MultiSignature",
+    "public": "AccountId"
+  },
+  "ProofOfAttendance": {
+    "prover_public": "AccountId",
+    "ceremony_index": "CeremonyIndexType",
+    "community_identifier": "CommunityIdentifier",
+    "attendee_public": "AccountId",
+    "attendee_signature": "MultiSignature"
+  },
+  "ShardIdentifier": "Hash",
+  "Request": {
+    "shard": "ShardIdentifier",
+    "cyphertext": "Vec<u8>"
+  },
+  "Enclave": {
+    "pubkey": "AccountId",
+    "mrenclave": "Hash",
+    "timestamp": "u64",
+    "url": "Text"
+  },
+  "PersonhoodUniquenessRating": "Vec<u8>",
+  "SybilResponse": {
+    "_enum": [
+      "Unused",
+      "Faucet"
+    ]
+  }
+}
+```
 
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
