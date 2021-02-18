@@ -125,7 +125,7 @@ This was the preliminaries. Now we head to the polkadot-ui to perform the xcm. W
 
 The first one should be connected to port `9988`, which is the rococo relay chain. There we can check whether the parachains have successfully connected to the relay chain and if they are producing blocks.
 
-![img.png](img.png)
+![img.png](docs/img.png)
 
 The second and third tab should be connected to port `9944` and `9955`, which are the ports of the two parachains with `para_id` = `1862` and `1863` respectively.
 
