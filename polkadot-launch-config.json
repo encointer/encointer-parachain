@@ -17,18 +17,32 @@
 },
     "parachains": [
     {
-        "bin": "./target/release/encointer-collator",
+        "bin": "./target/release/rococo-collator",
         "id": "1862",
         "wsPort": 9988,
         "port": 31200,
-        "flags": ["-lcumulus-network=trace", "-lcumulus-collator=trace","--", "--execution=wasm", "-lcumulus-network=trace", "-lcumulus-collator=trace"]
+        "flags": [
+            "-lcumulus-network=trace",
+            "-lcumulus-collator=trace",
+            "--",
+            "--execution=wasm",
+            "-lcumulus-network=trace",
+            "-lcumulus-collator=trace"
+        ]
     },
     {
-        "bin": "./target/release/encointer-collator",
+        "bin": "./target/release/rococo-collator",
         "id": "1863",
         "wsPort": 9999,
         "port": 31300,
-        "flags": ["-lcumulus-network=trace", "-lcumulus-collator=trace","--", "--execution=wasm", "-lcumulus-network=trace", "-lcumulus-collator=trace"]
+        "flags": [
+            "-lcumulus-network=trace",
+            "-lcumulus-collator=trace",
+            "--",
+            "--execution=wasm",
+            "-lcumulus-network=trace",
+            "-lcumulus-collator=trace"
+        ]
     }
 ],
     "simpleParachains": [
