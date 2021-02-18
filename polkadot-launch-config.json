@@ -22,7 +22,7 @@
 			"id": "1862",
 			"wsPort": 9944,
 			"port": 31200,
-			"flags": ["-lencointer=debug", "--", "--execution=wasm"]
+			"flags": ["-lencointer=debug", "-lcumulus-network=trace", "-lcumulus-collator=trace","--", "--execution=wasm", "-lcumulus-network=trace", "-lcumulus-collator=trace"]
 		},
 		{
 			"bin": "./target/release/encointer-collator",
@@ -30,7 +30,7 @@
 			"id": "1863",
 			"wsPort": 9955,
 			"port": 31300,
-			"flags": ["-lencointer=debug", "--", "--execution=wasm"]
+			"flags": ["-lencointer=debug", "-lcumulus-network=trace", "-lcumulus-collator=trace","--", "--execution=wasm", "-lcumulus-network=trace", "-lcumulus-collator=trace"]
 		}
 	],
 	"simpleParachains": [
