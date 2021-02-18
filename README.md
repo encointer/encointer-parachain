@@ -1,3 +1,9 @@
+# Bare Cumulus Rococo-v1
+
+This is used for debugging. Bare Cumulus with polkadot-launch to easy local testnet setup.
+
+
+
 # Cumulus :cloud:
 
 A set of tools for writing [Substrate](https://substrate.dev/)-based
