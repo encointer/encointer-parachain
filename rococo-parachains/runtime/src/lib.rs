@@ -57,6 +57,7 @@ pub use encointer_communities::Call as EncointerCommunitiesCall;
 pub use encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
 pub use encointer_scheduler::Call as EncointerSchedulerCall;
 pub use encointer_sybil_gate::Call as EncointerSybilGateCall;
+pub use encointer_xc_transfer::Call as EncointerXcTransferCall;
 
 pub use encointer_primitives::balances::{BalanceEntry, BalanceType};
 pub use encointer_primitives::scheduler::CeremonyPhaseType;
@@ -347,6 +348,16 @@ impl encointer_sybil_gate::Config for Runtime {
 	type Signature = MultiSignature;
 }
 
+impl encointer_xc_transfer::Config for Runtime {
+	type Event = Event;
+	type AccountId32 = AccountId;
+	type Balance = Balance;
+	type AccountIdConverter = LocationConverter;
+	type RelayChainNetworkId = RococoNetwork;
+	type ParaId = ParachainInfo;
+	type XcmExecutor = XcmExecutor<XcmConfig>;
+}
+
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
 
@@ -374,6 +385,7 @@ construct_runtime! {
 		// for sure, what to enter in the polkadot-ui.
 		EncointerPersonhoodOracle: encointer_personhood_oracle::{Module, Call, Event} = 14,
 		EncointerSybilGate: encointer_sybil_gate::{Module, Call, Storage, Event<T>} = 15,
+		EncoiterXcTransfer: encointer_xc_transfer::{Module, Call, Storage, Event<T>},
 	}
 }
 /// Block header type as expected by this runtime.
