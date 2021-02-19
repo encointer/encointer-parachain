@@ -27,13 +27,15 @@ use cumulus_primitives_core::{
 	DownwardMessageHandler, HrmpMessageHandler, HrmpMessageSender, InboundDownwardMessage,
 	InboundHrmpMessage, OutboundHrmpMessage, ParaId, UpwardMessageSender,
 };
-use frame_support::{decl_error, decl_event, decl_module, sp_runtime::traits::Hash};
+use frame_support::{debug, decl_error, decl_event, decl_module, sp_runtime::traits::Hash};
 use frame_system::ensure_root;
 use sp_std::convert::{TryFrom, TryInto};
 use xcm::{
 	v0::{Error as XcmError, ExecuteXcm, Junction, MultiLocation, SendXcm, Xcm},
 	VersionedXcm,
 };
+
+const LOG_TARGET: &str = "xcm-handler";
 
 pub trait Config: frame_system::Config {
 	type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
@@ -122,10 +124,7 @@ impl<T: Config> HrmpMessageHandler for Module<T> {
 		frame_support::debug::print!("Processing HRMP XCM: {:?}", &hash);
 		match VersionedXcm::decode(&mut &msg.data[..]).map(Xcm::try_from) {
 			Ok(Ok(xcm)) => {
-				let location = (
-					Junction::Parent,
-					Junction::Parachain { id: sender.into() },
-				);
+				let location = (Junction::Parent, Junction::Parachain { id: sender.into() });
 				match T::XcmExecutor::execute_xcm(location.into(), xcm) {
 					Ok(..) => RawEvent::Success(hash),
 					Err(e) => RawEvent::Fail(hash, e),
@@ -139,10 +138,12 @@ impl<T: Config> HrmpMessageHandler for Module<T> {
 
 impl<T: Config> SendXcm for Module<T> {
 	fn send_xcm(dest: MultiLocation, msg: Xcm) -> Result<(), XcmError> {
+		debug::RuntimeLogger::init();
 		let msg: VersionedXcm = msg.into();
 		match dest.first() {
 			// A message for us. Execute directly.
 			None => {
+				debug::debug!(target: LOG_TARGET, "Execute local xcm");
 				let msg = msg.try_into().map_err(|_| XcmError::UnhandledXcmVersion)?;
 				let res = T::XcmExecutor::execute_xcm(MultiLocation::Null, msg);
 				res
@@ -150,6 +151,7 @@ impl<T: Config> SendXcm for Module<T> {
 			// An upward message for the relay chain.
 			Some(Junction::Parent) if dest.len() == 1 => {
 				let data = msg.encode();
+				debug::debug!(target: LOG_TARGET, "Sending upward msg");
 				let hash = T::Hashing::hash(&data);
 
 				T::UpwardMessageSender::send_upward_message(data)
@@ -160,6 +162,7 @@ impl<T: Config> SendXcm for Module<T> {
 			}
 			// An HRMP message for a sibling parachain.
 			Some(Junction::Parent) if dest.len() == 2 => {
+				debug::debug!(target: LOG_TARGET, "Sending horizontal msg");
 				if let Some(Junction::Parachain { id }) = dest.at(1) {
 					let data = msg.encode();
 					let hash = T::Hashing::hash(&data);
@@ -178,6 +181,7 @@ impl<T: Config> SendXcm for Module<T> {
 			}
 			_ => {
 				/* TODO: Handle other cases, like downward message */
+				debug::warn!(target: LOG_TARGET, "other xcm msg, this is not handled.");
 				Err(XcmError::UnhandledXcmMessage)
 			}
 		}
