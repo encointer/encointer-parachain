@@ -1714,7 +1714,9 @@ dependencies = [
  "pallet-encointer-bazaar",
  "pallet-encointer-ceremonies",
  "pallet-encointer-communities",
+ "pallet-encointer-personhood-oracle",
  "pallet-encointer-scheduler",
+ "pallet-encointer-sybil-gate-template",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
  "pallet-timestamp",
@@ -1745,7 +1747,7 @@ dependencies = [
 [[package]]
 name = "encointer-primitives"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "parity-scale-codec",
  "serde",
@@ -1753,6 +1755,7 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "substrate-fixed",
+ "xcm",
 ]
 
 [[package]]
@@ -4478,7 +4481,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-balances"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4498,7 +4501,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-bazaar"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4512,7 +4515,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-ceremonies"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4532,7 +4535,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-communities"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4546,9 +4549,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-encointer-personhood-oracle"
+version = "0.3.9"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "pallet-encointer-balances",
+ "pallet-encointer-ceremonies",
+ "pallet-encointer-communities",
+ "pallet-encointer-scheduler",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "polkadot-parachain",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "xcm",
+]
+
+[[package]]
 name = "pallet-encointer-scheduler"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4561,6 +4586,25 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "sp-timestamp",
+]
+
+[[package]]
+name = "pallet-encointer-sybil-gate-template"
+version = "0.3.9"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "polkadot-parachain",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "substrate-fixed",
+ "xcm",
 ]
 
 [[package]]
@@ -6908,7 +6952,7 @@ dependencies = [
  "cfg-if 0.1.10",
  "libc",
  "nix",
- "rand 0.8.3",
+ "rand 0.6.5",
  "winapi 0.3.9",
 ]
 
@@ -8531,7 +8575,7 @@ dependencies = [
  "libc",
  "nix",
  "quick-error 2.0.0",
- "rand 0.8.3",
+ "rand 0.6.5",
  "winapi 0.3.9",
 ]
 
@@ -10244,7 +10288,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04f8ab788026715fa63b31960869617cba39117e520eb415b0139543e325ab59"
 dependencies = [
  "cfg-if 0.1.10",
- "rand 0.7.3",
+ "rand 0.6.5",
  "static_assertions",
 ]
 
