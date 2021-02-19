@@ -1747,7 +1747,7 @@ dependencies = [
 [[package]]
 name = "encointer-primitives"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "parity-scale-codec",
  "serde",
@@ -1755,6 +1755,7 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "substrate-fixed",
+ "xcm",
 ]
 
 [[package]]
@@ -4480,7 +4481,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-balances"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4500,7 +4501,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-bazaar"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4514,7 +4515,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-ceremonies"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4534,7 +4535,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-communities"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4550,7 +4551,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-personhood-oracle"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4572,7 +4573,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-scheduler"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
@@ -4590,7 +4591,7 @@ dependencies = [
 [[package]]
 name = "pallet-encointer-sybil-gate-template"
 version = "0.3.9"
-source = "git+https://github.com/encointer/pallets?branch=rococo#adc96a8801d33036cf08d7875730701bd073b328"
+source = "git+https://github.com/encointer/pallets?branch=rococo#33b07267a2b7332d9be3302998b3da12f288eb60"
 dependencies = [
  "encointer-primitives",
  "frame-support",
