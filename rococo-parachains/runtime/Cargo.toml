@@ -55,6 +55,12 @@ git = "https://github.com/encointer/pallets"
 branch = "rococo"
 package = "pallet-encointer-sybil-gate-template"
 
+[dependencies.encointer-xc-transfer]
+default-features = false
+git = "https://github.com/encointer/pallets"
+branch = "rococo"
+package = "pallet-encointer-xc-transfer"
+
 [dependencies.fixed]
 default-features = false
 git = "https://github.com/encointer/substrate-fixed"
