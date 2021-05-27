@@ -186,14 +186,14 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 		// telemetry endpoints
 		None,
 		// protocol id
-		Some("encointer-rococo-v1"),
+		Some("dot"),
 		// properties
 		Some(
 			serde_json::from_str(
 				r#"{
-			"ss58Format": 42,
-			"tokenDecimals": 12,
-			"tokenSymbol": "ERT"
+			    "ss58Format": 0,
+				"tokenDecimals": 10,
+				"tokenSymbol": "DOT"
 		  }"#,
 			)
 				.unwrap(),
