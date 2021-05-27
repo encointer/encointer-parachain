@@ -148,6 +148,17 @@ Doing the same again, will result in a failure, as each account can be funded on
 
 ![img_4.png](docs/img_4.png)
 
+# Upward/ Downward native-token transfers
+As of `polkadot-v0.9.2` cross chain native-token transfers are supported with an extrinsic from the `xcm-pallet`. The
+message format is very generic, hence the correct extrinsics for those transfers are shown below.
+
+## Downwards Tx
+Send from Alice on the relay chain to Dave on the parachain.
+
+![downward_token_tx_xcm.png](docs/downward_token_tx_xcm.png)
+
+
+
 # Type Extensions for Polkadot-UI
 ```
 {
