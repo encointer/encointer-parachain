@@ -9,15 +9,6 @@ panic = "unwind"
 
 #only while debugging/developping
 #[patch."https://github.com/encointer/pallets"]
-#pallet-encointer-ceremonies = { path = "/mnt/c/code/pallets/ceremonies" }
-#pallet-encointer-communities = { path = "/mnt/c/code/pallets/communities" }
-#pallet-encointer-balances = { path = "/mnt/c/code/pallets/balances" }
-#pallet-encointer-scheduler = { path = "/mnt/c/code/pallets/scheduler" }
-#pallet-encointer-bazaar = { path = "/mnt/c/code/pallets/bazaar" }
-#encointer-primitives = { path = "/mnt/c/code/pallets/primitives" }
-#pallet-encointer-sybil-gate-template = { path = "/mnt/c/code/pallets/sybil-gate-template" }
-#pallet-encointer-personhood-oracle = { path = "/mnt/c/code/pallets/personhood-oracle" }
-
 #pallet-encointer-ceremonies = { path = "../encointer-pallets/ceremonies" }
 #pallet-encointer-communities = { path = "../encointer-pallets/communities" }
 #pallet-encointer-balances = { path = "../encointer-pallets/balances" }
