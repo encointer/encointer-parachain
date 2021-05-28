@@ -1,13 +1,7 @@
 [workspace]
 members = [
-	"polkadot-parachains/",
+	"polkadot-parachains",
     "polkadot-parachains/encointer-runtime",
-	"test/runtime",
-	"test/runtime-upgrade",
-	"test/client",
-	"test/service",
-	"test/relay-sproof-builder",
-	"test/relay-validation-worker-provider",
 ]
 
 [profile.release]
