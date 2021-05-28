@@ -28,8 +28,6 @@ use sp_runtime::traits::{IdentifyAccount, Verify};
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec = sc_service::GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
 
-/// Specialized `ChainSpec` for the shell parachain runtime.
-pub type ShellChainSpec = sc_service::GenericChainSpec<cumulus_shell_runtime::GenesisConfig, Extensions>;
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -94,23 +92,6 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 				id,
 			)
 		},
-		vec![],
-		None,
-		None,
-		None,
-		Extensions {
-			relay_chain: "westend-dev".into(),
-			para_id: id.into(),
-		},
-	)
-}
-
-pub fn get_shell_chain_spec(id: ParaId) -> ShellChainSpec {
-	ShellChainSpec::from_genesis(
-		"Shell Local Testnet",
-		"shell_local_testnet",
-		ChainType::Local,
-		move || shell_testnet_genesis(id),
 		vec![],
 		None,
 		None,
@@ -292,17 +273,5 @@ fn testnet_genesis(
 		encointer_balances: parachain_runtime::EncointerBalancesConfig {
 			demurrage_per_block_default: Demurrage::from_bits(0x0000000000000000000001E3F0A8A973_i128),
 		},
-	}
-}
-
-fn shell_testnet_genesis(parachain_id: ParaId) -> cumulus_shell_runtime::GenesisConfig {
-	cumulus_shell_runtime::GenesisConfig {
-		frame_system: cumulus_shell_runtime::SystemConfig {
-			code: cumulus_shell_runtime::WASM_BINARY
-				.expect("WASM binary was not build, please build it!")
-				.to_vec(),
-			changes_trie_config: Default::default(),
-		},
-		parachain_info: cumulus_shell_runtime::ParachainInfoConfig { parachain_id },
 	}
 }

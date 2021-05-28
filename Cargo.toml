@@ -2,7 +2,6 @@
 members = [
 	"polkadot-parachains/",
     "polkadot-parachains/encointer-runtime",
-	"polkadot-parachains/shell-runtime",
 	"test/runtime",
 	"test/runtime-upgrade",
 	"test/client",

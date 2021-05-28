@@ -50,18 +50,12 @@ fn load_spec(
 		"track" => Ok(Box::new(chain_spec::ChainSpec::from_json_bytes(
 			&include_bytes!("../res/track.json")[..],
 		)?)),
-		"shell" => Ok(Box::new(chain_spec::get_shell_chain_spec(para_id))),
 		"" => Ok(Box::new(chain_spec::get_chain_spec(para_id))),
 		path => Ok({
 			let chain_spec = chain_spec::ChainSpec::from_json_file(
 			path.into(),
 		)?;
-
-			if use_shell_runtime(&chain_spec) {
-				Box::new(chain_spec::ShellChainSpec::from_json_file(path.into())?)
-			} else {
-				Box::new(chain_spec)
-			}
+			Box::new(chain_spec)
 		}),
 	}
 }
@@ -101,12 +95,9 @@ impl SubstrateCli for Cli {
 		load_spec(id, self.run.parachain_id.unwrap_or(100).into())
 	}
 
-	fn native_runtime_version(chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		if use_shell_runtime(&**chain_spec) {
-			&cumulus_shell_runtime::VERSION
-		} else {
-			&parachain_runtime::VERSION
-		}
+	fn native_runtime_version(_chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
+		// chain_spec was only used in case of shell runtime
+		&parachain_runtime::VERSION
 	}
 }
 
@@ -160,38 +151,23 @@ fn extract_genesis_wasm(chain_spec: &Box<dyn sc_service::ChainSpec>) -> Result<V
 		.ok_or_else(|| "Could not find wasm file in genesis state!".into())
 }
 
-fn use_shell_runtime(chain_spec: &dyn ChainSpec) -> bool {
-	chain_spec.id().starts_with("shell")
-}
-
-use crate::service::{new_partial, RococoParachainRuntimeExecutor, ShellRuntimeExecutor};
+use crate::service::{new_partial, RococoParachainRuntimeExecutor};
 
 macro_rules! construct_async_run {
 	(|$components:ident, $cli:ident, $cmd:ident, $config:ident| $( $code:tt )* ) => {{
 		let runner = $cli.create_runner($cmd)?;
-		if use_shell_runtime(&*runner.config().chain_spec) {
-			runner.async_run(|$config| {
-				let $components = new_partial::<cumulus_shell_runtime::RuntimeApi, ShellRuntimeExecutor, _>(
-					&$config,
-					crate::service::shell_build_import_queue,
-				)?;
-				let task_manager = $components.task_manager;
-				{ $( $code )* }.map(|v| (v, task_manager))
-			})
-		} else {
-			runner.async_run(|$config| {
-				let $components = new_partial::<
-					parachain_runtime::RuntimeApi,
-					RococoParachainRuntimeExecutor,
-					_
-				>(
-					&$config,
-					crate::service::rococo_parachain_build_import_queue,
-				)?;
-				let task_manager = $components.task_manager;
-				{ $( $code )* }.map(|v| (v, task_manager))
-			})
-		}
+		runner.async_run(|$config| {
+			let $components = new_partial::<
+				parachain_runtime::RuntimeApi,
+				RococoParachainRuntimeExecutor,
+				_
+			>(
+				&$config,
+				crate::service::rococo_parachain_build_import_queue,
+			)?;
+			let task_manager = $components.task_manager;
+			{ $( $code )* }.map(|v| (v, task_manager))
+		})
 	}}
 }
 
@@ -295,8 +271,6 @@ pub fn run() -> Result<()> {
 		}
 		None => {
 			let runner = cli.create_runner(&cli.run.normalize())?;
-			let use_shell = use_shell_runtime(&*runner.config().chain_spec);
-
 			runner.run_node_until_exit(|config| async move {
 				// TODO
 				let key = sp_core::Pair::generate().0;
@@ -337,17 +311,10 @@ pub fn run() -> Result<()> {
 					}
 				);
 
-				if use_shell {
-					crate::service::start_shell_node(config, key, polkadot_config, id)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
-				} else {
-					crate::service::start_rococo_parachain_node(config, key, polkadot_config, id)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
-				}
+				crate::service::start_rococo_parachain_node(config, key, polkadot_config, id)
+					.await
+					.map(|r| r.0)
+					.map_err(Into::into)
 			})
 		}
 	}
