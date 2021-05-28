@@ -28,7 +28,7 @@ polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "m
 
 # Cumulus dependencies
 cumulus-client-consensus-common = { path = "../common" }
-cumulus-primitives-core = { path = "../../../primitives/core" }
+cumulus-primitives-core = { git = "https://github.com/paritytech/cumulus", branch = "master" }
 
 # Other deps
 futures = { version = "0.3.8", features = ["compat"] }

@@ -26,8 +26,8 @@ pallet-balances = { git = "https://github.com/paritytech/substrate", branch = "m
 cumulus-test-runtime = { path = "../runtime" }
 cumulus-test-service = { path = "../service" }
 cumulus-test-relay-sproof-builder = { path = "../relay-sproof-builder" }
-cumulus-primitives-core = { path = "../../primitives/core" }
-cumulus-primitives-parachain-inherent = { path = "../../primitives/parachain-inherent" }
+cumulus-primitives-core = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "master" }
+cumulus-primitives-parachain-inherent = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "master" }
 
 # Polkadot deps
 polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "master" }

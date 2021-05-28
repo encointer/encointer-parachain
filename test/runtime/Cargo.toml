@@ -31,7 +31,7 @@ sp-version = { git = "https://github.com/paritytech/substrate", default-features
 
 # Cumulus dependencies
 cumulus-pallet-parachain-system = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "master" }
-cumulus-primitives-core = { path = "../../primitives/core", default-features = false }
+cumulus-primitives-core = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "master" }
 
 # Polkadot dependencies
 polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "master" }

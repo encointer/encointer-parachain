@@ -21,8 +21,8 @@ substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate
 polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "master" }
 
 # Cumulus dependencies
-cumulus-client-consensus-common = { path = "../common" }
-cumulus-primitives-core = { path = "../../../primitives/core" }
+cumulus-client-consensus-common = { git = "https://github.com/paritytech/cumulus", branch = "master" }
+cumulus-primitives-core = { git = "https://github.com/paritytech/cumulus", branch = "master" }
 
 # Other deps
 futures = { version = "0.3.8", features = ["compat"] }
