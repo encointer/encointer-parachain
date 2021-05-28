@@ -6,17 +6,10 @@ members = [
 	"client/consensus/relay-chain",
 	"client/network",
 	"client/service",
-	"pallets/aura-ext",
-	"pallets/dmp-queue",
-	"pallets/parachain-system",
-	"pallets/xcm",
-	"pallets/xcmp-queue",
 	"primitives/core",
 	"primitives/parachain-inherent",
 	"primitives/utility",
 	"polkadot-parachains/",
-	"polkadot-parachains/pallets/parachain-info",
-	"polkadot-parachains/pallets/ping",
     "polkadot-parachains/encointer-runtime",
 	"polkadot-parachains/shell-runtime",
 	"test/runtime",
@@ -32,6 +25,15 @@ panic = "unwind"
 
 #only while debugging/developping
 #[patch."https://github.com/encointer/pallets"]
+#pallet-encointer-ceremonies = { path = "/mnt/c/code/pallets/ceremonies" }
+#pallet-encointer-communities = { path = "/mnt/c/code/pallets/communities" }
+#pallet-encointer-balances = { path = "/mnt/c/code/pallets/balances" }
+#pallet-encointer-scheduler = { path = "/mnt/c/code/pallets/scheduler" }
+#pallet-encointer-bazaar = { path = "/mnt/c/code/pallets/bazaar" }
+#encointer-primitives = { path = "/mnt/c/code/pallets/primitives" }
+#pallet-encointer-sybil-gate-template = { path = "/mnt/c/code/pallets/sybil-gate-template" }
+#pallet-encointer-personhood-oracle = { path = "/mnt/c/code/pallets/personhood-oracle" }
+
 #pallet-encointer-ceremonies = { path = "../encointer-pallets/ceremonies" }
 #pallet-encointer-communities = { path = "../encointer-pallets/communities" }
 #pallet-encointer-balances = { path = "../encointer-pallets/balances" }
