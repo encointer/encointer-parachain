@@ -22,7 +22,7 @@ use parachain_runtime::{
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
-use sp_core::{crypto::UncheckedInto, sr25519, Pair, Public};
+use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
@@ -93,39 +93,6 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 			)
 		},
 		vec![],
-		None,
-		None,
-		None,
-		Extensions {
-			relay_chain: "westend-dev".into(),
-			para_id: id.into(),
-		},
-	)
-}
-
-pub fn staging_test_net(id: ParaId) -> ChainSpec {
-	ChainSpec::from_genesis(
-		"Staging Testnet",
-		"staging_testnet",
-		ChainType::Live,
-		move || {
-			testnet_genesis(
-				hex!["9ed7705e3c7da027ba0583a22a3212042f7e715d3c168ba14f1424e2bc111d00"].into(),
-				vec![
-					// $secret//one
-					hex!["aad9fa2249f87a210a0f93400b7f90e47b810c6d65caa0ca3f5af982904c2a33"]
-						.unchecked_into(),
-					// $secret//two
-					hex!["d47753f0cca9dd8da00c70e82ec4fc5501a69c49a5952a643d18802837c88212"]
-						.unchecked_into(),
-				],
-				vec![
-					hex!["9ed7705e3c7da027ba0583a22a3212042f7e715d3c168ba14f1424e2bc111d00"].into(),
-				],
-				id,
-			)
-		},
-		Vec::new(),
 		None,
 		None,
 		None,
