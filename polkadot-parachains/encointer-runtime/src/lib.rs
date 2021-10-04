@@ -116,9 +116,9 @@ pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
 
-pub const ROC: Balance = 1_000_000_000_000;
-pub const MILLIROC: Balance = 1_000_000_000;
-pub const MICROROC: Balance = 1_000_000;
+pub const ERT: Balance = 1_000_000_000_000;
+pub const MILLIERT: Balance = 1_000_000_000;
+pub const MICROERT: Balance = 1_000_000;
 
 // 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
 pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
@@ -219,10 +219,10 @@ impl pallet_timestamp::Config for Runtime {
 }
 
 parameter_types! {
-	pub const ExistentialDeposit: u128 = 1 * MILLIROC;
-	pub const TransferFee: u128 = 1 * MILLIROC;
-	pub const CreationFee: u128 = 1 * MILLIROC;
-	pub const TransactionByteFee: u128 = 1 * MICROROC;
+	pub const ExistentialDeposit: u128 = 1 * MILLIERT;
+	pub const TransferFee: u128 = 1 * MILLIERT;
+	pub const CreationFee: u128 = 1 * MILLIERT;
+	pub const TransactionByteFee: u128 = 1 * MICROERT;
 	pub const MaxLocks: u32 = 50;
 }
 
@@ -330,8 +330,8 @@ pub type XcmOriginToTransactDispatchOrigin = (
 parameter_types! {
 	// One XCM operation is 1_000_000 weight - almost certainly a conservative estimate.
 	pub UnitWeightCost: Weight = 1_000_000;
-	// One ROC buys 1 second of weight.
-	pub const WeightPrice: (MultiLocation, u128) = (X1(Parent), ROC);
+	// One ERT buys 1 second of weight.
+	pub const WeightPrice: (MultiLocation, u128) = (X1(Parent), ERT);
 }
 
 match_type! {
@@ -377,7 +377,7 @@ impl Config for XcmConfig {
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	type IsReserve = NativeAsset;
 	type IsTeleporter = NativeAsset;
-	// <- should be enough to allow teleportation of ROC
+	// <- should be enough to allow teleportation of ERT
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
@@ -429,11 +429,11 @@ impl cumulus_pallet_dmp_queue::Config for Runtime {
 }
 
 parameter_types! {
-	pub const AssetDeposit: Balance = 1 * ROC;
-	pub const ApprovalDeposit: Balance = 100 * MILLIROC;
+	pub const AssetDeposit: Balance = 1 * ERT;
+	pub const ApprovalDeposit: Balance = 100 * MILLIERT;
 	pub const StringLimit: u32 = 50;
-	pub const MetadataDepositBase: Balance = 1 * ROC;
-	pub const MetadataDepositPerByte: Balance = 10 * MILLIROC;
+	pub const MetadataDepositBase: Balance = 1 * ERT;
+	pub const MetadataDepositPerByte: Balance = 10 * MILLIERT;
 	pub const UnitBody: BodyId = BodyId::Unit;
 }
 
