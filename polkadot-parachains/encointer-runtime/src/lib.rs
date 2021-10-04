@@ -77,7 +77,7 @@ use xcm_builder::{
 	UsingComponents, SignedToAccountId32,
 };
 use xcm_executor::{Config, XcmExecutor, traits::ShouldExecute};
-use pallet_xcm::{XcmPassthrough, EnsureXcm, IsMajorityOfBody};
+use pallet_xcm::XcmPassthrough;
 use xcm::v0::Xcm;
 
 pub type SessionHandlers = ();
@@ -432,9 +432,6 @@ parameter_types! {
 	pub const MetadataDepositPerByte: Balance = 10 * MILLIROC;
 	pub const UnitBody: BodyId = BodyId::Unit;
 }
-
-/// A majority of the Unit body from Rococo over XCM is our required administration origin.
-pub type AdminOrigin = EnsureXcm<IsMajorityOfBody<RocLocation, UnitBody>>;
 
 impl pallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
