@@ -55,13 +55,13 @@ pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 
 // A few exports that help ease life for downstream crates.
-pub use encointer_balances::Call as EncointerBalancesCall;
-pub use encointer_bazaar::Call as EncointerBazaarCall;
-pub use encointer_ceremonies::Call as EncointerCeremoniesCall;
-pub use encointer_communities::Call as EncointerCommunitiesCall;
-pub use encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
-pub use encointer_scheduler::Call as EncointerSchedulerCall;
-pub use encointer_sybil_gate::Call as EncointerSybilGateCall;
+pub use pallet_encointer_balances::Call as EncointerBalancesCall;
+pub use pallet_encointer_bazaar::Call as EncointerBazaarCall;
+pub use pallet_encointer_ceremonies::Call as EncointerCeremoniesCall;
+pub use pallet_encointer_communities::Call as EncointerCommunitiesCall;
+pub use pallet_encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
+pub use pallet_encointer_scheduler::Call as EncointerSchedulerCall;
+pub use pallet_encointer_sybil_gate_template::Call as EncointerSybilGateCall;
 
 pub use encointer_primitives::balances::{BalanceEntry, BalanceType, Demurrage};
 pub use encointer_primitives::scheduler::CeremonyPhaseType;
@@ -102,6 +102,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 
 /// A type to hold UTC unix epoch [ms]
 pub type Moment = u64;
+
 pub const ONE_DAY: Moment = 86_400_000;
 
 pub const MILLISECS_PER_BLOCK: u64 = 12000;
@@ -342,6 +343,7 @@ match_type! {
 /// Transparent XcmTransact Barrier for sybil demo. Polkadot will probably come up with a
 /// better solution for this. Currently, they have not setup a barrier config for `XcmTransact`
 pub struct AllowXcmTransactFrom<T>(PhantomData<T>);
+
 impl<T: Contains<MultiLocation>> ShouldExecute for AllowXcmTransactFrom<T> {
 	fn should_execute<Call>(
 		_origin: &MultiLocation,
@@ -351,7 +353,7 @@ impl<T: Contains<MultiLocation>> ShouldExecute for AllowXcmTransactFrom<T> {
 		_weight_credit: &mut Weight,
 	) -> Result<(), ()> {
 		match message {
-			Xcm::Transact { origin_type: _ , require_weight_at_most: _, call: _ } => Ok(()),
+			Xcm::Transact { origin_type: _, require_weight_at_most: _, call: _ } => Ok(()),
 			_ => Err(())
 		}
 	}
@@ -366,6 +368,7 @@ pub type Barrier = (
 );
 
 pub struct XcmConfig;
+
 impl Config for XcmConfig {
 	type Call = Call;
 	type XcmSender = XcmRouter;
@@ -373,12 +376,13 @@ impl Config for XcmConfig {
 	type AssetTransactor = LocalAssetTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	type IsReserve = NativeAsset;
-	type IsTeleporter = NativeAsset;	// <- should be enough to allow teleportation of ROC
+	type IsTeleporter = NativeAsset;
+	// <- should be enough to allow teleportation of ROC
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
 	type Trader = UsingComponents<IdentityFee<Balance>, RocLocation, AccountId, Balances, ()>;
-	type ResponseHandler = ();	// Don't handle responses for now.
+	type ResponseHandler = ();    // Don't handle responses for now.
 }
 
 /// No local origins on this chain are allowed to dispatch XCM sends/executions.
@@ -440,37 +444,37 @@ impl pallet_aura::Config for Runtime {
 parameter_types! {
 	pub const MomentsPerDay: Moment = 86_400_000; // [ms/d]
 }
-impl encointer_scheduler::Config for Runtime {
+impl pallet_encointer_scheduler::Config for Runtime {
 	type Event = Event;
-	type OnCeremonyPhaseChange = encointer_ceremonies::Module<Runtime>;
+	type OnCeremonyPhaseChange = pallet_encointer_ceremonies::Module<Runtime>;
 	type MomentsPerDay = MomentsPerDay;
 }
 
-impl encointer_ceremonies::Config for Runtime {
+impl pallet_encointer_ceremonies::Config for Runtime {
 	type Event = Event;
 	type Public = <MultiSignature as Verify>::Signer;
 	type Signature = MultiSignature;
 	type RandomnessSource = pallet_randomness_collective_flip::Module<Runtime>;
 }
 
-impl encointer_communities::Config for Runtime {
+impl pallet_encointer_communities::Config for Runtime {
 	type Event = Event;
 }
 
-impl encointer_balances::Config for Runtime {
+impl pallet_encointer_balances::Config for Runtime {
 	type Event = Event;
 }
 
-impl encointer_bazaar::Config for Runtime {
+impl pallet_encointer_bazaar::Config for Runtime {
 	type Event = Event;
 }
 
-impl encointer_personhood_oracle::Config for Runtime {
+impl pallet_encointer_personhood_oracle::Config for Runtime {
 	type Event = Event;
 	type XcmSender = XcmRouter;
 }
 
-impl encointer_sybil_gate::Config for Runtime {
+impl pallet_encointer_sybil_gate_template::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
 	type XcmSender = XcmRouter;
@@ -504,14 +508,14 @@ construct_runtime! {
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Call, Event<T>, Origin} = 32,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
 
-		EncointerScheduler: encointer_scheduler::{Pallet, Call, Storage, Config<T>, Event} = 50,
-		EncointerCeremonies: encointer_ceremonies::{Pallet, Call, Storage, Config<T>, Event<T>} = 51,
-		EncointerCommunities: encointer_communities::{Pallet, Call, Storage, Config<T>, Event<T>} = 52,
-		EncointerBalances: encointer_balances::{Pallet, Call, Storage, Config, Event<T>} = 53,
-		EncointerBazaar: encointer_bazaar::{Pallet, Call, Storage, Event<T>} = 54,
+		EncointerScheduler: pallet_encointer_scheduler::{Pallet, Call, Storage, Config<T>, Event} = 50,
+		EncointerCeremonies: pallet_encointer_ceremonies::{Pallet, Call, Storage, Config<T>, Event<T>} = 51,
+		EncointerCommunities: pallet_encointer_communities::{Pallet, Call, Storage, Config<T>, Event<T>} = 52,
+		EncointerBalances: pallet_encointer_balances::{Pallet, Call, Storage, Config, Event<T>} = 53,
+		EncointerBazaar: pallet_encointer_bazaar::{Pallet, Call, Storage, Event<T>} = 54,
 
-		EncointerPersonhoodOracle: encointer_personhood_oracle::{Pallet, Call, Event} = 60,
-		EncointerSybilGate: encointer_sybil_gate::{Pallet, Call, Storage, Event<T>} = 61,
+		EncointerPersonhoodOracle: pallet_encointer_personhood_oracle::{Pallet, Call, Event} = 60,
+		EncointerSybilGate: pallet_encointer_sybil_gate_template::{Pallet, Call, Storage, Event<T>} = 61,
 	}
 }
 
