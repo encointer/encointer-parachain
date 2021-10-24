@@ -113,6 +113,7 @@ std = [
 	"pallet-aura/std",
 	"sp-consensus-aura/std",
 	"encointer-primitives/std",
+	"encointer-primitives/serde_derive",
 	"pallet-encointer-scheduler/std",
 	"pallet-encointer-ceremonies/std",
 	"pallet-encointer-balances/std",
