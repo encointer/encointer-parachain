@@ -31,7 +31,7 @@
 					"wsPort": 9944,
 					"port": 31200,
 					"name": "alice",
-					"flags": ["-lencointer=debug", "--", "--execution=wasm"]
+					"flags": ["-lencointer=debug", "--force-authoring", "--", "--execution=wasm"]
 				}
 			]
 		},
@@ -45,7 +45,7 @@
 					"wsPort": 9955,
 					"port": 31300,
 					"name": "alice",
-					"flags": ["-lencointer=debug", "--", "--execution=wasm"]
+					"flags": ["-lencointer=debug", "--force-authoring", "--", "--execution=wasm"]
 				}
 			]
 		}
