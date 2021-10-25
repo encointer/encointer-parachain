@@ -47,6 +47,7 @@ fn load_spec(
 		"encointer-rococo-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal))),
 		
 		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
+		"sybil-dummy-rococo" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::Rococo))),
 		
 		"" => Ok(Box::new(chain_spec::get_chain_spec(para_id))),
 		path => Ok({

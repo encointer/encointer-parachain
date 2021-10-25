@@ -36,7 +36,7 @@
 		},
 		{
 			"bin": "./target/release/encointer-collator",
-			"chain": "sybil-dummy",
+			"chain": "sybil-dummy-rococo",
 			"id": "1863",
 			"balance": "1000000000000000000000",
 			"nodes": [
