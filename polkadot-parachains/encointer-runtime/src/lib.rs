@@ -69,8 +69,10 @@ pub use encointer_primitives::{
 };
 
 // XCM imports
+use frame_support::traits::Contains;
 use pallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
 use polkadot_parachain::primitives::Sibling;
+use sp_std::marker::PhantomData;
 use xcm::latest::prelude::*;
 use xcm_builder::{
 	AccountId32Aliases, AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter,
@@ -79,7 +81,7 @@ use xcm_builder::{
 	SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
 	SovereignSignedViaLocation, TakeWeightCredit, UsingComponents,
 };
-use xcm_executor::{Config, XcmExecutor};
+use xcm_executor::{traits::ShouldExecute, Config, XcmExecutor};
 
 pub type SessionHandlers = ();
 
@@ -344,11 +346,31 @@ match_type! {
 	};
 }
 
+/// Transparent XcmTransact Barrier for sybil demo. Polkadot will probably come up with a
+/// better solution for this. Currently, they have not setup a barrier config for `XcmTransact`
+pub struct AllowXcmTransactFrom<T>(PhantomData<T>);
+
+impl<T: Contains<MultiLocation>> ShouldExecute for AllowXcmTransactFrom<T> {
+	fn should_execute<Call>(
+		_origin: &MultiLocation,
+		_top_level: bool,
+		message: &Xcm<Call>,
+		_shallow_weight: Weight,
+		_weight_credit: &mut Weight,
+	) -> Result<(), ()> {
+		match message {
+			Xcm::Transact { origin_type: _, require_weight_at_most: _, call: _ } => Ok(()),
+			_ => Err(()),
+		}
+	}
+}
+
 pub type Barrier = (
 	TakeWeightCredit,
 	AllowTopLevelPaidExecutionFrom<Everything>,
 	AllowUnpaidExecutionFrom<ParentOrParentsUnitPlurality>,
 	// ^^^ Parent & its unit plurality gets free execution
+	AllowXcmTransactFrom<Everything>,
 );
 
 pub struct XcmConfig;
