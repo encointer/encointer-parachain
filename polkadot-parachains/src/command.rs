@@ -45,9 +45,9 @@ fn load_spec(
 	match id {
 		"encointer-rococo" => Ok(Box::new(chain_spec::encointer_spec(para_id, false, RelayChain::Rococo))),
 		"encointer-rococo-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal))),
-		
-		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
+
 		"sybil-dummy-rococo" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::Rococo))),
+		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
 		
 		"" => Ok(Box::new(chain_spec::get_chain_spec(para_id))),
 		path => Ok({

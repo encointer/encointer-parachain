@@ -359,7 +359,7 @@ impl Config for XcmConfig {
 	type AssetTransactor = LocalAssetTransactor;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	type IsReserve = NativeAsset;
-	type IsTeleporter = NativeAsset; // <- should be enough to allow teleportation of ROC
+	type IsTeleporter = NativeAsset; // <- should be enough to allow teleportation of ERT
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call>;
@@ -420,7 +420,7 @@ parameter_types! {
 	pub const UnitBody: BodyId = BodyId::Unit;
 }
 
-/// A majority of the Unit body from Rococo over XCM is our required administration origin.
+/// A majority of the Unit body from Encointer over XCM is our required administration origin.
 pub type AdminOrigin = EnsureXcm<IsMajorityOfBody<EncointerLocation, UnitBody>>;
 
 parameter_types! {
