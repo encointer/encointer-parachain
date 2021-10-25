@@ -1,6 +1,6 @@
 {
 	"relaychain": {
-		"bin": "../bin/polkadot-v0.9.10",
+		"bin": "../../bin/polkadot-v0.9.10",
 		"chain": "rococo-local",
 		"nodes": [
 			{
@@ -22,7 +22,7 @@
 	},
 	"parachains": [
 		{
-			"bin": "./target/release/encointer-collator",
+			"bin": "../target/release/encointer-collator",
 			"chain": "encointer-rococo",
 			"id": "1862",
 			"balance": "1000000000000000000000",
@@ -35,7 +35,7 @@
 			]
 		},
 		{
-			"bin": "./target/release/encointer-collator",
+			"bin": "../target/release/encointer-collator",
 			"chain": "sybil-dummy-rococo",
 			"id": "1863",
 			"balance": "1000000000000000000000",
