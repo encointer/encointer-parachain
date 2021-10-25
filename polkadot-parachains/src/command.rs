@@ -16,6 +16,7 @@
 
 use crate::{
 	chain_spec,
+	chain_spec::RelayChain,
 	cli::{Cli, RelayChainCli, Subcommand},
 	service::{new_partial, Block, RococoParachainRuntimeExecutor},
 };
@@ -35,14 +36,18 @@ use std::{io::Write, net::SocketAddr};
 
 const DEFAULT_PARA_ID: u32 = 2015;
 
+// If we don't skipp here, each cmd expands to 5 lines. I think we have better overview like this.
+#[rustfmt::skip]
 fn load_spec(
 	id: &str,
 	para_id: ParaId,
 ) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
 	match id {
-		"encointer-rococo" => Ok(Box::new(chain_spec::encointer_spec(para_id, false))),
-		"encointer-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true))),
-		"sybil-dummy" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id))),
+		"encointer-rococo" => Ok(Box::new(chain_spec::encointer_spec(para_id, false, RelayChain::Rococo))),
+		"encointer-rococo-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal))),
+		
+		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
+		
 		"" => Ok(Box::new(chain_spec::get_chain_spec(para_id))),
 		path => Ok({
 			let chain_spec = chain_spec::ChainSpec::from_json_file(path.into())?;

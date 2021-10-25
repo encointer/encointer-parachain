@@ -94,12 +94,11 @@ pub fn get_chain_spec(id: ParaId) -> ChainSpec {
 	)
 }
 
-pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
+pub fn encointer_spec(id: ParaId, use_well_known_keys: bool, relay_chain: RelayChain) -> ChainSpec {
 	// encointer_root
 	let mut root_account: AccountId =
 		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
 	let mut endowed_accounts = vec![root_account.clone()];
-	let mut chain_type = ChainType::Live;
 
 	if use_well_known_keys {
 		root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
@@ -108,13 +107,12 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 			get_account_id_from_seed::<sr25519::Public>("Bob"),
 			get_account_id_from_seed::<sr25519::Public>("Charlie"),
 		];
-		chain_type = ChainType::Local;
 	}
 
 	ChainSpec::from_genesis(
 		"Encointer PC1",
 		"encointer-rococo-v1",
-		chain_type,
+		relay_chain.chain_type(),
 		move || {
 			testnet_genesis(
 				root_account.clone(),
@@ -139,11 +137,11 @@ pub fn encointer_spec(id: ParaId, use_well_known_keys: bool) -> ChainSpec {
 			)
 			.unwrap(),
 		),
-		Extensions { relay_chain: "rococo".into(), para_id: id.into() },
+		Extensions { relay_chain: relay_chain.to_string(), para_id: id.into() },
 	)
 }
 
-pub fn sybil_dummy_spec(id: ParaId) -> ChainSpec {
+pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> ChainSpec {
 	let root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
 	let endowed_accounts = vec![
 		get_account_id_from_seed::<sr25519::Public>("Alice"),
@@ -153,7 +151,7 @@ pub fn sybil_dummy_spec(id: ParaId) -> ChainSpec {
 	ChainSpec::from_genesis(
 		"Sybil Dummy",
 		"sybil-dummy-rococo-v1",
-		ChainType::Local,
+		relay_chain.chain_type(),
 		move || {
 			testnet_genesis(
 				root_account.clone(),
@@ -178,7 +176,7 @@ pub fn sybil_dummy_spec(id: ParaId) -> ChainSpec {
 			)
 			.unwrap(),
 		),
-		Extensions { relay_chain: "rococo".into(), para_id: id.into() },
+		Extensions { relay_chain: relay_chain.to_string(), para_id: id.into() },
 	)
 }
 
@@ -225,5 +223,40 @@ fn testnet_genesis(
 				0x0000000000000000000001E3F0A8A973_i128,
 			),
 		},
+	}
+}
+
+pub enum RelayChain {
+	RococoLocal,
+	// Kusama,
+	// KusamaLocal,
+	// PolkadotLocal,
+	Rococo,
+	// Polkadot,
+}
+
+impl ToString for RelayChain {
+	fn to_string(&self) -> String {
+		match self {
+			RelayChain::RococoLocal => "rococo-local".into(),
+			// RelayChain::Kusama => "kusama".into(),
+			// RelayChain::KusamaLocal => "kusama-local".into(),
+			// RelayChain::PolkadotLocal => "polkadot-local".into(),
+			RelayChain::Rococo => "rococo".into(),
+			// RelayChain::Polkadot => "polkadot".into(),
+		}
+	}
+}
+
+impl RelayChain {
+	fn chain_type(&self) -> ChainType {
+		match self {
+			RelayChain::RococoLocal => ChainType::Local,
+			// RelayChain::KusamaLocal => ChainType::Local,
+			// RelayChain::PolkadotLocal => ChainType::Local,
+			// RelayChain::Kusama => ChainType::Live,
+			RelayChain::Rococo => ChainType::Live,
+			// RelayChain::Polkadot => ChainType::Live,
+		}
 	}
 }
