@@ -46,12 +46,16 @@ fn load_spec(
 		"encointer-rococo" => Ok(Box::new(chain_spec::encointer_spec(para_id, false, RelayChain::Rococo))),
 		"encointer-rococo-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal))),
 
+		"launch-rococo" => Ok(Box::new(chain_spec::launch_spec(para_id, false, RelayChain::Rococo))),
+		"launch-rococo-local" => Ok(Box::new(chain_spec::launch_spec(para_id, true, RelayChain::RococoLocal))),
+
 		"sybil-dummy-rococo" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::Rococo))),
 		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
 		
-		"" => Ok(Box::new(chain_spec::get_chain_spec(para_id))),
+		"" => Err("No chain-spec specified".into()),
 		path => Ok({
-			let chain_spec = chain_spec::ChainSpec::from_json_file(path.into())?;
+			// Todo: generify
+			let chain_spec = chain_spec::EncointerChainSpec::from_json_file(path.into())?;
 			Box::new(chain_spec)
 		}),
 	}
