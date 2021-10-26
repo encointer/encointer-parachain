@@ -16,7 +16,7 @@
 
 use crate::{
 	chain_spec,
-	chain_spec::RelayChain,
+	chain_spec::{LaunchChainSpec, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
 	service::{new_partial, Block, RococoParachainRuntimeExecutor},
 };
@@ -36,6 +36,22 @@ use std::{io::Write, net::SocketAddr};
 
 const DEFAULT_PARA_ID: u32 = 2015;
 
+trait IdentifyChain {
+	fn is_launch(&self) -> bool;
+}
+
+impl IdentifyChain for dyn sc_service::ChainSpec {
+	fn is_launch(&self) -> bool {
+		self.name().starts_with("Encointer Launch")
+	}
+}
+
+impl<T: sc_service::ChainSpec + 'static> IdentifyChain for T {
+	fn is_launch(&self) -> bool {
+		<dyn sc_service::ChainSpec>::is_launch(self)
+	}
+}
+
 // If we don't skipp here, each cmd expands to 5 lines. I think we have better overview like this.
 #[rustfmt::skip]
 fn load_spec(
@@ -54,9 +70,12 @@ fn load_spec(
 		
 		"" => Err("No chain-spec specified".into()),
 		path => Ok({
-			// Todo: generify
 			let chain_spec = chain_spec::EncointerChainSpec::from_json_file(path.into())?;
-			Box::new(chain_spec)
+			if chain_spec.is_launch() {
+				Box::new(LaunchChainSpec::from_json_file(path.into())?)
+			} else {
+				Box::new(chain_spec)
+			}
 		}),
 	}
 }
