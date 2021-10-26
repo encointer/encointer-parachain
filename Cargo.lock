@@ -2157,6 +2157,62 @@ dependencies = [
 ]
 
 [[package]]
+name = "encointer-parachain-launch-runtime"
+version = "0.5.9"
+dependencies = [
+ "cumulus-pallet-aura-ext",
+ "cumulus-pallet-dmp-queue",
+ "cumulus-pallet-parachain-system",
+ "cumulus-pallet-xcm",
+ "cumulus-pallet-xcmp-queue",
+ "cumulus-primitives-core",
+ "cumulus-primitives-timestamp",
+ "cumulus-primitives-utility",
+ "encointer-primitives",
+ "frame-executive",
+ "frame-support",
+ "frame-system",
+ "hex",
+ "hex-literal 0.3.3",
+ "log",
+ "pallet-aura",
+ "pallet-balances",
+ "pallet-encointer-balances",
+ "pallet-encointer-bazaar",
+ "pallet-encointer-ceremonies",
+ "pallet-encointer-communities",
+ "pallet-encointer-personhood-oracle",
+ "pallet-encointer-scheduler",
+ "pallet-encointer-sybil-gate-template",
+ "pallet-randomness-collective-flip",
+ "pallet-sudo",
+ "pallet-timestamp",
+ "pallet-transaction-payment",
+ "pallet-xcm",
+ "parachain-info",
+ "parity-scale-codec",
+ "polkadot-parachain",
+ "serde",
+ "sp-api",
+ "sp-block-builder",
+ "sp-consensus-aura",
+ "sp-core",
+ "sp-inherents",
+ "sp-io",
+ "sp-offchain",
+ "sp-runtime",
+ "sp-session",
+ "sp-std",
+ "sp-transaction-pool",
+ "sp-version",
+ "substrate-fixed",
+ "substrate-wasm-builder",
+ "xcm",
+ "xcm-builder",
+ "xcm-executor",
+]
+
+[[package]]
 name = "encointer-parachain-runtime"
 version = "0.5.9"
 dependencies = [
