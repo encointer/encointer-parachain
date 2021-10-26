@@ -307,10 +307,6 @@ impl RelayChain {
 	fn properties(&self) -> Properties {
 		match self {
 			RelayChain::RococoLocal | RelayChain::Rococo => rococo_properties(),
-			// RelayChain::KusamaLocal => ChainType::Local,
-			// RelayChain::PolkadotLocal => ChainType::Local,
-			// RelayChain::Kusama => ChainType::Live,
-			// RelayChain::Polkadot => ChainType::Live,
 		}
 	}
 }

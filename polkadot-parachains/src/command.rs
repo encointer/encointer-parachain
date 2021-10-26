@@ -16,7 +16,7 @@
 
 use crate::{
 	chain_spec,
-	chain_spec::{LaunchChainSpec, RelayChain},
+	chain_spec::{EncointerChainSpec, LaunchChainSpec, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
 	service::{new_partial, Block, RococoParachainRuntimeExecutor},
 };
@@ -70,7 +70,7 @@ fn load_spec(
 		
 		"" => return Err("No chain-spec specified".into()),
 		path => {
-			let chain_spec = chain_spec::EncointerChainSpec::from_json_file(path.into())?;
+			let chain_spec = EncointerChainSpec::from_json_file(path.into())?;
 			if chain_spec.is_launch() {
 				Box::new(LaunchChainSpec::from_json_file(path.into())?)
 			} else {
