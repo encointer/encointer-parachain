@@ -267,29 +267,6 @@ fn launch_genesis(
 		parachain_info: launch_runtime::ParachainInfoConfig { parachain_id: id },
 		aura: launch_runtime::AuraConfig { authorities: initial_authorities },
 		aura_ext: Default::default(),
-		encointer_scheduler: launch_runtime::EncointerSchedulerConfig {
-			current_phase: CeremonyPhaseType::REGISTERING,
-			current_ceremony_index: 1,
-			ceremony_master: root_key.clone(),
-			phase_durations: vec![
-				(CeremonyPhaseType::REGISTERING, 600_000),
-				(CeremonyPhaseType::ASSIGNING, 600_000),
-				(CeremonyPhaseType::ATTESTING, 600_000),
-			],
-		},
-		encointer_ceremonies: launch_runtime::EncointerCeremoniesConfig {
-			ceremony_reward: BalanceType::from_num(1),
-			time_tolerance: 600_000,   // +-10min
-			location_tolerance: 1_000, // [m]
-		},
-		encointer_communities: launch_runtime::EncointerCommunitiesConfig {
-			community_master: root_key,
-		},
-		encointer_balances: launch_runtime::EncointerBalancesConfig {
-			demurrage_per_block_default: Demurrage::from_bits(
-				0x0000000000000000000001E3F0A8A973_i128,
-			),
-		},
 	}
 }
 

@@ -26,7 +26,7 @@ use sp_api::impl_runtime_apis;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
-	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT, Verify},
+	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT},
 	transaction_validity::{TransactionSource, TransactionValidity},
 	ApplyExtrinsicResult,
 };
@@ -53,20 +53,6 @@ pub use sp_runtime::{Perbill, Permill};
 
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
-
-// A few exports that help ease life for downstream crates.
-pub use pallet_encointer_balances::Call as EncointerBalancesCall;
-pub use pallet_encointer_bazaar::Call as EncointerBazaarCall;
-pub use pallet_encointer_ceremonies::Call as EncointerCeremoniesCall;
-pub use pallet_encointer_communities::Call as EncointerCommunitiesCall;
-pub use pallet_encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
-pub use pallet_encointer_scheduler::Call as EncointerSchedulerCall;
-pub use pallet_encointer_sybil_gate_template::Call as EncointerSybilGateCall;
-
-pub use encointer_primitives::{
-	balances::{BalanceEntry, BalanceType, Demurrage},
-	scheduler::CeremonyPhaseType,
-};
 
 // XCM imports
 use frame_support::traits::Contains;
@@ -213,7 +199,7 @@ parameter_types! {
 impl pallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
-	type OnTimestampSet = EncointerScheduler;
+	type OnTimestampSet = ();
 	type MinimumPeriod = MinimumPeriod;
 	type WeightInfo = ();
 }
@@ -449,45 +435,6 @@ parameter_types! {
 	pub const MomentsPerDay: Moment = 86_400_000; // [ms/d]
 }
 
-impl pallet_encointer_scheduler::Config for Runtime {
-	type Event = Event;
-	type OnCeremonyPhaseChange = EncointerCeremonies;
-	type MomentsPerDay = MomentsPerDay;
-}
-
-impl pallet_encointer_ceremonies::Config for Runtime {
-	type Event = Event;
-	type Public = <Signature as Verify>::Signer;
-	type Signature = Signature;
-	type RandomnessSource = RandomnessCollectiveFlip;
-}
-
-impl pallet_encointer_communities::Config for Runtime {
-	type Event = Event;
-}
-
-impl pallet_encointer_balances::Config for Runtime {
-	type Event = Event;
-}
-
-impl pallet_encointer_bazaar::Config for Runtime {
-	type Event = Event;
-}
-
-impl pallet_encointer_personhood_oracle::Config for Runtime {
-	type Event = Event;
-	type XcmSender = XcmRouter;
-}
-
-impl pallet_encointer_sybil_gate_template::Config for Runtime {
-	type Event = Event;
-	type Call = Call;
-	type XcmSender = XcmRouter;
-	type Currency = Balances;
-	type Public = <Signature as Verify>::Signer;
-	type Signature = Signature;
-}
-
 impl pallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
 	type DisabledValidators = ();
@@ -517,15 +464,6 @@ construct_runtime! {
 		PolkadotXcm: pallet_xcm::{Pallet, Call, Event<T>, Origin} = 31,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Call, Event<T>, Origin} = 32,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
-
-		EncointerScheduler: pallet_encointer_scheduler::{Pallet, Call, Storage, Config<T>, Event} = 50,
-		EncointerCeremonies: pallet_encointer_ceremonies::{Pallet, Call, Storage, Config<T>, Event<T>} = 51,
-		EncointerCommunities: pallet_encointer_communities::{Pallet, Call, Storage, Config<T>, Event<T>} = 52,
-		EncointerBalances: pallet_encointer_balances::{Pallet, Call, Storage, Config, Event<T>} = 53,
-		EncointerBazaar: pallet_encointer_bazaar::{Pallet, Call, Storage, Event<T>} = 54,
-
-		EncointerPersonhoodOracle: pallet_encointer_personhood_oracle::{Pallet, Call, Event} = 60,
-		EncointerSybilGate: pallet_encointer_sybil_gate_template::{Pallet, Call, Storage, Event<T>} = 61,
 	}
 }
 
