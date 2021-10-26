@@ -2103,6 +2103,7 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
  "derive_more 0.15.0",
+ "encointer-launch-runtime",
  "encointer-parachain-runtime",
  "exit-future 0.1.4",
  "frame-benchmarking",
@@ -2157,7 +2158,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "encointer-parachain-launch-runtime"
+name = "encointer-launch-runtime"
 version = "0.5.9"
 dependencies = [
  "cumulus-pallet-aura-ext",
