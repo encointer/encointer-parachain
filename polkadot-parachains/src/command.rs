@@ -58,26 +58,26 @@ fn load_spec(
 	id: &str,
 	para_id: ParaId,
 ) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
-	match id {
-		"encointer-rococo" => Ok(Box::new(chain_spec::encointer_spec(para_id, false, RelayChain::Rococo))),
-		"encointer-rococo-local" => Ok(Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal))),
+	Ok(match id {
+		"encointer-rococo" => Box::new(chain_spec::encointer_spec(para_id, false, RelayChain::Rococo)),
+		"encointer-rococo-local" => Box::new(chain_spec::encointer_spec(para_id, true, RelayChain::RococoLocal)),
 
-		"launch-rococo" => Ok(Box::new(chain_spec::launch_spec(para_id, false, RelayChain::Rococo))),
-		"launch-rococo-local" => Ok(Box::new(chain_spec::launch_spec(para_id, true, RelayChain::RococoLocal))),
+		"launch-rococo" => Box::new(chain_spec::launch_spec(para_id, false, RelayChain::Rococo)),
+		"launch-rococo-local" => Box::new(chain_spec::launch_spec(para_id, true, RelayChain::RococoLocal)),
 
-		"sybil-dummy-rococo" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::Rococo))),
-		"sybil-dummy-rococo-local" => Ok(Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal))),
+		"sybil-dummy-rococo" => Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::Rococo)),
+		"sybil-dummy-rococo-local" => Box::new(chain_spec::sybil_dummy_spec(para_id, RelayChain::RococoLocal)),
 		
-		"" => Err("No chain-spec specified".into()),
-		path => Ok({
+		"" => return Err("No chain-spec specified".into()),
+		path => {
 			let chain_spec = chain_spec::EncointerChainSpec::from_json_file(path.into())?;
 			if chain_spec.is_launch() {
 				Box::new(LaunchChainSpec::from_json_file(path.into())?)
 			} else {
 				Box::new(chain_spec)
 			}
-		}),
-	}
+		},
+	})
 }
 
 impl SubstrateCli for Cli {

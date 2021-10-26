@@ -24,11 +24,10 @@ use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type EncointerChainSpec =
-	sc_service::GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
+pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
 
 /// Specialized `ChainSpec` for the launch parachain runtime.
-pub type LaunchChainSpec = sc_service::GenericChainSpec<launch_runtime::GenesisConfig, Extensions>;
+pub type LaunchChainSpec = GenericChainSpec<launch_runtime::GenesisConfig, Extensions>;
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -168,7 +167,7 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 			)
 			.unwrap(),
 		),
-		Extensions { relay_chain: relay_chain.into(), para_id: para_id.into() },
+		Extensions { relay_chain, para_id: para_id.into() },
 	)
 }
 
