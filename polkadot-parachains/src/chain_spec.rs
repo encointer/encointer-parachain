@@ -17,7 +17,7 @@
 use cumulus_primitives_core::ParaId;
 use hex_literal::hex;
 use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage, Signature};
-use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
+use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup, Properties};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
@@ -95,7 +95,7 @@ pub fn encointer_spec(
 		},
 		relay_chain.chain_type(),
 		id,
-		relay_chain.to_string(),
+		&relay_chain,
 	)
 }
 
@@ -131,7 +131,7 @@ pub fn launch_spec(
 		},
 		relay_chain.chain_type(),
 		id,
-		relay_chain.to_string(),
+		&relay_chain,
 	)
 }
 
@@ -144,11 +144,11 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 	testnet_constructor: F,
 	chain_type: ChainType,
 	para_id: ParaId,
-	relay_chain: String,
+	relay_chain: &RelayChain,
 ) -> GenericChainSpec<GenesisConfig, Extensions> {
 	GenericChainSpec::<GenesisConfig, Extensions>::from_genesis(
 		chain_name,
-		&format!("encointer-{}", relay_chain),
+		&format!("encointer-{}", relay_chain.to_string()),
 		chain_type,
 		testnet_constructor,
 		Vec::new(),
@@ -157,17 +157,8 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 		// protocol id
 		Some("dot"),
 		// properties
-		Some(
-			serde_json::from_str(
-				r#"{
-				"ss58Format": 42,
-				"tokenDecimals": 12,
-				"tokenSymbol": "DOT"
-				}"#,
-			)
-			.unwrap(),
-		),
-		Extensions { relay_chain, para_id: para_id.into() },
+		Some(relay_chain.properties()),
+		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
 	)
 }
 
@@ -335,4 +326,25 @@ impl RelayChain {
 			// RelayChain::Polkadot => ChainType::Live,
 		}
 	}
+
+	fn properties(&self) -> Properties {
+		match self {
+			RelayChain::RococoLocal | RelayChain::Rococo => rococo_properties(),
+			// RelayChain::KusamaLocal => ChainType::Local,
+			// RelayChain::PolkadotLocal => ChainType::Local,
+			// RelayChain::Kusama => ChainType::Live,
+			// RelayChain::Polkadot => ChainType::Live,
+		}
+	}
+}
+
+fn rococo_properties() -> Properties {
+	serde_json::from_str(
+		r#"{
+				"ss58Format": 42,
+				"tokenDecimals": 12,
+				"tokenSymbol": "ROC"
+				}"#,
+	)
+	.unwrap()
 }
