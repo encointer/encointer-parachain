@@ -23,28 +23,15 @@
 	"parachains": [
 		{
 			"bin": "../target/release/encointer-collator",
-			"chain": "encointer-rococo",
+			"chain": "launch-rococo",
 			"id": "1862",
 			"balance": "1000000000000000000000",
 			"nodes": [
 				{
 					"wsPort": 9944,
 					"port": 31200,
-					"flags": ["-lencointer=debug", "--force-authoring", "--", "--execution=wasm"]
-				}
-			]
-		},
-		{
-			"bin": "../target/release/encointer-collator",
-			"chain": "sybil-dummy-rococo",
-			"id": "1863",
-			"balance": "1000000000000000000000",
-			"nodes": [
-				{
-					"wsPort": 9955,
-					"port": 31300,
 					"name": "alice",
-					"flags": ["-lencointer=debug", "--force-authoring", "--", "--execution=wasm"]
+					"flags": ["--force-authoring", "--", "--execution=wasm"]
 				}
 			]
 		}
@@ -52,18 +39,6 @@
 	"simpleParachains": [
 	],
 	"hrmpChannels": [
-		{
-			"sender": 1862,
-			"recipient": 1863,
-			"maxCapacity": 8,
-			"maxMessageSize": 512
-		},
-		{
-			"sender": 1863,
-			"recipient": 1862,
-			"maxCapacity": 8,
-			"maxMessageSize": 512
-		}
 	],
 	"types": "./typedefs.json",
 	"finalization": false
