@@ -242,6 +242,7 @@ fn encointer_genesis(
 		parachain_info: parachain_runtime::ParachainInfoConfig { parachain_id: id },
 		aura: parachain_runtime::AuraConfig { authorities: initial_authorities },
 		aura_ext: Default::default(),
+		treasury: Default::default(),
 		encointer_scheduler: parachain_runtime::EncointerSchedulerConfig {
 			current_phase: CeremonyPhaseType::REGISTERING,
 			current_ceremony_index: 1,

@@ -2237,6 +2237,7 @@ dependencies = [
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
+ "pallet-treasury",
  "pallet-xcm",
  "parachain-info",
  "parity-scale-codec",
