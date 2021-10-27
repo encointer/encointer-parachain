@@ -485,6 +485,8 @@ construct_runtime! {
 		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent} = 3,
 		ParachainInfo: parachain_info::{Pallet, Storage, Config} = 4,
 		Sudo: pallet_sudo::{Pallet, Call, Storage, Config<T>, Event<T>} = 5,
+		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 6,
+
 
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 10,
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage} = 11,
@@ -497,8 +499,6 @@ construct_runtime! {
 		PolkadotXcm: pallet_xcm::{Pallet, Call, Event<T>, Origin} = 31,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Call, Event<T>, Origin} = 32,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
-
-		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 40,
 	}
 }
 
