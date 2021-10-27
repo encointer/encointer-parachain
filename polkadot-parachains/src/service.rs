@@ -61,25 +61,13 @@ impl sc_executor::NativeExecutionDispatch for RococoParachainRuntimeExecutor {
 	type ExtendHostFunctions = ();
 
 	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
-		rococo_parachain_runtime::api::dispatch(method, data)
+		parachain_runtime::api::dispatch(method, data)
 	}
 
 	fn native_version() -> sc_executor::NativeVersion {
-		rococo_parachain_runtime::native_version()
+		parachain_runtime::native_version()
 	}
 }
-
-type BlockNumber = u32;
-type Header = sp_runtime::generic::Header<BlockNumber, sp_runtime::traits::BlakeTwo256>;
-pub type Block = sp_runtime::generic::Block<Header, sp_runtime::OpaqueExtrinsic>;
-type Hash = sp_core::H256;
-
-// Native executor instance.
-native_executor_instance!(
-	pub RococoParachainRuntimeExecutor,
-	parachain_runtime::api::dispatch,
-	parachain_runtime::native_version,
-);
 
 /// Starts a `ServiceBuilder` for a full service.
 ///
