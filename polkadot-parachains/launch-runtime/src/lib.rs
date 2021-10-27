@@ -259,13 +259,13 @@ impl pallet_treasury::Config for Runtime {
 	type RejectOrigin = RootOrigin;
 	type Event = Event;
 	type OnSlash = (); //No proposal
-	type ProposalBond = ProposalBond; //No proposal
-	type ProposalBondMinimum = ProposalBondMinimum; //No proposal
+	type ProposalBond = ProposalBond;
+	type ProposalBondMinimum = ProposalBondMinimum;
 	type SpendPeriod = SpendPeriod; //Cannot be 0: Error: Thread 'tokio-runtime-worker' panicked at 'attempt to calculate the remainder with a divisor of zero
 	type Burn = (); //No burn
 	type BurnDestination = (); //No burn
 	type SpendFunds = (); //No spend, no bounty
-	type MaxApprovals = MaxApprovals; //0:cannot approve any proposal
+	type MaxApprovals = MaxApprovals;
 	type WeightInfo = ();
 }
 
