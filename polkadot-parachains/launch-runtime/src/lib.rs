@@ -158,10 +158,10 @@ parameter_types! {
 	pub const SS58Prefix: u8 = 42;
 }
 
-pub struct SudoOnlyFilter;
-impl Contains<Call> for SudoOnlyFilter {
+pub struct SudoOnly;
+impl Contains<Call> for SudoOnly {
 	fn contains(call: &Call) -> bool {
-		!matches!(call, Call::Sudo(_))
+		matches!(call, Call::Sudo(_))
 	}
 }
 
@@ -196,7 +196,7 @@ impl frame_system::Config for Runtime {
 	type OnNewAccount = ();
 	type OnKilledAccount = ();
 	type DbWeight = ();
-	type BaseCallFilter = SudoOnlyFilter;
+	type BaseCallFilter = SudoOnly;
 	type SystemWeightInfo = ();
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
