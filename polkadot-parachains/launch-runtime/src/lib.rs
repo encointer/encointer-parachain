@@ -491,7 +491,7 @@ construct_runtime! {
 		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent} = 3,
 		ParachainInfo: parachain_info::{Pallet, Storage, Config} = 4,
 		Sudo: pallet_sudo::{Pallet, Call, Storage, Config<T>, Event<T>} = 5,
-		Utility: pallet_utility::{Pallet, Call, Event} = 7,
+		Utility: pallet_utility::{Pallet, Call, Event} = 6,
 
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 10,
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage} = 11,
