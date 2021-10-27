@@ -16,13 +16,12 @@
 
 use cumulus_primitives_core::ParaId;
 use hex_literal::hex;
-use launch_runtime::TreasuryPalletId;
 use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage, Signature};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup, Properties};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
-use sp_runtime::traits::{AccountIdConversion, IdentifyAccount, Verify};
+use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
@@ -30,7 +29,6 @@ pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig,
 /// Specialized `ChainSpec` for the launch parachain runtime.
 pub type LaunchChainSpec = GenericChainSpec<launch_runtime::GenesisConfig, Extensions>;
 
-pub const TREASURY_FUNDING_PERCENT: u128 = 5;
 pub const ENDOWED_FUNDING: u128 = 1 << 60;
 
 /// Helper function to generate a crypto pair from seed
@@ -40,23 +38,9 @@ pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Pu
 		.public()
 }
 
-///Get the account id for the treasury
-pub fn treasury_account_id() -> AccountId {
-	TreasuryPalletId::get().into_account()
-}
-
-/// Configure `endowed_accounts` with initial balance of `ENDOWED_FUNDING` and allocate the treasury
-/// `TREASURY_FUNDING_PERCENT` of total supply .
+/// Configure `endowed_accounts` with initial balance of `ENDOWED_FUNDING`.
 pub fn allocate_endowance(endowed_accounts: Vec<AccountId>) -> Vec<(AccountId, u128)> {
-	let treasury_funding =
-		(endowed_accounts.len() as u128) * ENDOWED_FUNDING * TREASURY_FUNDING_PERCENT / 100u128;
-
-	let mut endowance_allocation: Vec<(AccountId, u128)> =
-		endowed_accounts.into_iter().map(|k| (k, 1 << ENDOWED_FUNDING)).collect();
-
-	endowance_allocation.push((treasury_account_id(), treasury_funding));
-
-	endowance_allocation
+	endowed_accounts.into_iter().map(|k| (k, ENDOWED_FUNDING)).collect()
 }
 
 /// The extensions for the [`ChainSpec`].
