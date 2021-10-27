@@ -115,9 +115,12 @@ impl SubstrateCli for Cli {
 		load_spec(id, self.run.parachain_id.unwrap_or(DEFAULT_PARA_ID).into())
 	}
 
-	fn native_runtime_version(_chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		// chain_spec was only used in case of shell runtime
-		&parachain_runtime::VERSION
+	fn native_runtime_version(chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
+		if chain_spec.is_launch() {
+			&launch_runtime::VERSION
+		} else {
+			&parachain_runtime::VERSION
+		}
 	}
 }
 
