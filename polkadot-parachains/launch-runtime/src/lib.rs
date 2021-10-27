@@ -269,6 +269,12 @@ impl pallet_treasury::Config for Runtime {
 	type WeightInfo = ();
 }
 
+impl pallet_utility::Config for Runtime {
+	type Event = Event;
+	type Call = Call;
+	type WeightInfo = ();
+}
+
 impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 	type Event = Event;
