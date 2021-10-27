@@ -161,7 +161,21 @@ parameter_types! {
 pub struct SudoOnly;
 impl Contains<Call> for SudoOnly {
 	fn contains(call: &Call) -> bool {
-		matches!(call, Call::Sudo(_))
+		// the system relevant pallets have either:
+		//
+		// * `ensure_root(origin)`
+		// * `ensure_none(origin)`
+		//
+		// So effectively, this is a `SudoOnly` filter.
+		!matches!(
+			call,
+			// only enable force_transfer/set_balance, which are root calls.
+			Call::Balances(
+				pallet_balances::Call::transfer { .. } |
+					pallet_balances::Call::transfer_all { .. } |
+					pallet_balances::Call::transfer_keep_alive { .. }
+			) | Call::Treasury(_)
+		)
 	}
 }
 
