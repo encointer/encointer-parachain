@@ -614,17 +614,13 @@ impl OnUnbalanced<pallet_balances::NegativeImbalance<Runtime>> for DealWithFees 
 	fn on_unbalanceds<B>(
 		mut fees_then_tips: impl Iterator<Item = pallet_balances::NegativeImbalance<Runtime>>,
 	) {
-		if let Some(fees) = fees_then_tips.next() {
-			// for fees, 1% to treasury, 99% burned
-			// TODO: apply burning function based on cumulative number of extrinsics (#32)
-			let mut split = fees.ration(1, 99);
+		if let Some(mut fees) = fees_then_tips.next() {
+			// no burning, add all fees and tips to the treasury
 
-			// tips (voluntary extra fees) go to the treasury entirely. no burning
 			if let Some(tips) = fees_then_tips.next() {
-				tips.merge_into(&mut split.0);
+				tips.merge_into(&mut fees);
 			}
-			Treasury::on_unbalanced(split.0);
-			// burn remainder by not assigning imbalance to someone
+			Treasury::on_unbalanced(fees);
 		}
 	}
 }
