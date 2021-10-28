@@ -520,6 +520,25 @@ pub async fn start_rococo_parachain_node(
 		.await
 }
 
+/// Start a launch-runtime parachain node.
+pub async fn start_launch_parachain_node(
+	parachain_config: Configuration,
+	polkadot_config: Configuration,
+	id: ParaId,
+) -> sc_service::error::Result<(
+	TaskManager,
+	Arc<
+		TFullClient<
+			Block,
+			launch_runtime::RuntimeApi,
+			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
+		>,
+	>,
+)> {
+	start_parachain_node(parachain_config, polkadot_config, id, launch_parachain_build_import_queue)
+		.await
+}
+
 pub async fn start_parachain_node<RuntimeApi, Executor, BIQ>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,

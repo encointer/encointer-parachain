@@ -354,8 +354,7 @@ pub fn run() -> Result<()> {
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				if config.chain_spec.is_launch() {
-					// Todo: implement launch start
-					crate::service::start_rococo_parachain_node(config, polkadot_config, id)
+					crate::service::start_launch_parachain_node(config, polkadot_config, id)
 						.await
 						.map(|r| r.0)
 						.map_err(Into::into)
