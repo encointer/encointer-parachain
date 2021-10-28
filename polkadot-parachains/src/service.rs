@@ -372,7 +372,7 @@ where
 	Ok((task_manager, client))
 }
 
-/// Import queue for the encointer parachain.
+/// Import queue for the encointer parachain runtime.
 pub fn rococo_parachain_build_import_queue(
 	client: Arc<
 		TFullClient<
@@ -396,6 +396,37 @@ pub fn rococo_parachain_build_import_queue(
 	sc_service::Error,
 > {
 	parachain_build_import_queue::<parachain_runtime::RuntimeApi, EncointerParachainRuntimeExecutor>(
+		client,
+		config,
+		telemetry,
+		task_manager,
+	)
+}
+
+/// Import queue for the launch runtime.
+pub fn launch_parachain_build_import_queue(
+	client: Arc<
+		TFullClient<
+			Block,
+			launch_runtime::RuntimeApi,
+			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
+		>,
+	>,
+	config: &Configuration,
+	telemetry: Option<TelemetryHandle>,
+	task_manager: &TaskManager,
+) -> Result<
+	sc_consensus::DefaultImportQueue<
+		Block,
+		TFullClient<
+			Block,
+			launch_runtime::RuntimeApi,
+			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
+		>,
+	>,
+	sc_service::Error,
+> {
+	parachain_build_import_queue::<launch_runtime::RuntimeApi, LaunchParachainRuntimeExecutor>(
 		client,
 		config,
 		telemetry,
