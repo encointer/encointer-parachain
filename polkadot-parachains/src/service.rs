@@ -436,7 +436,8 @@ pub fn launch_parachain_build_import_queue(
 
 /// Generic import queue for the encointer- and launch parachain runtime.
 ///
-/// Note: This has been made generic by encointer.
+/// The trait bounds of the generic parameters are copied from the above `start_node_impl` except
+/// for the one mentioned below.
 pub fn parachain_build_import_queue<RuntimeApi, Executor>(
 	client: Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
 	config: &Configuration,
@@ -465,7 +466,8 @@ where
 		+ cumulus_primitives_core::CollectCollationInfo<Block>
 		+ pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>
 		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>
-		+ sp_consensus_aura::AuraApi<Block, sp_consensus_aura::sr25519::AuthorityId>, // <- added by encointer
+		+ sp_consensus_aura::AuraApi<Block, sp_consensus_aura::sr25519::AuthorityId>,
+	// ^^^ `AuraApi` is added by encointer, needed for this generic implementation.
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 {
@@ -539,6 +541,10 @@ pub async fn start_launch_parachain_node(
 		.await
 }
 
+/// Generic implementation introduced by encointer.
+///
+/// The trait bounds of the generic parameters are copied from the above `start_node_impl` except
+/// for the one mentioned below.
 pub async fn start_parachain_node<RuntimeApi, Executor, BIQ>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
@@ -564,7 +570,8 @@ where
 		+ cumulus_primitives_core::CollectCollationInfo<Block>
 		+ pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>
 		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>
-		+ sp_consensus_aura::AuraApi<Block, sp_consensus_aura::sr25519::AuthorityId>, // <- added by encointer
+		+ sp_consensus_aura::AuraApi<Block, sp_consensus_aura::sr25519::AuthorityId>,
+	// ^^^ `AuraApi` is added by encointer, needed for this generic implementation.
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 	BIQ: FnOnce(
