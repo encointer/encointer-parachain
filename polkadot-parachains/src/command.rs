@@ -18,7 +18,9 @@ use crate::{
 	chain_spec,
 	chain_spec::{EncointerChainSpec, LaunchChainSpec, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
-	service::{new_partial, Block, EncointerParachainRuntimeExecutor},
+	service::{
+		new_partial, Block, EncointerParachainRuntimeExecutor, LaunchParachainRuntimeExecutor,
+	},
 };
 use codec::Encode;
 use cumulus_client_service::genesis::generate_genesis_block;
@@ -177,7 +179,17 @@ fn extract_genesis_wasm(chain_spec: &Box<dyn sc_service::ChainSpec>) -> Result<V
 macro_rules! construct_async_run {
 	(|$components:ident, $cli:ident, $cmd:ident, $config:ident| $( $code:tt )* ) => {{
 		let runner = $cli.create_runner($cmd)?;
-		runner.async_run(|$config| {
+		if runner.config().chain_spec.is_launch() {
+			runner.async_run(|$config| {
+				let $components = new_partial::<launch_runtime::RuntimeApi, LaunchParachainRuntimeExecutor, _>(
+					&$config,
+					crate::service::launch_parachain_build_import_queue,
+				)?;
+				let task_manager = $components.task_manager;
+				{ $( $code )* }.map(|v| (v, task_manager))
+			})
+		} else {
+			runner.async_run(|$config| {
 			let $components = new_partial::<
 				parachain_runtime::RuntimeApi,
 				EncointerParachainRuntimeExecutor,
@@ -189,6 +201,7 @@ macro_rules! construct_async_run {
 			let task_manager = $components.task_manager;
 			{ $( $code )* }.map(|v| (v, task_manager))
 		})
+		}
 	}}
 }
 
@@ -293,8 +306,14 @@ pub fn run() -> Result<()> {
 		Some(Subcommand::Benchmark(cmd)) =>
 			if cfg!(feature = "runtime-benchmarks") {
 				let runner = cli.create_runner(cmd)?;
-				runner
-					.sync_run(|config| cmd.run::<Block, EncointerParachainRuntimeExecutor>(config))
+				if runner.config().chain_spec.is_launch() {
+					runner
+						.sync_run(|config| cmd.run::<Block, LaunchParachainRuntimeExecutor>(config))
+				} else {
+					runner.sync_run(|config| {
+						cmd.run::<Block, EncointerParachainRuntimeExecutor>(config)
+					})
+				}
 			} else {
 				Err("Benchmarking wasn't enabled when building the node. \
 				You can enable it with `--features runtime-benchmarks`."
@@ -334,10 +353,18 @@ pub fn run() -> Result<()> {
 				info!("Parachain genesis state: {}", genesis_state);
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
-				crate::service::start_rococo_parachain_node(config, polkadot_config, id)
-					.await
-					.map(|r| r.0)
-					.map_err(Into::into)
+				if config.chain_spec.is_launch() {
+					// Todo: implement launch start
+					crate::service::start_rococo_parachain_node(config, polkadot_config, id)
+						.await
+						.map(|r| r.0)
+						.map_err(Into::into)
+				} else {
+					crate::service::start_rococo_parachain_node(config, polkadot_config, id)
+						.await
+						.map(|r| r.0)
+						.map_err(Into::into)
+				}
 			})
 		},
 	}
