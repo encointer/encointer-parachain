@@ -40,9 +40,9 @@ use std::sync::Arc;
 use substrate_prometheus_endpoint::Registry;
 
 /// Native executor instance.
-pub struct RococoParachainRuntimeExecutor;
+pub struct EncointerParachainRuntimeExecutor;
 
-impl sc_executor::NativeExecutionDispatch for RococoParachainRuntimeExecutor {
+impl sc_executor::NativeExecutionDispatch for EncointerParachainRuntimeExecutor {
 	type ExtendHostFunctions = ();
 
 	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
@@ -51,6 +51,21 @@ impl sc_executor::NativeExecutionDispatch for RococoParachainRuntimeExecutor {
 
 	fn native_version() -> sc_executor::NativeVersion {
 		parachain_runtime::native_version()
+	}
+}
+
+/// Native executor instance.
+pub struct LaunchParachainRuntimeExecutor;
+
+impl sc_executor::NativeExecutionDispatch for LaunchParachainRuntimeExecutor {
+	type ExtendHostFunctions = ();
+
+	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
+		launch_runtime::api::dispatch(method, data)
+	}
+
+	fn native_version() -> sc_executor::NativeVersion {
+		launch_runtime::native_version()
 	}
 }
 
@@ -357,13 +372,13 @@ where
 	Ok((task_manager, client))
 }
 
-/// Build the import queue for the rococo parachain runtime.
+/// Import queue for the encointer parachain.
 pub fn rococo_parachain_build_import_queue(
 	client: Arc<
 		TFullClient<
 			Block,
 			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<RococoParachainRuntimeExecutor>,
+			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
 		>,
 	>,
 	config: &Configuration,
@@ -375,11 +390,54 @@ pub fn rococo_parachain_build_import_queue(
 		TFullClient<
 			Block,
 			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<RococoParachainRuntimeExecutor>,
+			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
 		>,
 	>,
 	sc_service::Error,
 > {
+	parachain_build_import_queue::<parachain_runtime::RuntimeApi, EncointerParachainRuntimeExecutor>(
+		client,
+		config,
+		telemetry,
+		task_manager,
+	)
+}
+
+/// Generic import queue for the encointer- and launch parachain runtime.
+///
+/// Note: This has been made generic by encointer.
+pub fn parachain_build_import_queue<RuntimeApi, Executor>(
+	client: Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
+	config: &Configuration,
+	telemetry: Option<TelemetryHandle>,
+	task_manager: &TaskManager,
+) -> Result<
+	sc_consensus::DefaultImportQueue<
+		Block,
+		TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
+	>,
+	sc_service::Error,
+>
+where
+	RuntimeApi: ConstructRuntimeApi<Block, TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>
+		+ Send
+		+ Sync
+		+ 'static,
+	RuntimeApi::RuntimeApi: sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block>
+		+ sp_api::Metadata<Block>
+		+ sp_session::SessionKeys<Block>
+		+ sp_api::ApiExt<
+			Block,
+			StateBackend = sc_client_api::StateBackendFor<TFullBackend<Block>, Block>,
+		> + sp_offchain::OffchainWorkerApi<Block>
+		+ sp_block_builder::BlockBuilder<Block>
+		+ cumulus_primitives_core::CollectCollationInfo<Block>
+		+ pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>
+		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>
+		+ sp_consensus_aura::AuraApi<Block, sp_consensus_aura::sr25519::AuthorityId>, // <- added by encointer
+	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
+	Executor: sc_executor::NativeExecutionDispatch + 'static,
+{
 	let slot_duration = cumulus_client_consensus_aura::slot_duration(&*client)?;
 
 	cumulus_client_consensus_aura::import_queue::<
@@ -423,11 +481,11 @@ pub async fn start_rococo_parachain_node(
 		TFullClient<
 			Block,
 			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<RococoParachainRuntimeExecutor>,
+			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
 		>,
 	>,
 )> {
-	start_node_impl::<parachain_runtime::RuntimeApi, RococoParachainRuntimeExecutor, _, _, _>(
+	start_node_impl::<parachain_runtime::RuntimeApi, EncointerParachainRuntimeExecutor, _, _, _>(
 		parachain_config,
 		polkadot_config,
 		id,
