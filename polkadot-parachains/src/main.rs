@@ -25,6 +25,7 @@ mod service;
 mod cli;
 mod command;
 mod rpc;
+mod chain_spec_helpers;
 
 fn main() -> sc_cli::Result<()> {
 	command::run()
