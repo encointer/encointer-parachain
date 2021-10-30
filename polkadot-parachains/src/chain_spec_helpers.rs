@@ -63,7 +63,8 @@ pub struct EncointerKeys;
 
 impl EncointerKeys {
 	pub fn root() -> AccountId {
-		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into()
+		public_from_ss58::<sr25519::Public>("5CSLXnYZQeVDvNmanYEJn4YXXhgFLKYwp2f216NsDehR8mVU")
+			.into()
 	}
 	pub fn authorities() -> Vec<AuraId> {
 		vec![
