@@ -15,6 +15,9 @@
 // along with Encointer.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Some helpers to create chains-specs
+//!
+//! Only moved stuff here that is not in the `chain_spec.rs` upstream to prevent upstream merge
+//! confusion.
 
 use hex_literal::hex;
 use parachain_runtime::{AccountId, AuraId};
