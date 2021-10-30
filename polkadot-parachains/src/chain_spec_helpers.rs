@@ -16,12 +16,10 @@
 
 //! Some helpers to create chains-specs
 
-use cumulus_primitives_core::ParaId;
 use hex_literal::hex;
 use parachain_runtime::{AccountId, AuraId};
-use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
-use sc_service::{ChainType, GenericChainSpec};
-use serde::{Deserialize, Serialize};
+use sc_chain_spec::Properties;
+use sc_service::ChainType;
 use sp_core::{crypto::Ss58Codec, sr25519, Public};
 use sp_keyring::AccountKeyring::{Alice, Bob};
 use std::str::FromStr;
@@ -45,15 +43,15 @@ pub enum GenesisKeys {
 pub(crate) struct WellKnownKeys;
 
 impl WellKnownKeys {
-	pub(crate) fn root() -> AccountId {
+	pub fn root() -> AccountId {
 		Alice.to_account_id()
 	}
 
-	pub(crate) fn endowed() -> Vec<AccountId> {
+	pub fn endowed() -> Vec<AccountId> {
 		vec![Alice.to_account_id(), Bob.to_account_id()]
 	}
 
-	pub(crate) fn authorities() -> Vec<AuraId> {
+	pub fn authorities() -> Vec<AuraId> {
 		vec![Alice.public().into()]
 	}
 }
@@ -61,10 +59,10 @@ impl WellKnownKeys {
 pub(crate) struct EncointerKeys;
 
 impl EncointerKeys {
-	pub(crate) fn root() -> AccountId {
+	pub fn root() -> AccountId {
 		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into()
 	}
-	pub(crate) fn authorities() -> Vec<AuraId> {
+	pub fn authorities() -> Vec<AuraId> {
 		vec![
 			public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
 				.into(),
@@ -78,4 +76,56 @@ impl EncointerKeys {
 				.into(),
 		]
 	}
+}
+
+pub enum RelayChain {
+	RococoLocal,
+	// Kusama,
+	// KusamaLocal,
+	// PolkadotLocal,
+	Rococo,
+	// Polkadot,
+}
+
+impl ToString for RelayChain {
+	fn to_string(&self) -> String {
+		match self {
+			RelayChain::RococoLocal => "rococo-local".into(),
+			// RelayChain::Kusama => "kusama".into(),
+			// RelayChain::KusamaLocal => "kusama-local".into(),
+			// RelayChain::PolkadotLocal => "polkadot-local".into(),
+			RelayChain::Rococo => "rococo".into(),
+			// RelayChain::Polkadot => "polkadot".into(),
+		}
+	}
+}
+
+impl RelayChain {
+	pub fn chain_type(&self) -> ChainType {
+		match self {
+			RelayChain::RococoLocal => ChainType::Local,
+			// RelayChain::KusamaLocal => ChainType::Local,
+			// RelayChain::PolkadotLocal => ChainType::Local,
+			// RelayChain::Kusama => ChainType::Live,
+			RelayChain::Rococo => ChainType::Live,
+			// RelayChain::Polkadot => ChainType::Live,
+		}
+	}
+
+	pub fn properties(&self) -> Properties {
+		match self {
+			RelayChain::RococoLocal | RelayChain::Rococo => rococo_properties(),
+		}
+	}
+}
+
+pub(crate) fn rococo_properties() -> Properties {
+	serde_json::from_str(
+		r#"{
+				"ss58Format": 42,
+				"tokenDecimals": 12,
+				"tokenSymbol": "ROC"
+				}"#,
+	)
+	.unwrap()
 }

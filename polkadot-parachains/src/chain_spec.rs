@@ -16,13 +16,11 @@
 
 use cumulus_primitives_core::ParaId;
 // use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage, Signature};
-use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, WellKnownKeys};
-use parachain_runtime::{AccountId, AuraId, Signature};
-use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup, Properties};
+use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys};
+use parachain_runtime::{AccountId, AuraId};
+use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
-use sp_core::{Pair, Public};
-use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
@@ -240,56 +238,4 @@ fn launch_genesis(
 		aura_ext: Default::default(),
 		treasury: Default::default(),
 	}
-}
-
-pub enum RelayChain {
-	RococoLocal,
-	// Kusama,
-	// KusamaLocal,
-	// PolkadotLocal,
-	Rococo,
-	// Polkadot,
-}
-
-impl ToString for RelayChain {
-	fn to_string(&self) -> String {
-		match self {
-			RelayChain::RococoLocal => "rococo-local".into(),
-			// RelayChain::Kusama => "kusama".into(),
-			// RelayChain::KusamaLocal => "kusama-local".into(),
-			// RelayChain::PolkadotLocal => "polkadot-local".into(),
-			RelayChain::Rococo => "rococo".into(),
-			// RelayChain::Polkadot => "polkadot".into(),
-		}
-	}
-}
-
-impl RelayChain {
-	fn chain_type(&self) -> ChainType {
-		match self {
-			RelayChain::RococoLocal => ChainType::Local,
-			// RelayChain::KusamaLocal => ChainType::Local,
-			// RelayChain::PolkadotLocal => ChainType::Local,
-			// RelayChain::Kusama => ChainType::Live,
-			RelayChain::Rococo => ChainType::Live,
-			// RelayChain::Polkadot => ChainType::Live,
-		}
-	}
-
-	fn properties(&self) -> Properties {
-		match self {
-			RelayChain::RococoLocal | RelayChain::Rococo => rococo_properties(),
-		}
-	}
-}
-
-fn rococo_properties() -> Properties {
-	serde_json::from_str(
-		r#"{
-				"ss58Format": 42,
-				"tokenDecimals": 12,
-				"tokenSymbol": "ROC"
-				}"#,
-	)
-	.unwrap()
 }
