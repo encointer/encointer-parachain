@@ -16,8 +16,7 @@
 
 use crate::{
 	chain_spec,
-	chain_spec::{EncointerChainSpec, LaunchChainSpec},
-	chain_spec_helpers::{GenesisKeys, RelayChain},
+	chain_spec::{EncointerChainSpec, GenesisKeys, LaunchChainSpec, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
 	service::{
 		new_partial, Block, EncointerParachainRuntimeExecutor, LaunchParachainRuntimeExecutor,

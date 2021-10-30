@@ -40,7 +40,7 @@ pub enum GenesisKeys {
 	WellKnown,
 }
 
-pub(crate) struct WellKnownKeys;
+pub struct WellKnownKeys;
 
 impl WellKnownKeys {
 	pub fn root() -> AccountId {
@@ -56,7 +56,7 @@ impl WellKnownKeys {
 	}
 }
 
-pub(crate) struct EncointerKeys;
+pub struct EncointerKeys;
 
 impl EncointerKeys {
 	pub fn root() -> AccountId {
@@ -119,7 +119,7 @@ impl RelayChain {
 	}
 }
 
-pub(crate) fn rococo_properties() -> Properties {
+pub fn rococo_properties() -> Properties {
 	serde_json::from_str(
 		r#"{
 				"ss58Format": 42,

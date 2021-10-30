@@ -16,11 +16,14 @@
 
 use cumulus_primitives_core::ParaId;
 // use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage, Signature};
-use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys};
 use parachain_runtime::{AccountId, AuraId};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
+
+pub use crate::chain_spec_helpers::{
+	public_from_ss58, rococo_properties, EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys,
+};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
