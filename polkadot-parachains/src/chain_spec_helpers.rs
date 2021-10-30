@@ -42,29 +42,29 @@ pub enum GenesisKeys {
 	WellKnown,
 }
 
-struct WellKnownKeys;
+pub(crate) struct WellKnownKeys;
 
 impl WellKnownKeys {
-	fn root() -> AccountId {
+	pub(crate) fn root() -> AccountId {
 		Alice.to_account_id()
 	}
 
-	fn endowed() -> Vec<AccountId> {
+	pub(crate) fn endowed() -> Vec<AccountId> {
 		vec![Alice.to_account_id(), Bob.to_account_id()]
 	}
 
-	fn authorities() -> Vec<AuraId> {
+	pub(crate) fn authorities() -> Vec<AuraId> {
 		vec![Alice.public().into()]
 	}
 }
 
-struct EncointerKeys;
+pub(crate) struct EncointerKeys;
 
 impl EncointerKeys {
-	fn root() -> AccountId {
+	pub(crate) fn root() -> AccountId {
 		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into()
 	}
-	fn authorities() -> Vec<AuraId> {
+	pub(crate) fn authorities() -> Vec<AuraId> {
 		vec![
 			public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
 				.into(),

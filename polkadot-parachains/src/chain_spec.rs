@@ -17,6 +17,7 @@
 use cumulus_primitives_core::ParaId;
 use hex_literal::hex;
 // use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage, Signature};
+use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, WellKnownKeys};
 use parachain_runtime::{AccountId, AuraId, Signature};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup, Properties};
 use sc_service::{ChainType, GenericChainSpec};
@@ -74,30 +75,23 @@ where
 /// Chain-spec for the encointer runtime
 pub fn encointer_spec(
 	id: ParaId,
-	use_well_known_keys: bool,
+	genesis_keys: GenesisKeys,
 	relay_chain: RelayChain,
 ) -> EncointerChainSpec {
-	// encointer_root
-	let mut root_account: AccountId =
-		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
-	let mut endowed_accounts = vec![root_account.clone()];
-
-	if use_well_known_keys {
-		root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
-		endowed_accounts = vec![
-			get_account_id_from_seed::<sr25519::Public>("Alice"),
-			get_account_id_from_seed::<sr25519::Public>("Bob"),
-			get_account_id_from_seed::<sr25519::Public>("Charlie"),
-		];
-	}
+	let (root, endowed, authorities) = match genesis_keys {
+		GenesisKeys::Encointer =>
+			(EncointerKeys::root(), vec![EncointerKeys::root()], EncointerKeys::authorities()),
+		GenesisKeys::WellKnown =>
+			(WellKnownKeys::root(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
+	};
 
 	chain_spec(
 		"Encointer Network",
 		move || {
 			encointer_genesis(
-				root_account.clone(),
-				vec![get_from_seed::<AuraId>("Alice")],
-				allocate_endowance(endowed_accounts.clone()),
+				root.clone(),
+				authorities.clone(),
+				allocate_endowance(endowed.clone()),
 				id,
 			)
 		},
@@ -110,30 +104,23 @@ pub fn encointer_spec(
 /// Chain-spec for the launch runtime
 pub fn launch_spec(
 	id: ParaId,
-	use_well_known_keys: bool,
+	genesis_keys: GenesisKeys,
 	relay_chain: RelayChain,
 ) -> LaunchChainSpec {
-	// encointer_root
-	let mut root_account: AccountId =
-		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into();
-	let mut endowed_accounts = vec![root_account.clone()];
-
-	if use_well_known_keys {
-		root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
-		endowed_accounts = vec![
-			get_account_id_from_seed::<sr25519::Public>("Alice"),
-			get_account_id_from_seed::<sr25519::Public>("Bob"),
-			get_account_id_from_seed::<sr25519::Public>("Charlie"),
-		];
-	}
+	let (root, endowed, authorities) = match genesis_keys {
+		GenesisKeys::Encointer =>
+			(EncointerKeys::root(), vec![EncointerKeys::root()], EncointerKeys::authorities()),
+		GenesisKeys::WellKnown =>
+			(WellKnownKeys::root(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
+	};
 
 	chain_spec(
 		"Encointer Launch",
 		move || {
 			launch_genesis(
-				root_account.clone(),
-				vec![get_from_seed::<AuraId>("Alice")],
-				allocate_endowance(endowed_accounts.clone()),
+				root.clone(),
+				authorities.clone(),
+				allocate_endowance(endowed.clone()),
 				id,
 			)
 		},
@@ -171,11 +158,8 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 }
 
 pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> EncointerChainSpec {
-	let root_account = get_account_id_from_seed::<sr25519::Public>("Alice");
-	let endowed_accounts = vec![
-		get_account_id_from_seed::<sr25519::Public>("Alice"),
-		get_account_id_from_seed::<sr25519::Public>("Bob"),
-	];
+	let (root, endowed, authorities) =
+		(WellKnownKeys::root(), WellKnownKeys::endowed(), WellKnownKeys::authorities());
 
 	EncointerChainSpec::from_genesis(
 		"Sybil Dummy",
@@ -183,9 +167,9 @@ pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> EncointerChainSp
 		relay_chain.chain_type(),
 		move || {
 			encointer_genesis(
-				root_account.clone(),
-				vec![get_from_seed::<AuraId>("Alice")],
-				allocate_endowance(endowed_accounts.clone()),
+				root.clone(),
+				authorities.clone(),
+				allocate_endowance(endowed.clone()),
 				id,
 			)
 		},
