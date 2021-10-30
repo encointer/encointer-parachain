@@ -17,21 +17,21 @@
 //! Some helpers to create chains-specs
 
 use cumulus_primitives_core::ParaId;
+use hex_literal::hex;
 use parachain_runtime::{AccountId, AuraId};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
 use sp_core::{crypto::Ss58Codec, sr25519, Public};
-use sp_keyring::AccountKeyring::{Alice, Bob, Dave, Eve};
+use sp_keyring::AccountKeyring::{Alice, Bob};
 use std::str::FromStr;
 
 pub fn public_from_ss58<TPublic: Public + FromStr>(ss58: &str) -> TPublic
-	where
-		<TPublic as FromStr>::Err: std::fmt::Debug,
+where
+	<TPublic as FromStr>::Err: std::fmt::Debug,
 {
 	TPublic::from_ss58check(ss58).expect("supply valid ss58!")
 }
-
 
 /// Defines the key set to use for root, endowed accounts, or authorities.
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -54,7 +54,7 @@ impl WellKnownKeys {
 	}
 
 	fn authorities() -> Vec<AuraId> {
-		vec![Alice.public().into(), Eve.public().into()]
+		vec![Alice.public().into()]
 	}
 }
 
@@ -62,20 +62,20 @@ struct EncointerKeys;
 
 impl EncointerKeys {
 	fn root() -> AccountId {
-		public_from_ss58::<sr25519::Public>("5EqGFRTN3m2kLpoaThANra5REs5C7B2rfLmmZv2nbJsxaTe1")
-			.into()
+		hex!["107f9c5385955bc57ac108b46b36498c4a8348eb964258b9b2ac53797d94794b"].into()
 	}
 	fn authorities() -> Vec<AuraId> {
 		vec![
-			public_from_ss58::<sr25519::Public>("5GZJjbPPD9u6NDgK1ApYmbyGs7EBX4HeEz2y2CD38YJxjvQH")
+			public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
 				.into(),
-			/*
-			public_from_ss58::<sr25519::Public>("5CcSd1GZus6Jw7rP47LLqMMmtr2KeXCH6W11ZKk1LbCQ9dPY").into(),
-			public_from_ss58::<sr25519::Public>("5FsECrDjBXrh5hXmN4PhQfNPbjYYwwW7edu2UQ8G5LR1JFuH").into(),
-			public_from_ss58::<sr25519::Public>("5HBdSEnswkqm6eoHzzX5PCeKoC15CCy88vARrT8XMaRRuyaE").into(),
-			public_from_ss58::<sr25519::Public>("5GGxVLYTXS7JZAwVzisdXbsugHSD6gtDb3AT3MVzih9jTLQT").into(),
-
-			 */
+			public_from_ss58::<sr25519::Public>("5CMekcxVqQ1ziRHoibG2w5Co7wXu7LWXtX7yTK67NWrJ61a9")
+				.into(),
+			public_from_ss58::<sr25519::Public>("5Gdh3vLvFKPMwMf2h4sngMgxSnaYGZUJTPGkGwoVmZFM2Ss5")
+				.into(),
+			public_from_ss58::<sr25519::Public>("5DhVfSunCNHy1R1ozJx1V59YbjDAEzEsaAghmzE77opGVUNf")
+				.into(),
+			public_from_ss58::<sr25519::Public>("5EWpnnj53PL9KbJAMnsrezQYZhwQ6UwnqSknnXd1ptVvRfVJ")
+				.into(),
 		]
 	}
 }
