@@ -19,7 +19,6 @@
 //! Only moved stuff here that is not in the `chain_spec.rs` upstream to prevent upstream merge
 //! confusion.
 
-use hex_literal::hex;
 use parachain_runtime::{AccountId, AuraId};
 use sc_chain_spec::Properties;
 use sc_service::ChainType;

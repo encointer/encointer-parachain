@@ -15,7 +15,6 @@ log = "0.4.8"
 codec = { package = "parity-scale-codec", version = "2.3.0" }
 structopt = "0.3.3"
 serde = { version = "1.0.101", features = ["derive"] }
-hex-literal = "0.2.1"
 async-trait = "0.1.42"
 
 # added by encointer
