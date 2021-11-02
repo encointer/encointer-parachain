@@ -137,7 +137,7 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 		// telemetry endpoints
 		None,
 		// protocol id
-		Some("dot"),
+		Some(relay_chain.protocol_id()),
 		// properties
 		Some(relay_chain.properties()),
 		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
