@@ -73,6 +73,8 @@ use xcm_builder::{
 };
 use xcm_executor::{Config, XcmExecutor};
 
+mod weights;
+
 pub type SessionHandlers = ();
 
 impl_opaque_keys! {
@@ -210,7 +212,7 @@ impl frame_system::Config for Runtime {
 	type OnKilledAccount = ();
 	type DbWeight = ();
 	type BaseCallFilter = SudoOnly;
-	type SystemWeightInfo = ();
+	type SystemWeightInfo = weights::frame_system::WeightInfo<Runtime>;
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type SS58Prefix = SS58Prefix;
@@ -246,7 +248,7 @@ impl pallet_balances::Config for Runtime {
 	type DustRemoval = ();
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
-	type WeightInfo = ();
+	type WeightInfo = weights::pallet_balances::WeightInfo<Runtime>;
 	type MaxLocks = MaxLocks;
 	type MaxReserves = MaxReserves;
 	type ReserveIdentifier = [u8; 8];
@@ -291,13 +293,13 @@ impl pallet_treasury::Config for Runtime {
 	type BurnDestination = (); //No burn
 	type SpendFunds = (); //No spend, no bounty
 	type MaxApprovals = MaxApprovals;
-	type WeightInfo = ();
+	type WeightInfo = weights::pallet_treasury::WeightInfo<Runtime>;
 }
 
 impl pallet_utility::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
-	type WeightInfo = ();
+	type WeightInfo = weights::pallet_utility::WeightInfo<Runtime>;
 }
 
 impl pallet_sudo::Config for Runtime {
