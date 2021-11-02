@@ -63,6 +63,8 @@ pub fn encointer_spec(
 ) -> EncointerChainSpec {
 	let (root, endowed, authorities) = match genesis_keys {
 		GenesisKeys::Encointer =>
+			(EncointerKeys::root(), [].to_vec(), EncointerKeys::authorities()),
+		GenesisKeys::EncointerWithRootEndowed =>
 			(EncointerKeys::root(), vec![EncointerKeys::root()], EncointerKeys::authorities()),
 		GenesisKeys::WellKnown =>
 			(WellKnownKeys::root(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
@@ -92,6 +94,8 @@ pub fn launch_spec(
 ) -> LaunchChainSpec {
 	let (root, endowed, authorities) = match genesis_keys {
 		GenesisKeys::Encointer =>
+			(EncointerKeys::root(), [].to_vec(), EncointerKeys::authorities()),
+		GenesisKeys::EncointerWithRootEndowed =>
 			(EncointerKeys::root(), vec![EncointerKeys::root()], EncointerKeys::authorities()),
 		GenesisKeys::WellKnown =>
 			(WellKnownKeys::root(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),

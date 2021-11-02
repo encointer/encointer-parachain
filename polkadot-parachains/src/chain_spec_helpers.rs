@@ -36,8 +36,10 @@ where
 /// Defines the key set to use for root, endowed accounts, or authorities.
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub enum GenesisKeys {
-	/// Use Encointer keys.
+	/// Use Encointer keys. Root is not in endowed keys.
 	Encointer,
+	/// Use Encointer keys. Root is in endowed keys.
+	EncointerWithRootEndowed,
 	/// Use Keys from the keyring for a test setup
 	WellKnown,
 }
