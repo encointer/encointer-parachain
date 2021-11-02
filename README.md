@@ -130,7 +130,7 @@ In `./scripts` we have two scripts for benchmarking the runtimes.
 2. run: `./scripts/benchmark_launch_runtime.sh` and `./scripts/benchmark_encointer_runtime.sh`.
 
 ### Adding new pallets to be benchmarked
-Every pallet that with a `type WeightInfo` parameter in its config must be benchmarked.
+Every pallet with a `type WeightInfo` parameter in its config must be benchmarked.
 
 1. [Cargo.toml] add `<new_pallet>/runtime-benchmarks` in the `runtime-benchmarks` feature section.
 2. [runtime] add the new pallet to the `list_benchmark!` and `add_benchmark!` list.
