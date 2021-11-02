@@ -121,6 +121,23 @@ node ../polkadot-launch/dist/index.js polkadot-launch-config.json
 
 This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`, `charlie.log`, which are the logs of the relay chain nodes and `9944.log`, `9955.log`, which are the logs of the two parachains.
 
+
+## Benchmark the runtimes
+In `./scripts` we have two scripts for benchmarking the runtimes.
+
+### Running benchmark
+1. Compile the node with: `cargo build --release --features runtime-benchmarks`
+2. run: `./scripts/benchmark_launch_runtime.sh` and `./scripts/benchmark_encointer_runtime.sh`.
+
+### Adding new pallets to be benchmarked
+Every pallet that has the `type WeightInfo` in its config, must be benchmarked.
+
+1. [Cargo.toml] add `<new_pallet>/runtime-benchmarks` in the `runtime-benchmarks` feature section.
+2. [runtime] add the new pallet to the `list_benchmark!` and `add_benchmark` section.
+3. Run the benchmark as advised above.
+4. [runtime/src/weights] add the new file to the modules
+4. [runtime] replace the placeholder `type WeightInfo = ()` with `type WeightInfo = weights::<pallet>::WeightInfo<Runtime>`
+
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
 * Parachains on Rococo in the [Polkadot Wiki](https://wiki.polkadot.network/docs/en/build-parachains-rococo#rococo-v1-parachain-requirements)
