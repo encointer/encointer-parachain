@@ -55,6 +55,16 @@ impl Extensions {
 	}
 }
 
+/// hard-coded launch-runtime config for kusama
+pub fn launch_kusama() -> Result<LaunchChainSpec, String> {
+	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-kusama.json")[..])
+}
+
+/// hard-coded launch-runtime config for westend
+pub fn launch_westend() -> Result<LaunchChainSpec, String> {
+	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-westend.json")[..])
+}
+
 /// Chain-spec for the encointer runtime
 pub fn encointer_spec(
 	id: ParaId,
