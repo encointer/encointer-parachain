@@ -125,9 +125,17 @@ This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`,
 ## Benchmark the runtimes
 In `./scripts` we have two scripts for benchmarking the runtimes.
 
+### Current benchmark
+The current weights have been benchmarked with the following reference hardware:
+
+    Core(TM) i7-10875H
+    32GB of RAM
+    NVMe SSD
+
 ### Running benchmark
 1. Compile the node with: `cargo build --release --features runtime-benchmarks`
 2. run: `./scripts/benchmark_launch_runtime.sh` and `./scripts/benchmark_encointer_runtime.sh`.
+3. If changed, update the reference hardware above.
 
 ### Adding new pallets to be benchmarked
 Every pallet with a `type WeightInfo` parameter in its config must be benchmarked.
