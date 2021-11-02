@@ -119,6 +119,9 @@ runtime-benchmarks = [
 	"frame-system-benchmarking",
 	"hex-literal",
 	"sp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
 	# actual pallets to be benchmarked
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
