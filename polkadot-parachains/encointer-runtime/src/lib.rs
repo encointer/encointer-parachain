@@ -249,6 +249,7 @@ impl pallet_balances::Config for Runtime {
 impl pallet_randomness_collective_flip::Config for Runtime {}
 
 parameter_types! {
+	/// Relay Chain `TransactionByteFee` / 10, same as statemine
 	pub const TransactionByteFee: u128 = 1 * MILLICENTS;
 	pub const OperationalFeeMultiplier: u8 = 5;
 }
