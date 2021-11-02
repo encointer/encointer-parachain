@@ -43,6 +43,8 @@ use sp_std::prelude::*;
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
+pub mod weights;
+
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
 	construct_runtime, match_type, parameter_types,
@@ -72,8 +74,6 @@ use xcm_builder::{
 	SovereignSignedViaLocation, TakeWeightCredit, UsingComponents,
 };
 use xcm_executor::{Config, XcmExecutor};
-
-mod weights;
 
 pub type SessionHandlers = ();
 
