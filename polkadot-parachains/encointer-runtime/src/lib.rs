@@ -31,7 +31,7 @@ use frame_system::{
 	EnsureOneOf, EnsureRoot,
 };
 use parachains_common::{
-	currency::{CENTS, EXISTENTIAL_DEPOSIT, MILLICENTS, UNITS},
+	currency::{EXISTENTIAL_DEPOSIT, MILLICENTS, UNITS},
 	fee::{SlowAdjustingFeeUpdate, WeightToFee},
 };
 use sp_api::impl_runtime_apis;
