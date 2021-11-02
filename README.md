@@ -130,13 +130,13 @@ In `./scripts` we have two scripts for benchmarking the runtimes.
 2. run: `./scripts/benchmark_launch_runtime.sh` and `./scripts/benchmark_encointer_runtime.sh`.
 
 ### Adding new pallets to be benchmarked
-Every pallet that has the `type WeightInfo` in its config, must be benchmarked.
+Every pallet that with a `type WeightInfo` parameter in its config must be benchmarked.
 
 1. [Cargo.toml] add `<new_pallet>/runtime-benchmarks` in the `runtime-benchmarks` feature section.
-2. [runtime] add the new pallet to the `list_benchmark!` and `add_benchmark` section.
+2. [runtime] add the new pallet to the `list_benchmark!` and `add_benchmark!` list.
 3. Run the benchmark as advised above.
 4. [runtime/src/weights] add the new file to the modules
-4. [runtime] replace the placeholder `type WeightInfo = ()` with `type WeightInfo = weights::<pallet>::WeightInfo<Runtime>`
+4. [runtime] replace the placeholder `type WeightInfo = ()` with `type WeightInfo = weights::<new_pallet>::WeightInfo<Runtime>`
 
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
