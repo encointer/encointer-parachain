@@ -43,7 +43,7 @@ use substrate_prometheus_endpoint::Registry;
 pub struct EncointerParachainRuntimeExecutor;
 
 impl sc_executor::NativeExecutionDispatch for EncointerParachainRuntimeExecutor {
-	type ExtendHostFunctions = ();
+	type ExtendHostFunctions = frame_benchmarking::benchmarking::HostFunctions;
 
 	fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
 		parachain_runtime::api::dispatch(method, data)
