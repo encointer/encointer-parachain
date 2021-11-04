@@ -300,7 +300,7 @@ impl pallet_multisig::Config for Runtime {
 	type DepositBase = DepositBase;
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = MaxSignatories;
-	type WeightInfo = ();
+	type WeightInfo = weights::pallet_multisig::WeightInfo<Runtime>;
 }
 
 impl pallet_utility::Config for Runtime {
@@ -378,7 +378,7 @@ impl pallet_proxy::Config for Runtime {
 	type ProxyDepositBase = ProxyDepositBase;
 	type ProxyDepositFactor = ProxyDepositFactor;
 	type MaxProxies = MaxProxies;
-	type WeightInfo = ();
+	type WeightInfo = weights::pallet_proxy::WeightInfo<Runtime>;
 	type MaxPending = MaxPending;
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
