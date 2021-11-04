@@ -1,6 +1,6 @@
 {
 	"relaychain": {
-		"bin": "../../bin/polkadot-v0.9.12",
+		"bin": "../../bin/polkadot-brenzi-teleport",
 		"chain": "rococo",
 		"nodes": [
 			{
