@@ -149,6 +149,8 @@ runtime-benchmarks = [
 	# actual pallets to be benchmarked
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
+	"pallet-proxy/runtime-benchmarks",
+	"pallet-multisig/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-treasury/runtime-benchmarks",
 	"pallet-utility/runtime-benchmarks",

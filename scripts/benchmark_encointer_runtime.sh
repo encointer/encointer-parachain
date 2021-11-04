@@ -16,6 +16,8 @@ mkdir -p "$WEIGHT_OUTPUT_DIR"
 pallets=(
   "frame_system" \
   "pallet_balances" \
+  "pallet_multisig" \
+  "pallet_proxy" \
   "pallet_timestamp" \
   "pallet_treasury" \
   "pallet_utility" \
