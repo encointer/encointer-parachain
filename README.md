@@ -116,7 +116,7 @@ yarn install
 yarn build
 
 # In the root directory of this repository simply execute
-node ../polkadot-launch/dist/index.js polkadot-launch-config.json
+node ../polkadot-launch/dist/cli.js ./polkadot-launch/launch-rococo-local-with-launch.json
 ```
 
 This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`, `charlie.log`, which are the logs of the relay chain nodes and `9944.log`, `9955.log`, which are the logs of the two parachains.
@@ -145,6 +145,14 @@ Every pallet with a `type WeightInfo` parameter in its config must be benchmarke
 3. Run the benchmark as advised above.
 4. [runtime/src/weights] add the new file to the modules
 4. [runtime] replace the placeholder `type WeightInfo = ()` with `type WeightInfo = weights::<new_pallet>::WeightInfo<Runtime>`
+
+### Update hardcoded chain-specs
+We have some hardcoded chain-specs to be sure that independent binaries can work with the same `genesis_hash`. However,
+sometimes we need to update the nodes' (i.e. the client's) spec, when we perform a substrate update. The following script
+creates new hard-coded chain-specs while migrating relevant data.
+
+`./scripts/update_hardcoded_chain_specs.py --migrate-genesis`
+
 
 ### More Resources
 * Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
