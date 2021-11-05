@@ -48,9 +48,7 @@ pub struct WellKnownKeys;
 
 impl WellKnownKeys {
 	pub fn endowed() -> Vec<AccountId> {
-		let mut e = vec![Alice.to_account_id(), Bob.to_account_id()];
-		e.extend_from_slice(&Self::council());
-		e
+		Self::council()
 	}
 
 	pub fn authorities() -> Vec<AuraId> {
