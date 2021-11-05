@@ -480,9 +480,9 @@ impl pallet_aura::Config for Runtime {
 }
 
 parameter_types! {
-	pub const MotionDuration: BlockNumber = 5;
-	pub const MaxProposals: u32 = 100;
-	pub const MaxMembers: u32 = 100;
+	pub const CouncilMotionDuration: BlockNumber = 7 * DAYS;
+	pub const CouncilMaxProposals: u32 = 100;
+	pub const CouncilMaxMembers: u32 = 100;
 }
 
 type MoreThanHalfCouncil = EnsureOneOf<
@@ -496,10 +496,10 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type Origin = Origin;
 	type Proposal = Call;
 	type Event = Event;
-	type MotionDuration = MotionDuration;
-	type MaxProposals = MaxProposals;
+	type MotionDuration = CouncilMotionDuration;
+	type MaxProposals = CouncilMaxProposals;
 	type DefaultVote = pallet_collective::PrimeDefaultVote;
-	type MaxMembers = MaxMembers;
+	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = ();
 }
 
@@ -513,7 +513,7 @@ impl pallet_membership::Config<pallet_membership::Instance1> for Runtime {
 	type PrimeOrigin = MoreThanHalfCouncil;
 	type MembershipInitialized = Collective;
 	type MembershipChanged = Collective;
-	type MaxMembers = MaxMembers;
+	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = ();
 }
 
