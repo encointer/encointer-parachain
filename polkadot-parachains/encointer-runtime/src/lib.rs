@@ -28,14 +28,17 @@ use frame_support::{
 };
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
-	EnsureRoot,
+	EnsureOneOf, EnsureRoot,
 };
 use parachains_common::{
 	currency::{EXISTENTIAL_DEPOSIT, MILLICENTS},
 	fee::{SlowAdjustingFeeUpdate, WeightToFee},
 };
 use sp_api::impl_runtime_apis;
-use sp_core::OpaqueMetadata;
+use sp_core::{
+	u32_trait::{_1, _2},
+	OpaqueMetadata,
+};
 use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT},
@@ -175,9 +178,16 @@ parameter_types! {
 	pub const SS58Prefix: u8 = 42;
 }
 
+pub struct BaseFilter;
+impl Contains<Call> for BaseFilter {
+	fn contains(_c: &Call) -> bool {
+		true
+	}
+}
+
 // Configure FRAME pallets to include in runtime.
 impl frame_system::Config for Runtime {
-	type BaseCallFilter = Everything;
+	type BaseCallFilter = BaseFilter;
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type AccountId = AccountId;
@@ -525,33 +535,40 @@ impl pallet_aura::Config for Runtime {
 }
 
 parameter_types! {
-	pub const MotionDuration: BlockNumber = 5;
-	pub const MaxProposals: u32 = 100;
-	pub const MaxMembers: u32 = 100;
+	pub const CouncilMotionDuration: BlockNumber = 7 * DAYS;
+	pub const CouncilMaxProposals: u32 = 100;
+	pub const CouncilMaxMembers: u32 = 100;
 }
 
-impl pallet_collective::Config for Runtime {
+type MoreThanHalfCouncil = EnsureOneOf<
+	AccountId,
+	EnsureRoot<AccountId>,
+	pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>,
+>;
+
+pub type CouncilCollective = pallet_collective::Instance1;
+impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type Origin = Origin;
 	type Proposal = Call;
 	type Event = Event;
-	type MotionDuration = MotionDuration;
-	type MaxProposals = MaxProposals;
+	type MotionDuration = CouncilMotionDuration;
+	type MaxProposals = CouncilMaxProposals;
 	type DefaultVote = pallet_collective::PrimeDefaultVote;
-	type MaxMembers = MaxMembers;
+	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = ();
 }
 
 // support for collective pallet
-impl pallet_membership::Config for Runtime {
+impl pallet_membership::Config<pallet_membership::Instance1> for Runtime {
 	type Event = Event;
-	type AddOrigin = EnsureRoot<AccountId>;
-	type RemoveOrigin = EnsureRoot<AccountId>;
-	type SwapOrigin = EnsureRoot<AccountId>;
-	type ResetOrigin = EnsureRoot<AccountId>;
-	type PrimeOrigin = EnsureRoot<AccountId>;
+	type AddOrigin = MoreThanHalfCouncil;
+	type RemoveOrigin = MoreThanHalfCouncil;
+	type SwapOrigin = MoreThanHalfCouncil;
+	type ResetOrigin = MoreThanHalfCouncil;
+	type PrimeOrigin = MoreThanHalfCouncil;
 	type MembershipInitialized = Collective;
 	type MembershipChanged = Collective;
-	type MaxMembers = MaxMembers;
+	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = ();
 }
 
@@ -586,8 +603,8 @@ construct_runtime! {
 		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 40,
 
 		// encointer council
-		Collective: pallet_collective::{Pallet, Call, Storage, Origin<T>, Config<T>, Event<T> } = 50,
-		Membership: pallet_membership::{Pallet, Call, Storage, Event<T>, Config<T>} = 51,
+		Collective: pallet_collective::<Instance1>::{Pallet, Call, Storage, Origin<T>, Config<T>, Event<T> } = 50,
+		Membership: pallet_membership::<Instance1>::{Pallet, Call, Storage, Event<T>, Config<T>} = 51,
 
 		// EncointerScheduler: pallet_encointer_scheduler::{Pallet, Call, Storage, Config<T>, Event} = 50,
 		// EncointerCeremonies: pallet_encointer_ceremonies::{Pallet, Call, Storage, Config<T>, Event<T>} = 51,
