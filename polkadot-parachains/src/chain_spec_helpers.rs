@@ -129,8 +129,8 @@ impl RelayChain {
 			RelayChain::RococoLocal => ChainType::Local,
 			RelayChain::Kusama => ChainType::Live,
 			RelayChain::KusamaLocal => ChainType::Local,
-			RelayChain::Westend => ChainType::Local,
-			RelayChain::WestendLocal => ChainType::Live,
+			RelayChain::Westend => ChainType::Live,
+			RelayChain::WestendLocal => ChainType::Local,
 		}
 	}
 

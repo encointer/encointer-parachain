@@ -55,16 +55,6 @@ impl Extensions {
 	}
 }
 
-/// hard-coded launch-runtime config for kusama
-pub fn launch_kusama() -> Result<LaunchChainSpec, String> {
-	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-kusama.json")[..])
-}
-
-/// hard-coded launch-runtime config for westend
-pub fn launch_westend() -> Result<LaunchChainSpec, String> {
-	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-westend.json")[..])
-}
-
 /// Chain-spec for the encointer runtime
 pub fn encointer_spec(
 	id: ParaId,
@@ -265,4 +255,35 @@ fn launch_genesis(
 			phantom: Default::default(),
 		},
 	}
+}
+
+
+/// hard-coded launch-runtime config for rococo
+pub fn launch_rococo() -> Result<LaunchChainSpec, String> {
+	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-rococo.json")[..])
+}
+
+/// hard-coded launch-runtime config for kusama
+pub fn launch_kusama() -> Result<LaunchChainSpec, String> {
+	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-kusama.json")[..])
+}
+
+/// hard-coded launch-runtime config for westend
+pub fn launch_westend() -> Result<LaunchChainSpec, String> {
+	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-westend.json")[..])
+}
+
+/// hard-coded encointer-runtime config for rococo
+pub fn encointer_rococo() -> Result<EncointerChainSpec, String> {
+	EncointerChainSpec::from_json_bytes(&include_bytes!("../res/encointer-rococo.json")[..])
+}
+
+/// hard-coded encointer-runtime config for kusama
+pub fn encointer_kusama() -> Result<EncointerChainSpec, String> {
+	EncointerChainSpec::from_json_bytes(&include_bytes!("../res/encointer-kusama.json")[..])
+}
+
+/// hard-coded encointer-runtime config for westend
+pub fn encointer_westend() -> Result<EncointerChainSpec, String> {
+	EncointerChainSpec::from_json_bytes(&include_bytes!("../res/encointer-westend.json")[..])
 }
