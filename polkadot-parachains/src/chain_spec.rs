@@ -257,7 +257,6 @@ fn launch_genesis(
 	}
 }
 
-
 /// hard-coded launch-runtime config for rococo
 pub fn launch_rococo() -> Result<LaunchChainSpec, String> {
 	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/launch-rococo.json")[..])
