@@ -137,7 +137,7 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 		// telemetry endpoints
 		None,
 		// protocol id
-		Some(relay_chain.protocol_id()),
+		None,
 		// properties
 		Some(relay_chain.properties()),
 		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
@@ -164,7 +164,7 @@ pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> EncointerChainSp
 		// telemetry endpoints
 		None,
 		// protocol id
-		Some("sybil-dummy-rococo-v1"),
+		None,
 		// properties
 		Some(
 			serde_json::from_str(

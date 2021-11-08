@@ -141,14 +141,6 @@ impl RelayChain {
 			RelayChain::Westend | RelayChain::WestendLocal => westend_properties(),
 		}
 	}
-
-	pub fn protocol_id(&self) -> &'static str {
-		match self {
-			RelayChain::Kusama | RelayChain::KusamaLocal => "ksmcc3",
-			RelayChain::Rococo | RelayChain::RococoLocal => "rococo",
-			RelayChain::Westend | RelayChain::WestendLocal => "wnd2",
-		}
-	}
 }
 
 pub fn rococo_properties() -> Properties {
