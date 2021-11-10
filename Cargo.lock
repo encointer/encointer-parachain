@@ -1113,6 +1113,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "concat-arrays"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1df715824eb382e34b7afb7463b0247bf41538aeba731fba05241ecdb5dc3747"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1265,6 +1276,21 @@ dependencies = [
  "wasmparser",
  "wasmtime-types",
 ]
+
+[[package]]
+name = "crc"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "49fc9a695bca7f35f5f4c15cddc84415f66a74ea78eef08e90c5024f2b540e23"
+dependencies = [
+ "crc-catalog",
+]
+
+[[package]]
+name = "crc-catalog"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ccaeedb56da03b09f598226e25e80088cb4cd25f316e6e4df7d695f0feeb1403"
 
 [[package]]
 name = "crc32fast"
@@ -2043,6 +2069,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "encointer-primitives"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "bs58",
+ "concat-arrays",
+ "crc",
+ "geohash",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "substrate-fixed",
+]
+
+[[package]]
 name = "encointer-runtime"
 version = "0.6.1"
 dependencies = [
@@ -2054,6 +2100,7 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-timestamp",
  "cumulus-primitives-utility",
+ "encointer-primitives",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
@@ -2065,6 +2112,11 @@ dependencies = [
  "pallet-aura",
  "pallet-balances",
  "pallet-collective",
+ "pallet-encointer-balances",
+ "pallet-encointer-bazaar",
+ "pallet-encointer-ceremonies",
+ "pallet-encointer-communities",
+ "pallet-encointer-scheduler",
  "pallet-membership",
  "pallet-randomness-collective-flip",
  "pallet-timestamp",
@@ -2767,6 +2819,16 @@ checksum = "501466ecc8a30d1d3b7fc9229b122b2ce8ed6e9d9223f1138d4babb253e51817"
 dependencies = [
  "typenum 1.14.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "version_check",
+]
+
+[[package]]
+name = "geohash"
+version = "0.11.1-alpha.0"
+source = "git+https://github.com/encointer/geohash?branch=master#7cf5425b8bffcc8c39e77f4e53a5663e295ca581"
+dependencies = [
+ "parity-scale-codec",
+ "scale-info",
+ "substrate-fixed",
 ]
 
 [[package]]
@@ -5246,6 +5308,92 @@ dependencies = [
  "sp-core",
  "sp-io",
  "sp-npos-elections",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-balances"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-communities",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-runtime",
+ "sp-std",
+ "substrate-fixed",
+]
+
+[[package]]
+name = "pallet-encointer-bazaar"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-communities",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-ceremonies"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-balances",
+ "pallet-encointer-communities",
+ "pallet-encointer-scheduler",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-communities"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "geohash",
+ "log",
+ "pallet-encointer-scheduler",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "substrate-fixed",
+]
+
+[[package]]
+name = "pallet-encointer-scheduler"
+version = "0.7.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.12#34643b4d37565971da57130b4eac540aae2e3ac7"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
  "sp-runtime",
  "sp-std",
 ]
