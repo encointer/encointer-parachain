@@ -2118,6 +2118,7 @@ dependencies = [
  "pallet-encointer-communities",
  "pallet-encointer-scheduler",
  "pallet-membership",
+ "pallet-proxy",
  "pallet-randomness-collective-flip",
  "pallet-timestamp",
  "pallet-transaction-payment",

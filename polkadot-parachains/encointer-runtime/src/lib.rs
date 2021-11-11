@@ -22,9 +22,10 @@
 #[cfg(feature = "std")]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::{
-	traits::{Imbalance, OnUnbalanced},
-	PalletId,
+	traits::{Imbalance, InstanceFilter, OnUnbalanced},
+	PalletId, RuntimeDebug,
 };
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
@@ -34,6 +35,7 @@ use parachains_common::{
 	currency::{EXISTENTIAL_DEPOSIT, MILLICENTS},
 	fee::{SlowAdjustingFeeUpdate, WeightToFee},
 };
+use scale_info::TypeInfo;
 use sp_api::impl_runtime_apis;
 use sp_core::{
 	u32_trait::{_1, _2},
@@ -151,6 +153,81 @@ const AVERAGE_ON_INITIALIZE_RATIO: Perbill = Perbill::from_percent(5);
 const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 /// We allow for 500 ms of compute with a 6 second average block time.
 const MAXIMUM_BLOCK_WEIGHT: Weight = WEIGHT_PER_SECOND / 2;
+
+//TODO add meaningful values
+parameter_types! {
+	pub const ProxyDepositBase: Balance = 32;
+	pub const ProxyDepositFactor: Balance = 32;
+	pub const MaxProxies: u16 = 32;
+	pub const AnnouncementDepositBase: Balance = 32;
+	pub const AnnouncementDepositFactor: Balance = 32;
+	pub const MaxPending: u16 = 32;
+}
+
+/// The type used to represent the kinds of proxying allowed.
+#[derive(
+	Copy,
+	Clone,
+	Eq,
+	PartialEq,
+	Ord,
+	PartialOrd,
+	Encode,
+	Decode,
+	RuntimeDebug,
+	TypeInfo,
+	MaxEncodedLen,
+)]
+pub enum ProxyType {
+	Any,
+	NonTransfer,
+	BazaarEdit,
+}
+
+impl Default for ProxyType {
+	fn default() -> Self {
+		Self::Any
+	}
+}
+impl InstanceFilter<Call> for ProxyType {
+	fn filter(&self, c: &Call) -> bool {
+		match self {
+			ProxyType::Any => true,
+			ProxyType::NonTransfer => matches!(c, Call::EncointerBazaar(..)),
+			ProxyType::BazaarEdit => matches!(
+				c,
+				Call::EncointerBazaar(EncointerBazaarCall::create_offering { .. }) |
+					Call::EncointerBazaar(EncointerBazaarCall::update_offering { .. }) |
+					Call::EncointerBazaar(EncointerBazaarCall::delete_offering { .. })
+			),
+		}
+	}
+
+	fn is_superset(&self, o: &Self) -> bool {
+		match (self, o) {
+			(x, y) if x == y => true,
+			(ProxyType::Any, _) => true,
+			(_, ProxyType::Any) => false,
+			(ProxyType::NonTransfer, _) => true,
+			_ => false,
+		}
+	}
+}
+
+impl pallet_proxy::Config for Runtime {
+	type Event = Event;
+	type Call = Call;
+	type Currency = Balances;
+	type ProxyType = ProxyType;
+	type ProxyDepositBase = ProxyDepositBase;
+	type ProxyDepositFactor = ProxyDepositFactor;
+	type MaxProxies = MaxProxies;
+	type WeightInfo = ();
+	type MaxPending = MaxPending;
+	type CallHasher = BlakeTwo256;
+	type AnnouncementDepositBase = AnnouncementDepositBase;
+	type AnnouncementDepositFactor = AnnouncementDepositFactor;
+}
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
@@ -602,6 +679,7 @@ construct_runtime! {
 		// Handy utilities.
 		Utility: pallet_utility::{Pallet, Call, Event} = 40,
 		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 43,
+		Proxy: pallet_proxy::{Pallet, Call, Storage, Event<T>} = 44,
 
 		// Encointer council.
 		Collective: pallet_collective::<Instance1>::{Pallet, Call, Storage, Origin<T>, Config<T>, Event<T> } = 50,

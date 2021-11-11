@@ -48,6 +48,7 @@ pallet-aura = { git = "https://github.com/paritytech/substrate", default-feature
 pallet-balances = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
 pallet-collective = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
 pallet-membership = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
+pallet-proxy = { git = "https://github.com/paritytech/substrate.git", default-features = false, branch = "polkadot-v0.9.12" }
 pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
 pallet-timestamp = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
 pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.12" }
@@ -106,6 +107,7 @@ std = [
 	"pallet-balances/std",
 	"pallet-collective/std",
 	"pallet-membership/std",
+	"pallet-proxy/std",
 	"pallet-randomness-collective-flip/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment/std",
