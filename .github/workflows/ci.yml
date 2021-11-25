@@ -75,7 +75,7 @@ jobs:
 
       - name: Release
         if: ${{ matrix.binary == 'release' }}
-        run: cargo build --release
+        run: cargo build --locked --release
 
       # Upload artifacts
       - name: Upload encointer-collator
