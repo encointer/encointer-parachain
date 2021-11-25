@@ -223,9 +223,11 @@ jobs:
         # para-id is hard-coded in the `polkadot-parachains/src/commands.rs`.
         # it is important to generate json first and derive genesis state from that
         # (because json is not generated deterministically. build-spec randomizes hashmap order)
+        # The chain-spec is sorted after generation to get deterministic output.
         run: |
           chmod +x ./encointer-collator
-          ./encointer-collator build-spec --chain ${{ env.CHAIN_SPEC }} --disable-default-bootnode --raw > ${{ env.CHAIN_SPEC }}.json
+          ./encointer-collator build-spec --chain ${{ env.CHAIN_SPEC }} --disable-default-bootnode --raw > ${{ env.CHAIN_SPEC }}-unsorted.json
+          jq --sort-keys . ${{ env.CHAIN_SPEC }}-unsorted.json > ${{ env.CHAIN_SPEC }}.json
           ./encointer-collator export-genesis-state --chain ${{ env.CHAIN_SPEC }}.json >  ${{ env.CHAIN_SPEC }}.json.state
           ./encointer-collator export-genesis-state --chain ${{ env.CHAIN_SPEC }} >  ${{ env.CHAIN_SPEC }}.state
 
