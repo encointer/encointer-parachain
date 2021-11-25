@@ -70,6 +70,7 @@ def main(migrate_genesis: bool):
         # remove side-products
         os.remove(f'{new_file_base}.json')
         os.remove(f'{new_file_base}-raw.json')
+        os.remove(f'{new_file_base}-raw-unsorted.json')
         os.remove(f'{new_file_base}.state')
         os.remove(f'{new_file_base}.wasm')
 
