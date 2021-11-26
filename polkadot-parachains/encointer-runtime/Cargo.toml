@@ -113,6 +113,7 @@ std = [
 	"pallet-transaction-payment/std",
 	"pallet-treasury/std",
 	"pallet-utility/std",
+	"pallet-xcm/std",
 	"parachain-info/std",
 	"parachains-common/std",
 	"cumulus-pallet-aura-ext/std",
