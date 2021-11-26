@@ -191,7 +191,6 @@ fn encointer_genesis(
 			code: parachain_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
-			changes_trie_config: Default::default(),
 		},
 		parachain_system: Default::default(),
 		balances: parachain_runtime::BalancesConfig { balances: endowance_allocation },
@@ -241,7 +240,6 @@ fn launch_genesis(
 			code: launch_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
-			changes_trie_config: Default::default(),
 		},
 		parachain_system: Default::default(),
 		balances: launch_runtime::BalancesConfig { balances: endowance_allocation },
