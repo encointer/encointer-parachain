@@ -23,27 +23,21 @@ import subprocess
 SPECS = [
     {
         "chain_id": "encointer-kusama",
-        "para_id": 1001,
     },
     {
         "chain_id": "encointer-rococo",
-        "para_id": 1001,
     },
     {
         "chain_id": "encointer-westend",
-        "para_id": 1003,
     },
     {
         "chain_id": "launch-kusama",
-        "para_id": 1001,
     },
     {
         "chain_id": "launch-rococo",
-        "para_id": 1001,
     },
     {
         "chain_id": "launch-westend",
-        "para_id": 1003,
     }
 ]
 COLLATOR = "target/release/encointer-collator"
@@ -53,10 +47,9 @@ RES_DIR = "polkadot-parachains/res"
 def main(migrate_genesis: bool):
     for s in SPECS:
         chain_spec = s["chain_id"]
-        para_id = s["para_id"]
 
         ret = subprocess.call(
-            f'scripts/dump_wasm_state_and_spec.sh {chain_spec}-fresh {para_id} {COLLATOR} {RES_DIR}',
+            f'scripts/dump_wasm_state_and_spec.sh {chain_spec}-fresh {COLLATOR} {RES_DIR}',
             stdout=subprocess.PIPE,
             shell=True
         )
