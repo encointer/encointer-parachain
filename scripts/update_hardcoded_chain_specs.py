@@ -22,12 +22,28 @@ import subprocess
 
 SPECS = [
     {
+        "chain_id": "encointer-kusama",
+        "para_id": 1001,
+    },
+    {
+        "chain_id": "encointer-rococo",
+        "para_id": 1001,
+    },
+    {
+        "chain_id": "encointer-westend",
+        "para_id": 1003,
+    },
+    {
         "chain_id": "launch-kusama",
-        "para_id": 2014,
+        "para_id": 1001,
+    },
+    {
+        "chain_id": "launch-rococo",
+        "para_id": 1001,
     },
     {
         "chain_id": "launch-westend",
-        "para_id": 2103,
+        "para_id": 1003,
     }
 ]
 COLLATOR = "target/release/encointer-collator"
