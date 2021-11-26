@@ -24,7 +24,6 @@
 		{
 			"bin": "../target/release/encointer-collator",
 			"chain": "encointer-rococo",
-			"id": "1003",
 			"balance": "1000000000000000000000",
 			"nodes": [
 				{
@@ -37,7 +36,6 @@
 		{
 			"bin": "../target/release/encointer-collator",
 			"chain": "sybil-dummy-rococo",
-			"id": "1863",
 			"balance": "1000000000000000000000",
 			"nodes": [
 				{

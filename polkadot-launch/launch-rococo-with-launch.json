@@ -24,7 +24,6 @@
 		{
 			"bin": "../target/release/encointer-collator",
 			"chain": "launch-rococo",
-			"id": "1003",
 			"balance": "1000000000000000000000",
 			"nodes": [
 				{

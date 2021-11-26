@@ -24,7 +24,6 @@
 		{
 			"bin": "../../bin/polkadot-collator-v0.9.12",
 			"chain": "westmint-local",
-			"id": "1000",
 			"balance": "1000000000000000000000",
 			"nodes": [
 				{
