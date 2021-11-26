@@ -36,6 +36,7 @@ use parachains_common::{
 };
 use sp_api::impl_runtime_apis;
 use sp_core::{
+	crypto::KeyTypeId,
 	u32_trait::{_1, _2},
 	OpaqueMetadata,
 };
@@ -75,11 +76,11 @@ use pallet_xcm::XcmPassthrough;
 use polkadot_parachain::primitives::Sibling;
 use xcm::latest::prelude::*;
 use xcm_builder::{
-	AccountId32Aliases, AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter,
-	EnsureXcmOrigin, FixedWeightBounds, IsConcrete, LocationInverter, NativeAsset,
-	ParentAsSuperuser, ParentIsDefault, RelayChainAsNative, SiblingParachainAsNative,
-	SiblingParachainConvertsVia, SignedAccountId32AsNative, SovereignSignedViaLocation,
-	TakeWeightCredit, UsingComponents,
+	AccountId32Aliases, AllowKnownQueryResponses, AllowSubscriptionsFrom,
+	AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter, EnsureXcmOrigin,
+	FixedWeightBounds, IsConcrete, LocationInverter, NativeAsset, ParentAsSuperuser,
+	ParentIsDefault, RelayChainAsNative, SiblingParachainAsNative, SiblingParachainConvertsVia,
+	SignedAccountId32AsNative, SovereignSignedViaLocation, TakeWeightCredit, UsingComponents,
 };
 use xcm_executor::{Config, XcmExecutor};
 
@@ -274,6 +275,7 @@ impl pallet_treasury::Config for Runtime {
 impl pallet_utility::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
+	type PalletsOrigin = OriginCaller;
 	type WeightInfo = weights::pallet_utility::WeightInfo<Runtime>;
 }
 
@@ -345,11 +347,11 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// using `LocationToAccountId` and then turn that into the usual `Signed` origin. Useful for
 	// foreign chains who want to have a local sovereign account on this chain which they control.
 	SovereignSignedViaLocation<LocationToAccountId, Origin>,
-	// Native converter for Relay-chain (Parent) location; will converts to a `Relay` origin when
-	// recognized.
+	// Native converter for Relay-chain (Parent) location; will convert to a `Relay` origin when
+	// recognised.
 	RelayChainAsNative<RelayChainOrigin, Origin>,
 	// Native converter for sibling Parachains; will convert to a `SiblingPara` origin when
-	// recognized.
+	// recognised.
 	SiblingParachainAsNative<cumulus_pallet_xcm::Origin, Origin>,
 	// Superuser converter for the Relay-chain (Parent) location. This will allow it to issue a
 	// transaction from the Root origin.
@@ -374,28 +376,27 @@ match_type! {
 	};
 }
 match_type! {
-	pub type Statemint: impl Contains<MultiLocation> = {
-		MultiLocation { parents: 1, interior: X1(Parachain(1000)) }
+	pub type ParentOrSiblings: impl Contains<MultiLocation> = {
+		MultiLocation { parents: 1, interior: Here } |
+		MultiLocation { parents: 1, interior: X1(_) }
 	};
 }
 
 pub type Barrier = (
 	TakeWeightCredit,
 	AllowTopLevelPaidExecutionFrom<Everything>,
+	// Parent and its exec plurality get free execution
 	AllowUnpaidExecutionFrom<ParentOrParentsExecutivePlurality>,
-	// ^^^ Parent and its exec plurality get free execution
-	AllowUnpaidExecutionFrom<Statemint>,
+	// Expected responses are OK.
+	AllowKnownQueryResponses<PolkadotXcm>,
+	// Subscriptions for version tracking are OK.
+	AllowSubscriptionsFrom<ParentOrSiblings>,
 );
-
-parameter_types! {
-	pub StatemintLocation: MultiLocation = MultiLocation::new(1, X1(Parachain(1000)));
-}
 
 pub struct XcmConfig;
 impl Config for XcmConfig {
 	type Call = Call;
 	type XcmSender = XcmRouter;
-	// How to withdraw and deposit an asset.
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
 	type IsReserve = NativeAsset;
@@ -421,7 +422,7 @@ pub type LocalOriginToLocation = ();
 /// queues.
 pub type XcmRouter = (
 	// Two routers - use UMP to communicate with the relay chain:
-	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, ()>,
+	cumulus_primitives_utility::ParentAsUmp<ParachainSystem, PolkadotXcm>,
 	// ..and XCMP to communicate with the sibling chains.
 	XcmpQueue,
 );
@@ -439,9 +440,7 @@ impl pallet_xcm::Config for Runtime {
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Origin = Origin;
 	type Call = Call;
-
 	const VERSION_DISCOVERY_QUEUE_SIZE: u32 = 100;
-	// Override for AdvertisedXcmVersion default
 	type AdvertisedXcmVersion = pallet_xcm::CurrentXcmVersion;
 }
 
@@ -454,7 +453,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type Event = Event;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type ChannelInfo = ParachainSystem;
-	type VersionWrapper = ();
+	type VersionWrapper = PolkadotXcm;
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
@@ -532,6 +531,7 @@ construct_runtime! {
 		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent} = 3,
 		ParachainInfo: parachain_info::{Pallet, Storage, Config} = 4,
 
+		// Monetary stuff.
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 10,
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage} = 11,
 
@@ -540,7 +540,7 @@ construct_runtime! {
 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue::{Pallet, Call, Storage, Event<T>} = 30,
-		PolkadotXcm: pallet_xcm::{Pallet, Call, Event<T>, Origin} = 31,
+		PolkadotXcm: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin} = 31,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Event<T>, Origin} = 32,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
 
@@ -617,13 +617,23 @@ impl OnUnbalanced<pallet_balances::NegativeImbalance<Runtime>> for DealWithFees 
 }
 
 impl_runtime_apis! {
+	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
+		fn slot_duration() -> sp_consensus_aura::SlotDuration {
+			sp_consensus_aura::SlotDuration::from_millis(Aura::slot_duration())
+		}
+
+		fn authorities() -> Vec<AuraId> {
+			Aura::authorities().into_inner()
+		}
+	}
+
 	impl sp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
 
 		fn execute_block(block: Block) {
-			Executive::execute_block(block);
+			Executive::execute_block(block)
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
@@ -638,9 +648,7 @@ impl_runtime_apis! {
 	}
 
 	impl sp_block_builder::BlockBuilder<Block> for Runtime {
-		fn apply_extrinsic(
-			extrinsic: <Block as BlockT>::Extrinsic,
-		) -> ApplyExtrinsicResult {
+		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
 
@@ -652,7 +660,10 @@ impl_runtime_apis! {
 			data.create_extrinsics()
 		}
 
-		fn check_inherents(block: Block, data: sp_inherents::InherentData) -> sp_inherents::CheckInherentsResult {
+		fn check_inherents(
+			block: Block,
+			data: sp_inherents::InherentData,
+		) -> sp_inherents::CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 	}
@@ -674,24 +685,14 @@ impl_runtime_apis! {
 	}
 
 	impl sp_session::SessionKeys<Block> for Runtime {
-		fn decode_session_keys(
-			encoded: Vec<u8>,
-		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
-			SessionKeys::decode_into_raw_public_keys(&encoded)
-		}
-
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
 			SessionKeys::generate(seed)
 		}
-	}
 
-	impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
-		fn slot_duration() -> sp_consensus_aura::SlotDuration {
-			sp_consensus_aura::SlotDuration::from_millis(Aura::slot_duration())
-		}
-
-		fn authorities() -> Vec<AuraId> {
-			Aura::authorities().into_inner()
+		fn decode_session_keys(
+			encoded: Vec<u8>,
+		) -> Option<Vec<(Vec<u8>, KeyTypeId)>> {
+			SessionKeys::decode_into_raw_public_keys(&encoded)
 		}
 	}
 
