@@ -4,7 +4,7 @@ name = "encointer-collator"
 version = "0.6.5"
 authors = ["Encointer <info@encointer.org>"]
 build = "build.rs"
-edition = "2018"
+edition = "2021"
 
 [[bin]]
 name = "encointer-collator"

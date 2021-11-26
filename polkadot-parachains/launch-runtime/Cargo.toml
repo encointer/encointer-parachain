@@ -4,7 +4,7 @@ name = 'launch-runtime'
 version = '0.6.0'
 authors = ["Encointer <info@encointer.org>"]
 license = "GPL-3.0"
-edition = '2018'
+edition = "2021"
 
 [dependencies]
 codec = { package = "parity-scale-codec", version = "2.3.0", default-features = false, features = ["derive"] }
