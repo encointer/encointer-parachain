@@ -632,15 +632,12 @@ extern crate frame_benchmarking;
 mod benches {
 	define_benchmarks!(
 		[frame_system, SystemBench::<Runtime>]
-		[pallet_assets, Assets]
 		[pallet_balances, Balances]
-		[pallet_multisig, Multisig]
-		[pallet_proxy, Proxy]
-		[pallet_session, SessionBench::<Runtime>]
-		[pallet_uniques, Uniques]
-		[pallet_utility, Utility]
+		[pallet_collective, Collective]
+		[pallet_membership, Membership]
 		[pallet_timestamp, Timestamp]
-		[pallet_collator_selection, CollatorSelection]
+		[pallet_treasury, Treasury]
+		[pallet_utility, Utility]
 	);
 }
 
