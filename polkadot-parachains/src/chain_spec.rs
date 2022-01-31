@@ -15,7 +15,7 @@
 // along with Cumulus.  If not, see <http://www.gnu.org/licenses/>.
 
 use cumulus_primitives_core::ParaId;
-use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType, Demurrage};
+use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
@@ -226,11 +226,6 @@ fn encointer_genesis(
 		},
 		encointer_communities: parachain_runtime::EncointerCommunitiesConfig {
 			community_master: root_key,
-		},
-		encointer_balances: parachain_runtime::EncointerBalancesConfig {
-			demurrage_per_block_default: Demurrage::from_bits(
-				0x0000000000000000000001E3F0A8A973_i128,
-			),
 		},
 	}
 }
