@@ -12,7 +12,7 @@ codec = { package = "parity-scale-codec", version = "2.3.0", default-features = 
 log = { version = "0.4.14", default-features = false }
 parachain-info = { default-features = false, git = "https://github.com/paritytech/cumulus", branch = "polkadot-v0.9.16" }
 scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
-serde = { version = "1.0.101", optional = true, features = ["derive"] }
+serde = { version = "1.0.132", default-features = false, optional = true, features = ["derive"] }
 
 # encointer deps
 encointer-primitives = { default-features = false, features = ['serde_derive'], git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.16" }
@@ -23,8 +23,6 @@ pallet-encointer-balances = { default-features = false, git = "https://github.co
 pallet-encointer-bazaar = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.16" }
 #pallet-encointer-personhood-oracle = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.16" }
 #pallet-encointer-sybil-gate-template = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.16" }
-
-fixed = { package = "substrate-fixed", tag = "v0.5.8", default-features = false, git = "https://github.com/encointer/substrate-fixed" }
 
 # Substrate dependencies
 sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.16" }
@@ -104,6 +102,7 @@ std = [
 	"frame-support/std",
 	"frame-executive/std",
 	"frame-system/std",
+	"frame-system-rpc-runtime-api/std",
 	"pallet-balances/std",
 	"pallet-collective/std",
 	"pallet-membership/std",
@@ -111,6 +110,7 @@ std = [
 	"pallet-randomness-collective-flip/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment/std",
+	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-treasury/std",
 	"pallet-utility/std",
 	"pallet-xcm/std",
@@ -129,6 +129,7 @@ std = [
 	"xcm-executor/std",
 	"pallet-aura/std",
 	"sp-consensus-aura/std",
+	"serde/std",
 	"encointer-primitives/std",
 	"encointer-primitives/serde_derive",
 	"pallet-encointer-scheduler/std",
@@ -138,7 +139,6 @@ std = [
 	"pallet-encointer-bazaar/std",
 #	"pallet-encointer-personhood-oracle/std",
 #	"pallet-encointer-sybil-gate-template/std",
-	"fixed/std"
 ]
 runtime-benchmarks = [
 	"frame-benchmarking",
