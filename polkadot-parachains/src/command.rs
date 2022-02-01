@@ -26,6 +26,7 @@ use codec::Encode;
 use cumulus_client_service::genesis::generate_genesis_block;
 use cumulus_primitives_core::ParaId;
 use log::info;
+use parachains_common::AuraId;
 use polkadot_parachain::primitives::AccountIdConversion;
 use sc_cli::{
 	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
@@ -201,7 +202,7 @@ macro_rules! construct_async_run {
 			runner.async_run(|$config| {
 				let $components = new_partial::<launch_runtime::RuntimeApi, LaunchParachainRuntimeExecutor, _>(
 					&$config,
-					crate::service::launch_parachain_build_import_queue,
+					crate::service::parachain_build_import_queue::<_, _, parachains_common::AuraId>,
 				)?;
 				let task_manager = $components.task_manager;
 				{ $( $code )* }.map(|v| (v, task_manager))
@@ -214,7 +215,7 @@ macro_rules! construct_async_run {
 				_
 			>(
 				&$config,
-				crate::service::rococo_parachain_build_import_queue,
+				crate::service::parachain_build_import_queue::<_, _, parachains_common::AuraId>,
 			)?;
 			let task_manager = $components.task_manager;
 			{ $( $code )* }.map(|v| (v, task_manager))
@@ -377,15 +378,23 @@ pub fn run() -> Result<()> {
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				if config.chain_spec.is_launch() {
-					crate::service::start_launch_parachain_node(config, polkadot_config, id)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
+					crate::service::start_parachain_node::<
+						launch_runtime::RuntimeApi,
+						LaunchParachainRuntimeExecutor,
+						AuraId,
+					>(config, polkadot_config, id)
+					.await
+					.map(|r| r.0)
+					.map_err(Into::into)
 				} else {
-					crate::service::start_rococo_parachain_node(config, polkadot_config, id)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
+					crate::service::start_parachain_node::<
+						parachain_runtime::RuntimeApi,
+						EncointerParachainRuntimeExecutor,
+						AuraId,
+					>(config, polkadot_config, id)
+					.await
+					.map(|r| r.0)
+					.map_err(Into::into)
 				}
 			})
 		},

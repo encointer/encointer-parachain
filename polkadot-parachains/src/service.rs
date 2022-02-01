@@ -403,58 +403,6 @@ where
 	Ok((task_manager, client))
 }
 
-/// Build the import queue for the encointer parachain runtime.
-pub fn rococo_parachain_build_import_queue<AuraId: AppKey>(
-	client: Arc<
-		TFullClient<
-			Block,
-			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
-		>,
-	>,
-	config: &Configuration,
-	telemetry: Option<TelemetryHandle>,
-	task_manager: &TaskManager,
-) -> Result<
-	sc_consensus::DefaultImportQueue<
-		Block,
-		TFullClient<
-			Block,
-			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
-		>,
-	>,
-	sc_service::Error,
-> {
-	parachain_build_import_queue::<_, _, AuraId>(client, config, telemetry, task_manager)
-}
-
-/// Import queue for the launch runtime.
-pub fn launch_parachain_build_import_queue<AuraId: AppKey>(
-	client: Arc<
-		TFullClient<
-			Block,
-			launch_runtime::RuntimeApi,
-			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
-		>,
-	>,
-	config: &Configuration,
-	telemetry: Option<TelemetryHandle>,
-	task_manager: &TaskManager,
-) -> Result<
-	sc_consensus::DefaultImportQueue<
-		Block,
-		TFullClient<
-			Block,
-			launch_runtime::RuntimeApi,
-			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
-		>,
-	>,
-	sc_service::Error,
-> {
-	parachain_build_import_queue::<_, _, AuraApi>(client, config, telemetry, task_manager)
-}
-
 enum BuildOnAccess<R> {
 	Uninitialized(Option<Box<dyn FnOnce() -> R + Send + Sync>>),
 	Initialized(R),
@@ -647,71 +595,15 @@ where
 		registry,
 	))
 }
-/// Start a rococo parachain node.
-pub async fn start_rococo_parachain_node<AuraId: AppKey>(
-	parachain_config: Configuration,
-	polkadot_config: Configuration,
-	id: ParaId,
-) -> sc_service::error::Result<(
-	TaskManager,
-	Arc<
-		TFullClient<
-			Block,
-			parachain_runtime::RuntimeApi,
-			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
-		>,
-	>,
-)>
-where
-	<<AuraId as AppKey>::Pair as Pair>::Signature:
-		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
-{
-	start_parachain_node::<_, _, _, AuraId>(
-		parachain_config,
-		polkadot_config,
-		id,
-		rococo_parachain_build_import_queue::<AuraId>,
-	)
-	.await
-}
-
-/// Start a launch-runtime parachain node.
-pub async fn start_launch_parachain_node<RuntimeApi, Executor, AuraId: AppKey>(
-	parachain_config: Configuration,
-	polkadot_config: Configuration,
-	id: ParaId,
-) -> sc_service::error::Result<(
-	TaskManager,
-	Arc<
-		TFullClient<
-			Block,
-			launch_runtime::RuntimeApi,
-			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
-		>,
-	>,
-)>
-where
-	<<AuraId as AppKey>::Pair as Pair>::Signature:
-		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
-{
-	start_parachain_node::<_, _, _, AuraId>(
-		parachain_config,
-		polkadot_config,
-		id,
-		launch_parachain_build_import_queue::<AuraId>,
-	)
-	.await
-}
 
 /// Generic implementation introduced by encointer.
 ///
 /// The trait bounds of the generic parameters are copied from the above `start_node_impl` except
 /// for the one mentioned below.
-pub async fn start_parachain_node<RuntimeApi, Executor, BIQ, AuraId: AppKey>(
+pub async fn start_parachain_node<RuntimeApi, Executor, AuraId: AppKey>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
 	id: ParaId,
-	build_import_queue: BIQ,
 ) -> sc_service::error::Result<(
 	TaskManager,
 	Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
@@ -735,18 +627,6 @@ where
 		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
-	BIQ: FnOnce(
-			Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
-			&Configuration,
-			Option<TelemetryHandle>,
-			&TaskManager,
-		) -> Result<
-			sc_consensus::DefaultImportQueue<
-				Block,
-				TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
-			>,
-			sc_service::Error,
-		> + 'static,
 	<<AuraId as AppKey>::Pair as Pair>::Signature:
 		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
 {
@@ -755,7 +635,7 @@ where
 		polkadot_config,
 		id,
 		|_| Ok(Default::default()),
-		build_import_queue,
+		parachain_build_import_queue::<_, _, AuraId>,
 		|client,
 		 prometheus_registry,
 		 telemetry,
