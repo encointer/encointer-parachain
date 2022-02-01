@@ -214,7 +214,7 @@ fn encointer_genesis(
 		encointer_scheduler: parachain_runtime::EncointerSchedulerConfig {
 			current_phase: CeremonyPhaseType::REGISTERING,
 			current_ceremony_index: 1,
-			ceremony_master: root_key.clone(),
+			ceremony_master: Some(root_key.clone()),
 			phase_durations: vec![
 				(CeremonyPhaseType::REGISTERING, 600_000),
 				(CeremonyPhaseType::ASSIGNING, 600_000),
@@ -227,7 +227,7 @@ fn encointer_genesis(
 			location_tolerance: 1_000, // [m]
 		},
 		encointer_communities: parachain_runtime::EncointerCommunitiesConfig {
-			community_master: root_key,
+			community_master: Some(root_key),
 		},
 	}
 }
