@@ -141,6 +141,7 @@ fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
 		// protocol id
 		Some(&format!("nctr-{}", relay_chain.to_string().chars().nth(0).unwrap())),
 		// properties
+		None,
 		Some(relay_chain.properties()),
 		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
 	)
@@ -166,6 +167,7 @@ pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> EncointerChainSp
 		// telemetry endpoints
 		None,
 		// protocol id
+		None,
 		None,
 		// properties
 		Some(
