@@ -2051,7 +2051,7 @@ dependencies = [
 
 [[package]]
 name = "encointer-collator"
-version = "0.6.6"
+version = "0.6.7"
 dependencies = [
  "assert_cmd",
  "async-trait",
