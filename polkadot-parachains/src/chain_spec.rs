@@ -275,4 +275,3 @@ pub fn launch_kusama() -> Result<LaunchChainSpec, String> {
 pub fn launch_westend() -> Result<LaunchChainSpec, String> {
 	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/encointer-westend.json")[..])
 }
-
