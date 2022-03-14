@@ -65,31 +65,48 @@ fn load_spec(
 		"encointer-kusama" 			=> Box::new(chain_spec::launch_kusama()?),
 
 		// live config initialize
-		"encointer-rococo-fresh" 		=> Box::new(chain_spec::launch_spec(1003.into(), GenesisKeys::Encointer, RelayChain::Rococo)),
-		"encointer-westend-fresh" 		=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::Encointer, 						RelayChain::Westend)),
-		"encointer-kusama-fresh" 		=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::Encointer, 						RelayChain::Kusama)),
+		"encointer-rococo-fresh" 		=> Box::new(chain_spec::launch_spec(
+			1003.into(), GenesisKeys::Encointer, RelayChain::Rococo)),
+		"encointer-westend-fresh" 		=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::Encointer, RelayChain::Westend)),
+		"encointer-kusama-fresh" 		=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::Encointer, RelayChain::Kusama)),
 
 		// on-the-spot specs
-		"encointer-rococo-local" 		=> Box::new(chain_spec::encointer_spec(1003.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::RococoLocal)),
-		"encointer-rococo-local-dev"	=> Box::new(chain_spec::encointer_spec(1003.into(), GenesisKeys::WellKnown, RelayChain::RococoLocal)),
+		"encointer-rococo-local" 		=> Box::new(chain_spec::encointer_spec(
+			1003.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::RococoLocal)),
+		"encointer-rococo-local-dev"	=> Box::new(chain_spec::encointer_spec(
+			1003.into(), GenesisKeys::WellKnown, RelayChain::RococoLocal)),
 
-		"encointer-westend-local" 		=> Box::new(chain_spec::encointer_spec(1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::WestendLocal)),
-		"encointer-westend-local-dev"	=> Box::new(chain_spec::encointer_spec(1001.into(), GenesisKeys::WellKnown, RelayChain::WestendLocal)),
+		"encointer-westend-local" 		=> Box::new(chain_spec::encointer_spec(
+			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::WestendLocal)),
+		"encointer-westend-local-dev"	=> Box::new(chain_spec::encointer_spec(
+			1001.into(), GenesisKeys::WellKnown, RelayChain::WestendLocal)),
 
-		"encointer-kusama-local" 		=> Box::new(chain_spec::encointer_spec(1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::KusamaLocal)),
-		"encointer-kusama-local-dev" 	=> Box::new(chain_spec::encointer_spec(1001.into(), GenesisKeys::WellKnown, RelayChain::KusamaLocal)),
+		"encointer-kusama-local" 		=> Box::new(chain_spec::encointer_spec(
+			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::KusamaLocal)),
+		"encointer-kusama-local-dev" 	=> Box::new(chain_spec::encointer_spec(
+			1001.into(), GenesisKeys::WellKnown, RelayChain::KusamaLocal)),
 
-		"launch-rococo-local" 		=> Box::new(chain_spec::launch_spec(1003.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::RococoLocal)),
-		"launch-rococo-local-dev" 	=> Box::new(chain_spec::launch_spec(1003.into(), GenesisKeys::WellKnown, RelayChain::RococoLocal)),
+		"launch-rococo-local" 		=> Box::new(chain_spec::launch_spec(
+			1003.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::RococoLocal)),
+		"launch-rococo-local-dev" 	=> Box::new(chain_spec::launch_spec(
+			1003.into(), GenesisKeys::WellKnown, RelayChain::RococoLocal)),
 
-		"launch-westend-local" 		=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::EncointerWithCouncilEndowed, 	RelayChain::WestendLocal)),
-		"launch-westend-local-dev" 	=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::WellKnown, 						RelayChain::WestendLocal)),
+		"launch-westend-local" 		=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::WestendLocal)),
+		"launch-westend-local-dev" 	=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::WellKnown, RelayChain::WestendLocal)),
 
-		"launch-kusama-local" 		=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::EncointerWithCouncilEndowed, 	RelayChain::KusamaLocal)),
-		"launch-kusama-local-dev" 	=> Box::new(chain_spec::launch_spec(1001.into(), GenesisKeys::WellKnown, 						RelayChain::KusamaLocal)),
+		"launch-kusama-local" 		=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::KusamaLocal)),
+		"launch-kusama-local-dev" 	=> Box::new(chain_spec::launch_spec(
+			1001.into(), GenesisKeys::WellKnown, RelayChain::KusamaLocal)),
 
-		"sybil-dummy-rococo" 		=> Box::new(chain_spec::sybil_dummy_spec(1863.into(), RelayChain::Rococo)),
-		"sybil-dummy-rococo-local" 	=> Box::new(chain_spec::sybil_dummy_spec(1863.into(), RelayChain::RococoLocal)),
+		"sybil-dummy-rococo" 		=> Box::new(chain_spec::sybil_dummy_spec(
+			1863.into(), RelayChain::Rococo)),
+		"sybil-dummy-rococo-local" 	=> Box::new(chain_spec::sybil_dummy_spec(
+			1863.into(), RelayChain::RococoLocal)),
 
 		"" => return Err("No chain-spec specified".into()),
 		path => {
