@@ -11,12 +11,12 @@ name = "encointer-collator"
 path = "src/main.rs"
 
 [dependencies]
+clap = { version = "3.1", features = ["derive"] }
 futures = { version = "0.3.1", features = ["compat"] }
 log = "0.4.8"
 codec = { package = "parity-scale-codec", version = "2.3.0" }
-structopt = "0.3.3"
 serde = { version = "1.0.132", features = ["derive"] }
-hex-literal = "0.2.1"
+hex-literal = "0.3.4"
 async-trait = "0.1.42"
 
 # added by encointer
@@ -58,6 +58,8 @@ sp-offchain = { git = "https://github.com/paritytech/substrate", branch = "polka
 sp-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.17" }
 sp-consensus-aura = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.17" }
 substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.17" }
+
+try-runtime-cli = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.17" }
 
 # RPC related dependencies
 jsonrpc-core = "18.0.0"
