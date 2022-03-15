@@ -225,9 +225,9 @@ fn encointer_genesis(
 			time_tolerance: 600_000,   // +-10min
 			location_tolerance: 1_000, // [m]
 			endorsement_tickets_per_bootstrapper: 10,
-			reputation_lifetime: 5,   
+			reputation_lifetime: 5,
 			inactivity_timeout: 5, // idle ceremonies before purging community
-			meetup_time_offset: 0,			
+			meetup_time_offset: 0,
 		},
 		encointer_communities: parachain_runtime::EncointerCommunitiesConfig {
 			min_solar_trip_time_s: 1, // [s]

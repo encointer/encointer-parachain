@@ -71,7 +71,7 @@ pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
 // XCM imports
-use pallet_xcm::{XcmPassthrough, EnsureXcm, IsMajorityOfBody};
+use pallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
 use polkadot_parachain::primitives::Sibling;
 use xcm::latest::prelude::*;
 use xcm_builder::{
@@ -458,7 +458,7 @@ impl cumulus_pallet_xcm::Config for Runtime {
 }
 
 parameter_types! {
-    pub const KsmLocation: MultiLocation = MultiLocation::parent();
+	pub const KsmLocation: MultiLocation = MultiLocation::parent();
 	pub const ExecutiveBody: BodyId = BodyId::Executive;
 }
 

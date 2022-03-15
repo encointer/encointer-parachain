@@ -59,7 +59,7 @@ pub mod weights;
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
 	construct_runtime, match_type, parameter_types,
-	traits::{Contains, Everything, Nothing, EqualPrivilegeOnly},
+	traits::{Contains, EqualPrivilegeOnly, Everything, Nothing},
 	weights::{
 		constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
 		DispatchClass, IdentityFee, Weight,
@@ -89,7 +89,7 @@ pub use encointer_primitives::{
 };
 
 // XCM imports
-use pallet_xcm::{XcmPassthrough, EnsureXcm, IsMajorityOfBody};
+use pallet_xcm::{EnsureXcm, IsMajorityOfBody, XcmPassthrough};
 use polkadot_parachain::primitives::Sibling;
 use xcm::latest::prelude::*;
 use xcm_builder::{
@@ -572,7 +572,7 @@ impl cumulus_pallet_xcm::Config for Runtime {
 }
 
 parameter_types! {
-    pub const KsmLocation: MultiLocation = MultiLocation::parent();
+	pub const KsmLocation: MultiLocation = MultiLocation::parent();
 	pub const ExecutiveBody: BodyId = BodyId::Executive;
 }
 
@@ -583,9 +583,8 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type VersionWrapper = PolkadotXcm;
 	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
 	type ControllerOrigin =
-	EnsureOneOf<EnsureRoot<AccountId>, EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>>;
+		EnsureOneOf<EnsureRoot<AccountId>, EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
