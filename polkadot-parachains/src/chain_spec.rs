@@ -215,9 +215,9 @@ fn encointer_genesis(
 			current_phase: CeremonyPhaseType::REGISTERING,
 			current_ceremony_index: 1,
 			phase_durations: vec![
-				(CeremonyPhaseType::REGISTERING, 57600000),
-				(CeremonyPhaseType::ASSIGNING, 28800000),
-				(CeremonyPhaseType::ATTESTING, 172800000),
+				(CeremonyPhaseType::REGISTERING,604800000), // 7d
+				(CeremonyPhaseType::ASSIGNING,   86400000), // 1d
+				(CeremonyPhaseType::ATTESTING,  172800000), // 2d
 			],
 		},
 		encointer_ceremonies: parachain_runtime::EncointerCeremoniesConfig {
