@@ -96,7 +96,7 @@ use xcm_builder::{
 	AccountId32Aliases, AllowKnownQueryResponses, AllowSubscriptionsFrom,
 	AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter, EnsureXcmOrigin,
 	FixedWeightBounds, IsConcrete, LocationInverter, NativeAsset, ParentAsSuperuser,
-	ParentIsDefault, RelayChainAsNative, SiblingParachainAsNative, SiblingParachainConvertsVia,
+	ParentIsPreset, RelayChainAsNative, SiblingParachainAsNative, SiblingParachainConvertsVia,
 	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
 	UsingComponents,
 };
@@ -433,7 +433,7 @@ parameter_types! {
 /// `Transact` in order to determine the dispatch Origin.
 pub type LocationToAccountId = (
 	// The parent (Relay-chain) origin converts to the default `AccountId`.
-	ParentIsDefault<AccountId>,
+	ParentIsPreset<AccountId>,
 	// Sibling parachain origins convert to AccountId via the `ParaId::into`.
 	SiblingParachainConvertsVia<Sibling, AccountId>,
 	// Straight up local `AccountId32` origins just alias directly to `AccountId`.
@@ -571,12 +571,21 @@ impl cumulus_pallet_xcm::Config for Runtime {
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 }
 
+parameter_types! {
+    pub const KsmLocation: MultiLocation = MultiLocation::parent();
+	pub const ExecutiveBody: BodyId = BodyId::Executive;
+}
+
 impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type Event = Event;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type ChannelInfo = ParachainSystem;
 	type VersionWrapper = PolkadotXcm;
 	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
+	type ControllerOrigin =
+	EnsureOneOf<EnsureRoot<AccountId>, EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>>;
+	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
+
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
@@ -593,18 +602,17 @@ parameter_types! {
 
 parameter_types! {
 	pub const MomentsPerDay: Moment = 86_400_000; // [ms/d]
-	pub const ReputationLifetime: u32 = 1;
-	pub const AmountNewbieTickets: u8 = 50;
-	pub const MinSolarTripTimeS: u32 = 1;
-	pub const MaxSpeedMps: u32 = 83;
 	pub const DefaultDemurrage: Demurrage = Demurrage::from_bits(0x0000000000000000000001E3F0A8A973_i128);
-	pub const InactivityTimeout: u32 = 50;
+	pub const MeetupSizeTarget: u64 = 10;
+	pub const MeetupMinSize: u64 = 3;
+	pub const MeetupNewbieLimitDivider: u64 = 2; // 2 means 1/3 of participants may be newbies
 }
 
 impl pallet_encointer_scheduler::Config for Runtime {
 	type Event = Event;
 	type OnCeremonyPhaseChange = EncointerCeremonies;
 	type MomentsPerDay = MomentsPerDay;
+	type CeremonyMaster = MoreThanHalfCouncil;
 }
 
 impl pallet_encointer_ceremonies::Config for Runtime {
@@ -612,15 +620,15 @@ impl pallet_encointer_ceremonies::Config for Runtime {
 	type Public = <Signature as Verify>::Signer;
 	type Signature = Signature;
 	type RandomnessSource = RandomnessCollectiveFlip;
-	type ReputationLifetime = ReputationLifetime;
-	type AmountNewbieTickets = AmountNewbieTickets;
-	type InactivityTimeout = InactivityTimeout;
+	type MeetupSizeTarget = MeetupSizeTarget;
+	type MeetupMinSize = MeetupMinSize;
+	type MeetupNewbieLimitDivider = MeetupNewbieLimitDivider;
+	type CeremonyMaster = MoreThanHalfCouncil;
 }
 
 impl pallet_encointer_communities::Config for Runtime {
 	type Event = Event;
-	type MinSolarTripTimeS = MinSolarTripTimeS;
-	type MaxSpeedMps = MaxSpeedMps;
+	type CommunityMaster = MoreThanHalfCouncil;
 }
 
 impl pallet_encointer_balances::Config for Runtime {
