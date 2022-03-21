@@ -5484,7 +5484,9 @@ name = "pallet-encointer-balances"
 version = "0.8.1"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#51f3daedbf251b9b34ffdc1753f9fa0d04cf5f12"
 dependencies = [
+ "approx",
  "encointer-primitives",
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "log",
@@ -5500,6 +5502,7 @@ version = "0.8.1"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#51f3daedbf251b9b34ffdc1753f9fa0d04cf5f12"
 dependencies = [
  "encointer-primitives",
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "log",
@@ -5527,6 +5530,7 @@ dependencies = [
  "pallet-timestamp",
  "parity-scale-codec",
  "scale-info",
+ "sp-application-crypto",
  "sp-core",
  "sp-runtime",
  "sp-std",
@@ -5538,6 +5542,7 @@ version = "0.8.1"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#51f3daedbf251b9b34ffdc1753f9fa0d04cf5f12"
 dependencies = [
  "encointer-primitives",
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "log",
@@ -5556,6 +5561,7 @@ version = "0.8.1"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#51f3daedbf251b9b34ffdc1753f9fa0d04cf5f12"
 dependencies = [
  "encointer-primitives",
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "log",
