@@ -144,7 +144,7 @@ impl<T: frame_system::Config> pallet_encointer_ceremonies::WeightInfo for Weight
 	// Storage: EncointerCeremonies EndorseeCount (r:0 w:1)
 	// Storage: EncointerCeremonies EndorseesCount (r:0 w:1)
 	fn purge_community_ceremony() -> Weight {
-		(131_000_000 as Weight)
+		(10^10 as Weight)
 			.saturating_add(T::DbWeight::get().writes(12 as Weight))
 	}
 }
