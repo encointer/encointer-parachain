@@ -22,6 +22,11 @@ pallets=(
   "pallet_timestamp" \
   "pallet_treasury" \
   "pallet_utility" \
+  "pallet_encointer_balances" \
+  "pallet_encointer_bazaar" \
+  "pallet_encointer_ceremonies" \
+  "pallet_encointer_communities" \
+  "pallet_encointer_scheduler" \
 )
 
 for pallet in ${pallets[*]}; do
