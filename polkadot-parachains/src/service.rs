@@ -605,10 +605,11 @@ where
 ///
 /// The trait bounds of the generic parameters are copied from the above `start_node_impl` except
 /// for the one mentioned below.
-pub async fn start_parachain_node<RuntimeApi, Executor, AuraId: AppKey>(
+pub async fn start_parachain_node<RuntimeApi, Executor, AuraId: AppKey, RpcBuilder>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
 	id: ParaId,
+	rpc_extension_builder: RpcBuilder,
 ) -> sc_service::error::Result<(
 	TaskManager,
 	Arc<TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>>,
@@ -634,6 +635,18 @@ where
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 	<<AuraId as AppKey>::Pair as Pair>::Signature:
 		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
+	RpcBuilder: Fn(
+			crate::rpc::FullDeps<
+				TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
+				sc_transaction_pool::FullPool<
+					Block,
+					TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
+				>,
+				TFullBackend<Block>,
+			>,
+		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
+		+ Send
+		+ 'static,
 {
 	start_node_impl::<RuntimeApi, Executor, _, _, _>(
 		parachain_config,
@@ -786,7 +799,8 @@ pub async fn start_launch_node(
 		launch_runtime::RuntimeApi,
 		LaunchParachainRuntimeExecutor,
 		parachains_common::AuraId,
-	>(config, polkadot_config, id)
+		_,
+	>(config, polkadot_config, id, |deps| Ok(rpc::create_shell(deps)))
 	.await
 }
 
@@ -809,6 +823,7 @@ pub async fn start_encointer_node(
 		parachain_runtime::RuntimeApi,
 		EncointerParachainRuntimeExecutor,
 		parachains_common::AuraId,
-	>(config, polkadot_config, id)
+		_,
+	>(config, polkadot_config, id, |deps| Ok(rpc::create_full(deps)))
 	.await
 }
