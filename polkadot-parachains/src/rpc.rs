@@ -97,18 +97,8 @@ where
 	io
 }
 
-// /// Full client dependencies need for shell
-// pub struct ShellDeps<C, P, Backend> {
-// 	/// The client instance to use.
-// 	pub client: Arc<C>,
-// 	/// Transaction pool instance.
-// 	pub pool: Arc<P>,
-// 	/// Whether to deny unsafe calls
-// 	pub deny_unsafe: DenyUnsafe,
-// }
-
-/// Instantiate all RPC extensions.
-pub fn create_shell<C, P, TBackend>(deps: FullDeps<C, P, TBackend>) -> RpcExtension
+/// Instantiate reduced RPC extensions for launch runtime
+pub fn create_launch_ext<C, P, TBackend>(deps: FullDeps<C, P, TBackend>) -> RpcExtension
 where
 	C: ProvideRuntimeApi<Block>
 		+ HeaderBackend<Block>

@@ -220,7 +220,7 @@ async fn start_node_impl<RuntimeApi, Executor, RB, BIQ, BIC>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
 	id: ParaId,
-	rpc_ext: RB,
+	rpc_extensions: RB,
 	build_import_queue: BIQ,
 	build_consensus: BIC,
 ) -> sc_service::error::Result<(
@@ -342,7 +342,7 @@ where
 				deny_unsafe,
 			};
 
-			rpc_ext(deps)
+			rpc_extensions(deps)
 		})
 	};
 
@@ -807,7 +807,7 @@ pub async fn start_launch_node(
 		LaunchParachainRuntimeExecutor,
 		parachains_common::AuraId,
 		_,
-	>(config, polkadot_config, id, |deps| Ok(rpc::create_shell(deps)))
+	>(config, polkadot_config, id, |deps| Ok(rpc::create_launch_ext(deps)))
 	.await
 }
 
