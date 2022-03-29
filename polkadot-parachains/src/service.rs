@@ -323,7 +323,7 @@ where
 		let client = client.clone();
 		let transaction_pool = transaction_pool.clone();
 		let backend = backend.clone();
-		let offchain_indexing_enabled = config.offchain_worker.indexing_enabled;
+		let offchain_indexing_enabled = parachain_config.offchain_worker.indexing_enabled;
 
 		// `backend` and offchain_indexing_enabled` are encointer customizations.
 		Box::new(move |deny_unsafe, _| {
@@ -335,7 +335,7 @@ where
 				deny_unsafe,
 			};
 
-			Ok(rpc::create_full(deps))
+			Ok(rpc::create_shell(deps))
 		})
 	};
 
@@ -764,5 +764,51 @@ where
 			Ok(parachain_consensus)
 		},
 	)
+	.await
+}
+
+/// Start a node containing the launch runtime
+pub async fn start_launch_node(
+	config: Configuration,
+	polkadot_config: Configuration,
+	id: ParaId,
+) -> sc_service::error::Result<(
+	TaskManager,
+	Arc<
+		TFullClient<
+			Block,
+			launch_runtime::RuntimeApi,
+			NativeElseWasmExecutor<LaunchParachainRuntimeExecutor>,
+		>,
+	>,
+)> {
+	start_parachain_node::<
+		launch_runtime::RuntimeApi,
+		LaunchParachainRuntimeExecutor,
+		parachains_common::AuraId,
+	>(config, polkadot_config, id)
+	.await
+}
+
+/// Start a node containing the encointer runtime.
+pub async fn start_encointer_node(
+	config: Configuration,
+	polkadot_config: Configuration,
+	id: ParaId,
+) -> sc_service::error::Result<(
+	TaskManager,
+	Arc<
+		TFullClient<
+			Block,
+			parachain_runtime::RuntimeApi,
+			NativeElseWasmExecutor<EncointerParachainRuntimeExecutor>,
+		>,
+	>,
+)> {
+	start_parachain_node::<
+		parachain_runtime::RuntimeApi,
+		EncointerParachainRuntimeExecutor,
+		parachains_common::AuraId,
+	>(config, polkadot_config, id)
 	.await
 }
