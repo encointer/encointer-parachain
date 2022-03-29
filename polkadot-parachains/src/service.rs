@@ -322,11 +322,16 @@ where
 	let rpc_extensions_builder = {
 		let client = client.clone();
 		let transaction_pool = transaction_pool.clone();
+		let backend = backend.clone();
+		let offchain_indexing_enabled = config.offchain_worker.indexing_enabled;
 
+		// `backend` and offchain_indexing_enabled` are encointer customizations.
 		Box::new(move |deny_unsafe, _| {
 			let deps = rpc::FullDeps {
 				client: client.clone(),
 				pool: transaction_pool.clone(),
+				backend: backend.clone(),
+				offchain_indexing_enabled,
 				deny_unsafe,
 			};
 
