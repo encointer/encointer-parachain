@@ -220,7 +220,7 @@ async fn start_node_impl<RuntimeApi, Executor, RB, BIQ, BIC>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
 	id: ParaId,
-	_rpc_ext_builder: RB,
+	rpc_ext: RB,
 	build_import_queue: BIQ,
 	build_consensus: BIC,
 ) -> sc_service::error::Result<(
@@ -246,7 +246,14 @@ where
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	Executor: sc_executor::NativeExecutionDispatch + 'static,
 	RB: Fn(
-			Arc<TFullClient<Block, RuntimeApi, Executor>>,
+			crate::rpc::FullDeps<
+				TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
+				sc_transaction_pool::FullPool<
+					Block,
+					TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<Executor>>,
+				>,
+				TFullBackend<Block>,
+			>,
 		) -> Result<jsonrpc_core::IoHandler<sc_rpc::Metadata>, sc_service::Error>
 		+ Send
 		+ 'static,
@@ -335,7 +342,7 @@ where
 				deny_unsafe,
 			};
 
-			Ok(rpc::create_shell(deps))
+			rpc_ext(deps)
 		})
 	};
 
@@ -652,7 +659,7 @@ where
 		parachain_config,
 		polkadot_config,
 		id,
-		|_| Ok(Default::default()),
+		rpc_extension_builder,
 		parachain_build_import_queue::<_, _, AuraId>,
 		|client,
 		 prometheus_registry,
