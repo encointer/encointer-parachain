@@ -45,6 +45,7 @@ node ../polkadot-launch/dist/cli.js ./polkadot-launch/launch-rococo-local-with-l
 
 This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`, `charlie.log`, which are the logs of the relay chain nodes and `9944.log`, `9955.log`, which are the logs of the two parachains.
 
+Executing the `./tmux_setup.sh` script at the project root will set up tmux with three panes that tailing the logs of `alice.log`, `9944.log` and `9955.log`.
 
 ## manual test setup step by step
 
