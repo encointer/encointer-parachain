@@ -37,42 +37,7 @@
 						"--execution=wasm"
 					]
 				}
-			],
-			"genesis": {
-				"runtime": {
-					"encointerScheduler": {
-						"phaseDurations": [
-							[
-								"REGISTERING",
-								600000
-							],
-							[
-								"ASSIGNING",
-								600000
-							],
-							[
-								"ATTESTING",
-								600000
-							]
-						]
-					},
-					"encointerCeremonies": {
-						"ceremonyReward": {
-							"bits": 18446744073709551616
-						},
-						"locationTolerance": 1000,
-						"timeTolerance": 600000,
-						"inactivityTimeout": 500,
-						"endorsementTicketsPerBootstrapper": 10,
-						"reputationLifetime": 500,
-						"meetupTimeOffset": 0
-					},
-					"encointerCommunities": {
-						"minSolarTripTimeS": 1,
-						"maxSpeedMps": 1
-					}
-				}
-			}
+			]
 		}
 	],
 	"simpleParachains": [
