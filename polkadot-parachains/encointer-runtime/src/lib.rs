@@ -637,6 +637,7 @@ impl pallet_encointer_communities::Config for Runtime {
 impl pallet_encointer_balances::Config for Runtime {
 	type Event = Event;
 	type DefaultDemurrage = DefaultDemurrage;
+	type CeremonyMaster = MoreThanHalfCouncil;
 	type WeightInfo = weights::pallet_encointer_balances::WeightInfo<Runtime>;
 }
 
