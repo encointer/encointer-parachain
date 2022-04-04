@@ -236,7 +236,7 @@ fn encointer_genesis(
 			// for relative adjustment.
 			// 100_000 translates 5uKSM to 0.01 CC if ceremony reward is 20 CC
 			// lower values lead to lower fees in CC proportionally
-			fee_conversion_factor: 100_000
+			fee_conversion_factor: 100_000,
 		},
 	}
 }

@@ -95,7 +95,6 @@ where
 				storage,
 				offchain_indexing_enabled,
 			)))
-
 		},
 		None => log::warn!(
 			"Offchain caching disabled, due to lack of offchain storage support in backend."
