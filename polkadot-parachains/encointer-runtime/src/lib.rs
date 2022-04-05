@@ -703,6 +703,15 @@ impl pallet_membership::Config<pallet_membership::Instance1> for Runtime {
 	type WeightInfo = weights::pallet_membership::WeightInfo<Runtime>;
 }
 
+// for fee payment in comunity currency
+impl pallet_asset_tx_payment::Config for Runtime {
+	type Fungibles = pallet_encointer_balances::Pallet<Runtime>;
+	type OnChargeAssetTransaction = pallet_asset_tx_payment::FungiblesAdapter<
+		encointer_balances_tx_payment::BalanceToCommunityBalance<Runtime>,
+		encointer_balances_tx_payment::BurnCredit,
+	>;
+}
+
 construct_runtime! {
 	pub enum Runtime where
 		Block = Block,
@@ -721,6 +730,7 @@ construct_runtime! {
 		// Monetary stuff.
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 10,
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage} = 11,
+		AssetTxPayment: pallet_asset_tx_payment::{Pallet, Storage} = 12,
 
 		Aura: pallet_aura::{Pallet, Storage, Config<T>} = 23,
 		AuraExt: cumulus_pallet_aura_ext::{Pallet, Storage, Config} = 24,
@@ -783,7 +793,7 @@ pub type SignedExtra = (
 	frame_system::CheckEra<Runtime>,
 	frame_system::CheckNonce<Runtime>,
 	frame_system::CheckWeight<Runtime>,
-	pallet_transaction_payment::ChargeTransactionPayment<Runtime>,
+	pallet_asset_tx_payment::ChargeAssetTxPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;

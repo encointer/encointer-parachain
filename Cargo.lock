@@ -2054,6 +2054,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
+name = "encointer-balances-tx-payment"
+version = "0.1.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#f57b1c6d51c86e3c3d6e10b2758874333bf7c675"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-asset-tx-payment",
+ "pallet-encointer-balances",
+ "pallet-encointer-ceremonies",
+ "pallet-transaction-payment",
+ "sp-runtime",
+]
+
+[[package]]
 name = "encointer-ceremonies-assignment"
 version = "0.1.0"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.17#f57b1c6d51c86e3c3d6e10b2758874333bf7c675"
@@ -2172,6 +2188,7 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-timestamp",
  "cumulus-primitives-utility",
+ "encointer-balances-tx-payment",
  "encointer-primitives",
  "frame-benchmarking",
  "frame-executive",
@@ -2181,6 +2198,7 @@ dependencies = [
  "frame-system-rpc-runtime-api",
  "hex-literal",
  "log",
+ "pallet-asset-tx-payment",
  "pallet-aura",
  "pallet-balances",
  "pallet-collective",
@@ -5185,6 +5203,7 @@ dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec",
  "scale-info",
+ "serde",
  "sp-core",
  "sp-io",
  "sp-runtime",
@@ -11162,7 +11181,7 @@ dependencies = [
  "chrono",
  "lazy_static",
  "matchers",
- "parking_lot 0.11.2",
+ "parking_lot 0.10.2",
  "regex",
  "serde",
  "serde_json",
