@@ -430,10 +430,15 @@ pub fn run() -> Result<()> {
 						.map(|r| r.0)
 						.map_err(Into::into)
 				} else {
-					crate::service::start_encointer_node(config, polkadot_config, collator_options, id)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
+					crate::service::start_encointer_node(
+						config,
+						polkadot_config,
+						collator_options,
+						id,
+					)
+					.await
+					.map(|r| r.0)
+					.map_err(Into::into)
 				}
 			})
 		},
