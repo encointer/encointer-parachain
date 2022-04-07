@@ -2223,7 +2223,7 @@ dependencies = [
 
 [[package]]
 name = "encointer-collator"
-version = "0.6.11"
+version = "1.0.0"
 dependencies = [
  "assert_cmd",
  "async-trait",
@@ -2321,7 +2321,7 @@ dependencies = [
 
 [[package]]
 name = "encointer-runtime"
-version = "0.6.5"
+version = "1.0.6"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
@@ -4222,7 +4222,7 @@ dependencies = [
 
 [[package]]
 name = "launch-runtime"
-version = "0.6.1"
+version = "1.0.1"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-dmp-queue",
