@@ -32,11 +32,11 @@ use frame_system::{
 use parachains_common::{
 	currency::{CENTS, EXISTENTIAL_DEPOSIT, MILLICENTS},
 	fee::{SlowAdjustingFeeUpdate, WeightToFee},
+	Moment,
 };
 use sp_api::impl_runtime_apis;
 use sp_core::{
 	crypto::KeyTypeId,
-	u32_trait::{_1, _2},
 	OpaqueMetadata,
 };
 use sp_runtime::{
@@ -104,9 +104,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	transaction_version: 1,
 	state_version: 0,
 };
-
-/// A type to hold UTC unix epoch [ms]
-pub type Moment = u64;
 
 pub const ONE_DAY: Moment = 86_400_000;
 
@@ -471,6 +468,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type ControllerOrigin =
 		EnsureOneOf<EnsureRoot<AccountId>, EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
+	type WeightInfo = ();
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
@@ -503,7 +501,7 @@ parameter_types! {
 
 type MoreThanHalfCouncil = EnsureOneOf<
 	EnsureRoot<AccountId>,
-	pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>,
+	pallet_collective::EnsureProportionMoreThan<AccountId, CouncilCollective, 1, 2>,
 >;
 
 pub type CouncilCollective = pallet_collective::Instance1;
