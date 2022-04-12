@@ -12,7 +12,9 @@ It is forked from the [Cumulus](https://github.com/paritytech/cumulus) repositor
 
 Build sudo-patched polkadot binary
 ```bash
+cd ..
 git clone https://github.com/paritytech/polkadot
+cd polkddot
 git fetch
 git checkout v0.9.18
 # add sudo to all types of relaychain to simplify and accelerate testing
@@ -22,7 +24,9 @@ diener update --substrate --branch polkadot-v0.9.18
 cargo build --release
 ```
 
-Place the binary into `../../bin/polkadot-0.9.18-sudo`
+Run:
+`cp target/release/polkadot ../../bin/polkadot-0.9.18`  
+(you have to create the `bin` directory if necessary)
 
 
 ### Setup local testnet with polkadot-launch
@@ -34,12 +38,14 @@ Place the binary into `../../bin/polkadot-0.9.18-sudo`
 
 ```bash
 # We need to build it from source. The one from the yarn registry does not work with our code.
+cd ..
 git clone https://github.com/paritytech/polkadot-launch
 cd polkadot-launch
 yarn install
 yarn build
 
-# In the root directory of this repository simply execute
+cd ../encointer-parachain
+cargo build --release
 node ../polkadot-launch/dist/cli.js ./polkadot-launch/launch-rococo-local-with-launch.json
 ```
 
