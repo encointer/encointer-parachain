@@ -14,7 +14,7 @@ Build sudo-patched polkadot binary
 ```bash
 cd ..
 git clone https://github.com/paritytech/polkadot
-cd polkddot
+cd polkadot
 git fetch
 git checkout v0.9.18
 # add sudo to all types of relaychain to simplify and accelerate testing
