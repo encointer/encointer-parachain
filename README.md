@@ -10,9 +10,9 @@ It is forked from the [Cumulus](https://github.com/paritytech/cumulus) repositor
 
 ## Launch a local setup with polkadot-launch
 
-Build sudo-patched polkadot binary
+###Build sudo-patched polkadot binary  
+Inside the parent directory of this repo, execute the following commands:
 ```bash
-cd ..
 git clone https://github.com/paritytech/polkadot
 cd polkadot
 git fetch
@@ -36,9 +36,9 @@ Run:
 
 **Preliminaries:** you need to have yarn and node installed
 
+Inside the parent directory of this repo, execute the following commands:
 ```bash
 # We need to build it from source. The one from the yarn registry does not work with our code.
-cd ..
 git clone https://github.com/paritytech/polkadot-launch
 cd polkadot-launch
 yarn install
