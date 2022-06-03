@@ -31,7 +31,7 @@ use sp_runtime::{
 	create_runtime_str, generic, impl_opaque_keys,
 	traits::{AccountIdLookup, BlakeTwo256, Block as BlockT, Verify},
 	transaction_validity::{TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult, Permill, Perbill
+	ApplyExtrinsicResult, Perbill, Permill,
 };
 
 use sp_std::prelude::*;
@@ -53,8 +53,8 @@ use frame_system::{
 pub use parachains_common as common;
 use parachains_common::{
 	opaque, AccountId, AuraId, Balance, BlockNumber, Hash, Header, Index, Signature,
-	AVERAGE_ON_INITIALIZE_RATIO, HOURS, MAXIMUM_BLOCK_WEIGHT,
-	NORMAL_DISPATCH_RATIO, SLOT_DURATION, DAYS
+	AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
+	SLOT_DURATION,
 };
 use xcm_config::{KsmLocation, XcmConfig};
 
@@ -88,10 +88,12 @@ use xcm::latest::BodyId;
 use xcm_executor::XcmExecutor;
 
 // encointer specific
-use runtime_common::{
-	weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight},
-	currency::*, fee::WeightToFee};
 use crate::xcm_config::XcmOriginToTransactDispatchOrigin;
+use runtime_common::{
+	currency::*,
+	fee::WeightToFee,
+	weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight},
+};
 
 /// A type to hold UTC unix epoch [ms]
 pub type Moment = u64;
@@ -379,7 +381,6 @@ impl pallet_randomness_collective_flip::Config for Runtime {}
 impl parachain_info::Config for Runtime {}
 
 impl cumulus_pallet_aura_ext::Config for Runtime {}
-
 
 parameter_types! {
 	pub const ExecutiveBody: BodyId = BodyId::Executive;

@@ -20,6 +20,7 @@
 
 use std::sync::Arc;
 
+use parachain_runtime::Moment;
 use parachains_common::{AccountId, Balance, Block, BlockNumber, Index as Nonce};
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};
@@ -27,7 +28,6 @@ use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;
 use sp_block_builder::BlockBuilder;
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
-use parachain_runtime::Moment;
 
 /// A type representing all RPC extensions.
 pub type RpcExtension = jsonrpsee::RpcModule<()>;
@@ -47,7 +47,9 @@ pub struct FullDeps<C, P, Backend> {
 }
 
 /// Instantiate all RPC extensions.
-pub fn create_full<C, P, TBackend>(deps: FullDeps<C, P, TBackend>) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
+pub fn create_full<C, P, TBackend>(
+	deps: FullDeps<C, P, TBackend>,
+) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
 where
 	C: ProvideRuntimeApi<Block>
 		+ HeaderBackend<Block>
@@ -67,10 +69,10 @@ where
 	TBackend: sc_client_api::Backend<Block>, // added by encointer
 	<TBackend as sc_client_api::Backend<Block>>::OffchainStorage: 'static, // added by encointer
 {
+	use frame_rpc_system::{System, SystemApiServer};
 	use pallet_encointer_bazaar_rpc::{BazaarApiServer, BazaarRpc};
 	use pallet_encointer_ceremonies_rpc::{CeremoniesApiServer, CeremoniesRpc};
 	use pallet_encointer_communities_rpc::{CommunitiesApiServer, CommunitiesRpc};
-	use frame_rpc_system::{System, SystemApiServer};
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 
 	let mut module = RpcExtension::new(());
@@ -89,7 +91,7 @@ where
 					offchain_indexing_enabled,
 					deny_unsafe,
 				)
-					.into_rpc(),
+				.into_rpc(),
 			)?;
 
 			module.merge(
@@ -107,7 +109,9 @@ where
 }
 
 /// Instantiate reduced RPC extensions for launch runtime
-pub fn create_launch_ext<C, P, TBackend>(deps: FullDeps<C, P, TBackend>) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
+pub fn create_launch_ext<C, P, TBackend>(
+	deps: FullDeps<C, P, TBackend>,
+) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
 where
 	C: ProvideRuntimeApi<Block>
 		+ HeaderBackend<Block>

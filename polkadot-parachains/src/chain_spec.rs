@@ -16,10 +16,10 @@
 
 use cumulus_primitives_core::ParaId;
 use parachain_runtime::{BalanceType, CeremonyPhaseType};
+use parachains_common::{AccountId, AuraId};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
-use parachains_common::{AccountId, AuraId};
 
 pub use crate::chain_spec_helpers::{
 	public_from_ss58, rococo_properties, EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys,

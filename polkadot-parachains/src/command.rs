@@ -227,16 +227,15 @@ fn extract_genesis_wasm(chain_spec: &Box<dyn sc_service::ChainSpec>) -> Result<V
 macro_rules! construct_benchmark_partials {
 	($config:expr, |$partials:ident| $code:expr) => {
 		if $config.chain_spec.is_launch() {
-
 			let $partials = new_partial::<launch_runtime::RuntimeApi, _>(
 				&$config,
-					crate::service::parachain_build_import_queue::<_, parachains_common::AuraId>,
+				crate::service::parachain_build_import_queue::<_, parachains_common::AuraId>,
 			)?;
 			$code
 		} else if $config.chain_spec.is_encointer() {
 			let $partials = new_partial::<parachain_runtime::RuntimeApi, _>(
 				&$config,
-					crate::service::parachain_build_import_queue::<_, parachains_common::AuraId>,
+				crate::service::parachain_build_import_queue::<_, parachains_common::AuraId>,
 			)?;
 			$code
 		} else {
@@ -421,7 +420,7 @@ pub fn run() -> Result<()> {
 					runner.async_run(|config| {
 						Ok((cmd.run::<Block, LaunchParachainRuntimeExecutor>(config), task_manager))
 					})
-				} else if runner.config().chain_spec.is_encointer()  {
+				} else if runner.config().chain_spec.is_encointer() {
 					runner.async_run(|config| {
 						Ok((
 							cmd.run::<Block, EncointerParachainRuntimeExecutor>(config),
@@ -484,10 +483,16 @@ pub fn run() -> Result<()> {
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				if config.chain_spec.is_launch() {
-					crate::service::start_launch_node(config, polkadot_config, collator_options, id, hwbench)
-						.await
-						.map(|r| r.0)
-						.map_err(Into::into)
+					crate::service::start_launch_node(
+						config,
+						polkadot_config,
+						collator_options,
+						id,
+						hwbench,
+					)
+					.await
+					.map(|r| r.0)
+					.map_err(Into::into)
 				} else {
 					crate::service::start_encointer_node(
 						config,

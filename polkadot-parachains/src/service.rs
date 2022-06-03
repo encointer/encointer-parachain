@@ -37,6 +37,7 @@ use sp_core::Pair;
 use crate::rpc;
 pub use parachains_common::{AccountId, Balance, Block, BlockNumber, Hash, Header, Index as Nonce};
 
+use crate::rpc::RpcExtension;
 use cumulus_client_consensus_relay_chain::Verifier as RelayChainVerifier;
 use futures::lock::Mutex;
 use sc_consensus::{
@@ -58,7 +59,6 @@ use sp_runtime::{
 };
 use std::{marker::PhantomData, sync::Arc, time::Duration};
 use substrate_prometheus_endpoint::Registry;
-use crate::rpc::RpcExtension;
 
 #[cfg(not(feature = "runtime-benchmarks"))]
 type HostFunctions = sp_io::SubstrateHostFunctions;
@@ -267,14 +267,15 @@ where
 		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	RB: Fn(
-		crate::rpc::FullDeps<
-			TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
-			sc_transaction_pool::FullPool<
-				Block,
+			crate::rpc::FullDeps<
 				TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
+				sc_transaction_pool::FullPool<
+					Block,
+					TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
+				>,
+				TFullBackend<Block>,
 			>,
-			TFullBackend<Block>,
-		>) -> Result<jsonrpsee::RpcModule<()>, sc_service::Error>
+		) -> Result<jsonrpsee::RpcModule<()>, sc_service::Error>
 		+ Send
 		+ 'static,
 	BIQ: FnOnce(
@@ -724,8 +725,7 @@ where
 			Ok(AuraConsensus::build::<<AuraId as AppKey>::Pair, _, _, _, _, _, _>(
 				BuildAuraConsensusParams {
 					proposer_factory,
-					create_inherent_data_providers:
-					move |_, (relay_parent, validation_data)| {
+					create_inherent_data_providers: move |_, (relay_parent, validation_data)| {
 						let relay_chain_for_aura = relay_chain_interface.clone();
 						async move {
 							let parachain_inherent =
@@ -736,8 +736,7 @@ where
 								id,
 							).await;
 
-							let timestamp =
-								sp_timestamp::InherentDataProvider::from_system_time();
+							let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
 
 							let slot =
 									sp_consensus_aura::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
@@ -745,12 +744,11 @@ where
 										slot_duration,
 									);
 
-							let parachain_inherent =
-								parachain_inherent.ok_or_else(|| {
-									Box::<dyn std::error::Error + Send + Sync>::from(
-										"Failed to create parachain inherent",
-									)
-								})?;
+							let parachain_inherent = parachain_inherent.ok_or_else(|| {
+								Box::<dyn std::error::Error + Send + Sync>::from(
+									"Failed to create parachain inherent",
+								)
+							})?;
 
 							Ok((timestamp, slot, parachain_inherent))
 						}
@@ -784,19 +782,16 @@ pub async fn start_launch_node(
 	hwbench: Option<sc_sysinfo::HwBench>,
 ) -> sc_service::error::Result<(
 	TaskManager,
-	Arc<
-		TFullClient<
-			Block,
-			launch_runtime::RuntimeApi,
-			WasmExecutor<HostFunctions>,
-		>,
-	>,
+	Arc<TFullClient<Block, launch_runtime::RuntimeApi, WasmExecutor<HostFunctions>>>,
 )> {
-	start_parachain_node::<
-		launch_runtime::RuntimeApi,
-		parachains_common::AuraId,
-		_,
-	>(config, polkadot_config, collator_options, id, |deps| rpc::create_launch_ext(deps).map_err(Into::into), hwbench)
+	start_parachain_node::<launch_runtime::RuntimeApi, parachains_common::AuraId, _>(
+		config,
+		polkadot_config,
+		collator_options,
+		id,
+		|deps| rpc::create_launch_ext(deps).map_err(Into::into),
+		hwbench,
+	)
 	.await
 }
 
@@ -809,18 +804,15 @@ pub async fn start_encointer_node(
 	hwbench: Option<sc_sysinfo::HwBench>,
 ) -> sc_service::error::Result<(
 	TaskManager,
-	Arc<
-		TFullClient<
-			Block,
-			parachain_runtime::RuntimeApi,
-			WasmExecutor<HostFunctions>,
-		>,
-	>,
+	Arc<TFullClient<Block, parachain_runtime::RuntimeApi, WasmExecutor<HostFunctions>>>,
 )> {
-	start_parachain_node::<
-		parachain_runtime::RuntimeApi,
-		parachains_common::AuraId,
-		_,
-	>(config, polkadot_config, collator_options, id, |deps| rpc::create_full(deps).map_err(Into::into), hwbench)
+	start_parachain_node::<parachain_runtime::RuntimeApi, parachains_common::AuraId, _>(
+		config,
+		polkadot_config,
+		collator_options,
+		id,
+		|deps| rpc::create_full(deps).map_err(Into::into),
+		hwbench,
+	)
 	.await
 }
