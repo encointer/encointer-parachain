@@ -42,7 +42,7 @@ use sp_version::RuntimeVersion;
 use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::{
 	construct_runtime, parameter_types,
-	traits::{EnsureOneOf, InstanceFilter},
+	traits::{EnsureOneOf, Imbalance, InstanceFilter},
 	weights::{ConstantMultiplier, DispatchClass, Weight},
 	PalletId, RuntimeDebug,
 };
