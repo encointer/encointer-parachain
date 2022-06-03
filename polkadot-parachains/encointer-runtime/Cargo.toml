@@ -15,6 +15,7 @@ scale-info = { version = "2.0.1", default-features = false, features = ["derive"
 serde = { version = "1.0.132", default-features = false, optional = true, features = ["derive"] }
 
 # encointer deps
+runtime-common = { default-features = false, path = "../common" }
 encointer-balances-tx-payment = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.23" }
 encointer-primitives = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.23" }
 pallet-encointer-balances = { default-features = false, git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.23" }
@@ -60,7 +61,7 @@ pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/parityt
 pallet-treasury = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
 pallet-utility = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
 
-parachains-common = { default-features = false, path = "../parachains-common" }
+parachains-common = { default-features = false, git = "https://github.com/paritytech/cumulus", branch = "polkadot-v0.9.23" }
 
 # Cumulus dependencies
 cumulus-pallet-aura-ext = { git = "https://github.com/paritytech/cumulus", default-features = false, branch = "polkadot-v0.9.23" }
@@ -74,6 +75,7 @@ cumulus-pallet-xcm = { git = "https://github.com/paritytech/cumulus", default-fe
 
 # Polkadot dependencies
 polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.23" }
+polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.23" }
 xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.23" }
 xcm-builder = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.23" }
 xcm-executor = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.23" }
@@ -89,6 +91,29 @@ substrate-wasm-builder = { git = "https://github.com/paritytech/substrate", bran
 
 [features]
 default = [ "std" ]
+runtime-benchmarks = [
+	"frame-benchmarking",
+	"frame-support/runtime-benchmarks",
+	"frame-system-benchmarking",
+	"hex-literal",
+	"sp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	# actual pallets to be benchmarked
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collective/runtime-benchmarks",
+	"pallet-membership/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-treasury/runtime-benchmarks",
+	"pallet-utility/runtime-benchmarks",
+	"pallet-encointer-balances/runtime-benchmarks",
+	"pallet-encointer-bazaar/runtime-benchmarks",
+	"pallet-encointer-ceremonies/runtime-benchmarks",
+	"pallet-encointer-communities/runtime-benchmarks",
+	"pallet-encointer-scheduler/runtime-benchmarks",
+]
 std = [
 	"codec/std",
 	"scale-info/std",
@@ -137,6 +162,8 @@ std = [
 	"pallet-aura/std",
 	"sp-consensus-aura/std",
 	"serde/std",
+	# encointer
+	"runtime-common/std",
 	"encointer-balances-tx-payment/std",
 	"encointer-primitives/std",
 	"encointer-primitives/serde_derive",
@@ -150,27 +177,4 @@ std = [
 	"pallet-encointer-scheduler/std",
 #	"pallet-encointer-personhood-oracle/std",
 #	"pallet-encointer-sybil-gate-template/std",
-]
-runtime-benchmarks = [
-	"frame-benchmarking",
-	"frame-support/runtime-benchmarks",
-	"frame-system-benchmarking",
-	"hex-literal",
-	"sp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"pallet-xcm/runtime-benchmarks",
-	# actual pallets to be benchmarked
-	"frame-system/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-collective/runtime-benchmarks",
-	"pallet-membership/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"pallet-treasury/runtime-benchmarks",
-	"pallet-utility/runtime-benchmarks",
-	"pallet-encointer-balances/runtime-benchmarks",
-	"pallet-encointer-bazaar/runtime-benchmarks",
-	"pallet-encointer-ceremonies/runtime-benchmarks",
-	"pallet-encointer-communities/runtime-benchmarks",
-	"pallet-encointer-scheduler/runtime-benchmarks",
 ]
