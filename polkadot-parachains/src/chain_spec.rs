@@ -15,10 +15,11 @@
 // along with Cumulus.  If not, see <http://www.gnu.org/licenses/>.
 
 use cumulus_primitives_core::ParaId;
-use parachain_runtime::{AccountId, AuraId, BalanceType, CeremonyPhaseType};
+use parachain_runtime::{BalanceType, CeremonyPhaseType};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
+use parachains_common::{AccountId, AuraId};
 
 pub use crate::chain_spec_helpers::{
 	public_from_ss58, rococo_properties, EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys,
@@ -38,7 +39,7 @@ pub fn allocate_endowance(endowed_accounts: Vec<AccountId>) -> Vec<(AccountId, u
 }
 
 /// The default XCM version to set in genesis config.
-const SAFE_XCM_VERSION: u32 = 2;
+const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
 
 /// The extensions for the [`ChainSpec`].
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ChainSpecGroup, ChainSpecExtension)]
