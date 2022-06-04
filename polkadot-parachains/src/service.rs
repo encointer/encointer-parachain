@@ -656,7 +656,7 @@ pub async fn start_parachain_node<RuntimeApi, AuraId: AppKey, RpcBuilder>(
 	polkadot_config: Configuration,
 	collator_options: CollatorOptions,
 	id: ParaId,
-	rpc_extension_builder: RpcBuilder,
+	rpc_extension_builder: RpcBuilder, // passing the rpc_extension_builder is encointer-specific
 	hwbench: Option<sc_sysinfo::HwBench>,
 ) -> sc_service::error::Result<(
 	TaskManager,
@@ -711,6 +711,12 @@ where
 		 sync_oracle,
 		 keystore,
 		 force_authoring| {
+			// Encointer customization: This part is different from upstream. We don't use the relay
+			// consensus part from further below, we start with aura consensus directly.
+			//
+			// We do this because our launch-runtime comes with consensus, whereas the upstream
+			// shell runtime does not have that.
+
 			let spawn_handle = task_manager.spawn_handle();
 			let slot_duration = cumulus_client_consensus_aura::slot_duration(&*client).unwrap();
 
@@ -722,6 +728,7 @@ where
 				telemetry.clone(),
 			);
 
+			// We don't use the `BuildOnAccess`, we directly return the aura consensus here.
 			Ok(AuraConsensus::build::<<AuraId as AppKey>::Pair, _, _, _, _, _, _>(
 				BuildAuraConsensusParams {
 					proposer_factory,
