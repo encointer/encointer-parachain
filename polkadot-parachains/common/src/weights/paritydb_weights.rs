@@ -15,6 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//! Copied from cumulus/parachains/runtimes/assets/statemine/weights/paritydb_weights
+//!
+//!
 pub mod constants {
 	use frame_support::{
 		parameter_types,
