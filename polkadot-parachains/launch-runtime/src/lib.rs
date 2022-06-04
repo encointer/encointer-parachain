@@ -21,7 +21,7 @@
 //! However, contrary to the cumulus' `Shell Runtime`, it can produce blocks on its own and has
 //! a few pallets.
 //!
-//! The configuration (especially XCM) is almost identical to `statemint`. Therefore, upstream
+//! The configuration (especially XCM) is almost identical to `statemine`. Therefore, upstream
 //! updates should always check the diff to see if there are some configuration updates.
 
 #![cfg_attr(not(feature = "std"), no_std)]

@@ -15,7 +15,7 @@
 
 //! Common XcmConfig for our launch-runtime.
 //!
-//! Taken from cumulus/parachains/runtimes/statemint
+//! Taken from cumulus/parachains/runtimes/statemine
 
 use super::{
 	AccountId, Balances, Call, Event, FeesToTreasury, Origin, ParachainInfo, ParachainSystem,
