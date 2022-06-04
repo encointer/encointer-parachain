@@ -52,9 +52,8 @@ use frame_system::{
 };
 pub use parachains_common as common;
 use parachains_common::{
-	opaque, AccountId, AuraId, Balance, BlockNumber, Hash, Header, Index, Signature,
-	AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
-	SLOT_DURATION,
+	opaque, AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
+	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
 };
 use xcm_config::{KsmLocation, XcmConfig};
 
@@ -573,6 +572,11 @@ construct_runtime! {
 		// EncointerSybilGate: pallet_encointer_sybil_gate_template::{Pallet, Call, Storage, Event<T>} = 71,
 	}
 }
+
+/// `parachains_common` is an upstream crate, where they are started to define common types.
+///
+/// The re-export is added by encointer.
+pub use parachains_common::{AccountId, Balance, BlockNumber, Hash, Header, Index, Signature};
 
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
