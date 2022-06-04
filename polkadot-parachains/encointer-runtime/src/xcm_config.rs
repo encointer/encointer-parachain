@@ -15,7 +15,7 @@
 
 //! XcmConfig for our launch-runtime.
 //!
-//! Taken from cumulus/parachains/runtimes/statemine
+//! Almost identical to cumulus/parachains/runtimes/statemine
 
 use super::{
 	AccountId, Balances, Call, Event, FeesToTreasury, Origin, ParachainInfo, ParachainSystem,
@@ -141,7 +141,7 @@ impl xcm_executor::Config for XcmConfig {
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call, MaxInstructions>;
-	// `FeesToTreasury` is an encointer addaptation
+	// `FeesToTreasury` is an encointer adaptation
 	type Trader =
 		UsingComponents<WeightToFee, KsmLocation, AccountId, Balances, FeesToTreasury<Runtime>>;
 	type ResponseHandler = PolkadotXcm;
