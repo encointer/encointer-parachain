@@ -75,6 +75,25 @@ substrate-wasm-builder = { git = "https://github.com/paritytech/substrate", bran
 
 [features]
 default = [ "std" ]
+runtime-benchmarks = [
+	"frame-benchmarking",
+	"frame-support/runtime-benchmarks",
+	"frame-system-benchmarking",
+	"hex-literal",
+	"sp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"pallet-xcm/runtime-benchmarks",
+	# actual pallets to be benchmarked
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+	"pallet-balances/runtime-benchmarks",
+	"pallet-collective/runtime-benchmarks",
+	"pallet-membership/runtime-benchmarks",
+	"pallet-timestamp/runtime-benchmarks",
+	"pallet-treasury/runtime-benchmarks",
+	"pallet-utility/runtime-benchmarks",
+]
 std = [
 	"codec/std",
 	"scale-info/std",
@@ -122,22 +141,4 @@ std = [
 	"sp-consensus-aura/std",
 	# encointer
 	"runtime-common/std",
-]
-runtime-benchmarks = [
-	"frame-benchmarking",
-	"frame-support/runtime-benchmarks",
-	"frame-system-benchmarking",
-	"hex-literal",
-	"sp-runtime/runtime-benchmarks",
-	"xcm-builder/runtime-benchmarks",
-	"xcm-executor/runtime-benchmarks",
-	"pallet-xcm/runtime-benchmarks",
-	# actual pallets to be benchmarked
-	"frame-system/runtime-benchmarks",
-	"pallet-balances/runtime-benchmarks",
-	"pallet-collective/runtime-benchmarks",
-	"pallet-membership/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
-	"pallet-treasury/runtime-benchmarks",
-	"pallet-utility/runtime-benchmarks",
 ]

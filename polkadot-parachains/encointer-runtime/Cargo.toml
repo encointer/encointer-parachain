@@ -101,6 +101,7 @@ runtime-benchmarks = [
 	"xcm-executor/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 	# actual pallets to be benchmarked
+	"cumulus-pallet-xcmp-queue/runtime-benchmarks",
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-collective/runtime-benchmarks",
