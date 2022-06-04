@@ -289,8 +289,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type ControllerOrigin =
 		EnsureOneOf<EnsureRoot<AccountId>, EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
-	// Todo benchmarks
-	type WeightInfo = ();
+	type WeightInfo = weights::cumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
