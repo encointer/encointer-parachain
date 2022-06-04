@@ -14,6 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Encointer.  If not, see <http://www.gnu.org/licenses/>.
 
+//! # Encointer Parachain Runtime
+//!
+//! Encointer runtime containing all the specific logic to:
+//!  * perform ceremonies and receive a community income
+//!  * pay fees in the respective community currency
+//!
+//! The configuration (especially XCM) is almost identical to `statemint`. Therefore, upstream
+//! updates should always check the diff to see if there are some configuration updates.
+
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit = "256"]
