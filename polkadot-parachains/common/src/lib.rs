@@ -17,6 +17,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
+pub mod deal_with_fees;
 pub mod weights;
 
 // below is copied from cumulus/parachains/runtimes/assets/statemine/constants

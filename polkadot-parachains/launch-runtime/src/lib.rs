@@ -48,7 +48,7 @@ use sp_version::RuntimeVersion;
 
 use frame_support::{
 	construct_runtime, parameter_types,
-	traits::{Contains, EnsureOneOf, Imbalance, OnUnbalanced},
+	traits::{Contains, EnsureOneOf},
 	weights::{ConstantMultiplier, DispatchClass, Weight},
 	PalletId,
 };
@@ -73,9 +73,13 @@ use polkadot_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
 use xcm::latest::BodyId;
 use xcm_executor::XcmExecutor;
 
+// Added by encointer
 use crate::xcm_config::XcmOriginToTransactDispatchOrigin;
-use runtime_common::{
+
+// Added by encointer
+pub(crate) use runtime_common::{
 	currency::*,
+	deal_with_fees::FeesToTreasury,
 	fee::WeightToFee,
 	weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight},
 };
@@ -204,7 +208,9 @@ parameter_types! {
 }
 
 impl pallet_transaction_payment::Config for Runtime {
-	type OnChargeTransaction = pallet_transaction_payment::CurrencyAdapter<Balances, DealWithFees>;
+	// `FeesToTreasury is an encointer adaptation.
+	type OnChargeTransaction =
+		pallet_transaction_payment::CurrencyAdapter<Balances, FeesToTreasury<Runtime>>;
 	type WeightToFee = WeightToFee;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
@@ -414,22 +420,6 @@ pub type Executive = frame_executive::Executive<
 	Runtime,
 	AllPalletsWithSystem,
 >;
-
-pub struct DealWithFees;
-impl OnUnbalanced<pallet_balances::NegativeImbalance<Runtime>> for DealWithFees {
-	fn on_unbalanceds<B>(
-		mut fees_then_tips: impl Iterator<Item = pallet_balances::NegativeImbalance<Runtime>>,
-	) {
-		if let Some(mut fees) = fees_then_tips.next() {
-			// no burning, add all fees and tips to the treasury
-
-			if let Some(tips) = fees_then_tips.next() {
-				tips.merge_into(&mut fees);
-			}
-			Treasury::on_unbalanced(fees);
-		}
-	}
-}
 
 #[cfg(feature = "runtime-benchmarks")]
 #[macro_use]

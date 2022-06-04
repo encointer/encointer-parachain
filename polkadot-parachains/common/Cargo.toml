@@ -11,6 +11,9 @@ polkadot-core-primitives = { git = "https://github.com/paritytech/polkadot", def
 
 sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
+frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
+pallet-balances = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
+pallet-treasury = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "polkadot-v0.9.23" }
 
 [features]
 default = [ "std" ]
@@ -19,4 +22,7 @@ std = [
     "polkadot-core-primitives/std",
     "sp-runtime/std",
     "frame-support/std",
+    "frame-system/std",
+    "pallet-balances/std",
+    "pallet-treasury/std",
 ]
