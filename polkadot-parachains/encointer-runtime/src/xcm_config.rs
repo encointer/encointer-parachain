@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Common XcmConfig for our launch-runtime.
+//! XcmConfig for our launch-runtime.
 //!
 //! Taken from cumulus/parachains/runtimes/statemine
 
@@ -141,6 +141,7 @@ impl xcm_executor::Config for XcmConfig {
 	type LocationInverter = LocationInverter<Ancestry>;
 	type Barrier = Barrier;
 	type Weigher = FixedWeightBounds<UnitWeightCost, Call, MaxInstructions>;
+	// `FeesToTreasury` is an encointer addaptation
 	type Trader =
 		UsingComponents<WeightToFee, KsmLocation, AccountId, Balances, FeesToTreasury<Runtime>>;
 	type ResponseHandler = PolkadotXcm;
