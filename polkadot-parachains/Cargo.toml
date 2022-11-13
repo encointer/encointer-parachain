@@ -16,7 +16,7 @@ clap = { version = "3.1", features = ["derive"] }
 codec = { package = "parity-scale-codec", version = "3.0.0" }
 futures = { version = "0.3.1", features = ["compat"] }
 hex-literal = "0.3.4"
-jsonrpsee = { version = "0.13.1", features = ["server"] }
+jsonrpsee = { version = "0.15.1", features = ["server"] }
 log = "0.4.17"
 serde = { version = "1.0.137", features = ["derive"] }
 
@@ -54,6 +54,7 @@ sc-telemetry = { git = "https://github.com/paritytech/substrate", branch = "polk
 sc-transaction-pool = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sp-transaction-pool = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sc-network = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
+sc-network-common = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sc-basic-authorship = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sp-timestamp = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
@@ -67,6 +68,7 @@ sp-offchain = { git = "https://github.com/paritytech/substrate", branch = "polka
 sp-api = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sp-consensus-aura = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 sc-sysinfo = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
+sp-serializer = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 try-runtime-cli = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.28" }
 
