@@ -1,7 +1,9 @@
 {
   "bootNodes": [
     "/ip4/104.248.131.111/tcp/30333/p2p/12D3KooWGa6QRfYmeCWCBHPvJAytaiXZsWzuq1L7zgzph4YHwGjB",
-    "/ip4/104.248.135.198/tcp/30333/p2p/12D3KooWCSzi8TmqvxKmrPdXT5jietrRMCeDVQGZUWQ5JT6MpZ9F"
+    "/ip4/104.248.135.198/tcp/30333/p2p/12D3KooWCSzi8TmqvxKmrPdXT5jietrRMCeDVQGZUWQ5JT6MpZ9F",
+    "/dns/boot.stake.plus/tcp/36333/p2p/12D3KooWNFFdJFV21haDiSdPJ1EnGmv6pa2TgB81Cvu7Y96hjTAu",
+    "/dns/boot.stake.plus/tcp/36334/wss/p2p/12D3KooWNFFdJFV21haDiSdPJ1EnGmv6pa2TgB81Cvu7Y96hjTAu"
   ],
   "chainType": "Live",
   "codeSubstitutes": {},
