@@ -1,7 +1,10 @@
 {
   "bootNodes": [
     "/ip4/104.248.131.111/tcp/30333/p2p/12D3KooWGa6QRfYmeCWCBHPvJAytaiXZsWzuq1L7zgzph4YHwGjB",
-    "/ip4/104.248.135.198/tcp/30333/p2p/12D3KooWCSzi8TmqvxKmrPdXT5jietrRMCeDVQGZUWQ5JT6MpZ9F"
+    "/ip4/104.248.135.198/tcp/30333/p2p/12D3KooWCSzi8TmqvxKmrPdXT5jietrRMCeDVQGZUWQ5JT6MpZ9F",
+    "/dns/boot-ksm-encointer-cr.gatotech.network/tcp/31326/p2p/12D3KooWByfCkLUzuMBJhVqb5SZxTHgGdwPzbJEk3t7gxDUakdi7",
+    "/dns/boot-ksm-encointer-cr.gatotech.network/tcp/31426/ws/p2p/12D3KooWByfCkLUzuMBJhVqb5SZxTHgGdwPzbJEk3t7gxDUakdi7",
+    "/dns/boot-ksm-encointer-cr.gatotech.network/tcp/31526/wss/p2p/12D3KooWByfCkLUzuMBJhVqb5SZxTHgGdwPzbJEk3t7gxDUakdi7"
   ],
   "chainType": "Live",
   "codeSubstitutes": {},
