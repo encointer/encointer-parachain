@@ -83,10 +83,11 @@ pub use encointer_primitives::{
 	balances::{BalanceEntry, BalanceType, Demurrage},
 	bazaar::{BusinessData, BusinessIdentifier, OfferingData},
 	ceremonies::{AggregatedAccountData, CeremonyIndexType, CeremonyInfo, CommunityReputation},
-	common::PalletString,
+	common::BoundedPalletString,
 	communities::{CommunityIdentifier, Location},
 	scheduler::CeremonyPhaseType,
 };
+use sp_core::ConstU32;
 
 // XCM imports
 // Polkadot imports
@@ -167,16 +168,16 @@ impl Default for ProxyType {
 		Self::Any
 	}
 }
-impl InstanceFilter<Call> for ProxyType {
-	fn filter(&self, c: &Call) -> bool {
+impl InstanceFilter<RuntimeCall> for ProxyType {
+	fn filter(&self, c: &RuntimeCall) -> bool {
 		match self {
 			ProxyType::Any => true,
-			ProxyType::NonTransfer => matches!(c, Call::EncointerBazaar(..)),
+			ProxyType::NonTransfer => matches!(c, RuntimeCall::EncointerBazaar(..)),
 			ProxyType::BazaarEdit => matches!(
 				c,
-				Call::EncointerBazaar(EncointerBazaarCall::create_offering { .. }) |
-					Call::EncointerBazaar(EncointerBazaarCall::update_offering { .. }) |
-					Call::EncointerBazaar(EncointerBazaarCall::delete_offering { .. })
+				RuntimeCall::EncointerBazaar(EncointerBazaarCall::create_offering { .. }) |
+					RuntimeCall::EncointerBazaar(EncointerBazaarCall::update_offering { .. }) |
+					RuntimeCall::EncointerBazaar(EncointerBazaarCall::delete_offering { .. })
 			),
 		}
 	}
@@ -233,8 +234,8 @@ parameter_types! {
 }
 
 pub struct BaseFilter;
-impl Contains<Call> for BaseFilter {
-	fn contains(_c: &Call) -> bool {
+impl Contains<RuntimeCall> for BaseFilter {
+	fn contains(_c: &RuntimeCall) -> bool {
 		true
 	}
 }
@@ -368,13 +369,12 @@ impl pallet_scheduler::Config for Runtime {
 	type MaxScheduledPerBlock = MaxScheduledPerBlock;
 	type WeightInfo = pallet_scheduler::weights::SubstrateWeight<Runtime>;
 	type OriginPrivilegeCmp = EqualPrivilegeOnly;
-	type PreimageProvider = ();
-	type NoPreimagePostponement = ();
+	type Preimages = ();
 }
 
 parameter_types! {
-	pub const ReservedXcmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT / 4;
-	pub const ReservedDmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT / 4;
+	pub const ReservedXcmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT.saturating_div(4);
+	pub const ReservedDmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT.saturating_div(4);
 }
 
 impl cumulus_pallet_parachain_system::Config for Runtime {
@@ -460,6 +460,10 @@ impl pallet_encointer_communities::Config for Runtime {
 	type CommunityMaster = MoreThanHalfCouncil;
 	type TrustableForNonDestructiveAction = MoreThanHalfCouncil;
 	type WeightInfo = weights::pallet_encointer_communities::WeightInfo<Runtime>;
+	type MaxCommunityIdentifiers = ConstU32<10000>;
+	type MaxBootstrappers = ConstU32<10000>;
+	type MaxLocationsPerGeohash = ConstU32<10000>;
+	type MaxCommunityIdentifiersPerGeohash = ConstU32<10000>;
 }
 
 impl pallet_encointer_balances::Config for Runtime {
@@ -509,7 +513,7 @@ type MoreThanHalfCouncil = EitherOfDiverse<
 pub type CouncilCollective = pallet_collective::Instance1;
 impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
-	type Proposal = Call;
+	type Proposal = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type MotionDuration = CouncilMotionDuration;
 	type MaxProposals = CouncilMaxProposals;
@@ -617,9 +621,9 @@ pub type SignedExtra = (
 	pallet_asset_tx_payment::ChargeAssetTxPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
-pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signature, SignedExtra>;
+pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
-pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
+pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, RuntimeCall, SignedExtra>;
 /// Executive: handles dispatch to the various modules.
 pub type Executive = frame_executive::Executive<
 	Runtime,
@@ -781,7 +785,7 @@ impl_runtime_apis! {
 			EncointerCommunities::get_cids()
 		}
 
-		fn get_name(cid: &CommunityIdentifier) -> Option<PalletString> {
+		fn get_name(cid: &CommunityIdentifier) -> Option<BoundedPalletString> {
 			EncointerCommunities::get_name(cid)
 		}
 

@@ -121,4 +121,6 @@ impl<T: frame_system::Config> pallet_proxy::WeightInfo for WeightInfo<T> {
             .saturating_add(T::DbWeight::get().reads(1))
             .saturating_add(T::DbWeight::get().writes(1))
     }
+    fn create_pure(_: u32) -> Weight { todo!() }
+    fn kill_pure(_: u32) -> Weight { todo!() }
 }

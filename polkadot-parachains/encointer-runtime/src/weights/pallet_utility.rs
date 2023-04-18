@@ -47,6 +47,6 @@ impl<T: frame_system::Config> pallet_utility::WeightInfo for WeightInfo<T> {
 
 	fn force_batch(_c: u32) -> Weight {
 		// Todo: dummy weight need to rerun benchmarks
-		(23_000_000)
+		Weight::from_ref_time(23_000_000)
 	}
 }
