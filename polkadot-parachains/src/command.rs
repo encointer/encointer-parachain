@@ -368,6 +368,7 @@ pub fn run() -> Result<()> {
 				_ => Err("Benchmarking sub-command unsupported".into()),
 			}
 		},
+		#[cfg(feature = "try-runtime")]
 		Some(Subcommand::TryRuntime(cmd)) => {
 			if cfg!(feature = "try-runtime") {
 				// grab the task manager.
@@ -395,6 +396,10 @@ pub fn run() -> Result<()> {
 				Err("Try-runtime must be enabled by `--features try-runtime`.".into())
 			}
 		},
+		#[cfg(not(feature = "try-runtime"))]
+		Some(Subcommand::TryRuntime) => Err("Try-runtime was not enabled when building the node. \
+			You can enable it with `--features try-runtime`."
+			.into()),
 		Some(Subcommand::Key(cmd)) => Ok(cmd.run(&cli)?),
 		None => {
 			let runner = cli.create_runner(&cli.run.normalize())?;
@@ -556,10 +561,6 @@ impl CliConfiguration<Self> for RelayChainCli {
 
 	fn transaction_pool(&self, is_dev: bool) -> Result<sc_service::config::TransactionPoolOptions> {
 		self.base.base.transaction_pool(is_dev)
-	}
-
-	fn state_cache_child_ratio(&self) -> Result<Option<usize>> {
-		self.base.base.state_cache_child_ratio()
 	}
 
 	fn rpc_methods(&self) -> Result<sc_service::config::RpcMethods> {

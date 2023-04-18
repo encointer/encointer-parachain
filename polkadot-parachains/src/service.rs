@@ -340,14 +340,15 @@ where
 	let validator = parachain_config.role.is_authority();
 	let prometheus_registry = parachain_config.prometheus_registry().cloned();
 	let transaction_pool = params.transaction_pool.clone();
-	let import_queue = cumulus_client_service::SharedImportQueue::new(params.import_queue);
-	let (network, system_rpc_tx, start_network) =
+	let import_queue_service = params.import_queue.service();
+
+	let (network, system_rpc_tx, tx_handler_controller, start_network) =
 		sc_service::build_network(sc_service::BuildNetworkParams {
 			config: &parachain_config,
 			client: client.clone(),
 			transaction_pool: transaction_pool.clone(),
 			spawn_handle: task_manager.spawn_handle(),
-			import_queue: import_queue.clone(),
+			import_queue: params.import_queue,
 			block_announce_validator_builder: Some(Box::new(|_| {
 				Box::new(block_announce_validator)
 			})),
@@ -431,7 +432,7 @@ where
 			relay_chain_interface: relay_chain_interface.clone(),
 			spawner,
 			parachain_consensus,
-			import_queue,
+			import_queue: import_queue_service,
 			collator_key: collator_key.expect("Command line arguments do not allow this. qed"),
 			relay_chain_slot_duration,
 		};
@@ -445,8 +446,7 @@ where
 			para_id: id,
 			relay_chain_interface,
 			relay_chain_slot_duration,
-			import_queue,
-			collator_options,
+			import_queue: import_queue_service,
 		};
 
 		start_full_node(params)?;
@@ -613,9 +613,8 @@ where
 								slot_duration,
 							);
 
-						Ok((timestamp, slot))
+						Ok((slot, timestamp))
 					},
-					can_author_with: sp_consensus::AlwaysCanAuthor,
 					telemetry: telemetry_handle,
 				},
 			),
