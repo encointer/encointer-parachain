@@ -23,7 +23,7 @@ use cumulus_client_consensus_common::{
 use cumulus_client_network::BlockAnnounceValidator;
 use cumulus_client_service::{
 	build_relay_chain_interface, prepare_node_config, start_collator, start_full_node,
-	StartCollatorParams, StartFullNodeParams,
+	StartCollatorParams, StartFullNodeParams, build_relay_chain_interface,
 };
 use cumulus_primitives_core::{
 	relay_chain::v2::{Hash as PHash, PersistedValidationData},
