@@ -127,7 +127,7 @@ pub fn new_partial<RuntimeApi, BIQ>(
 			Block,
 			TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
 		>,
-		(Option<Telemetry>, Option<TelemetryWorkerHandle>),
+		(ParachainBlockImport<RuntimeApi>, Option<Telemetry>, Option<TelemetryWorkerHandle>),
 	>,
 	sc_service::Error,
 >
@@ -147,6 +147,7 @@ where
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
 	BIQ: FnOnce(
 		Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
+		ParachainBlockImport<RuntimeApi>,
 		&Configuration,
 		Option<TelemetryHandle>,
 		&TaskManager,
@@ -200,8 +201,11 @@ where
 		client.clone(),
 	);
 
+	let block_import = ParachainBlockImport::new(client.clone(), backend.clone());
+
 	let import_queue = build_import_queue(
 		client.clone(),
+		block_import.clone(),
 		config,
 		telemetry.as_ref().map(|telemetry| telemetry.handle()),
 		&task_manager,
@@ -215,7 +219,7 @@ where
 		task_manager,
 		transaction_pool,
 		select_chain: (),
-		other: (telemetry, telemetry_worker_handle),
+		other: (block_import, telemetry, telemetry_worker_handle),
 	};
 
 	Ok(params)
@@ -269,6 +273,7 @@ where
 		+ 'static,
 	BIQ: FnOnce(
 			Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
+			ParachainBlockImport<RuntimeApi>,
 			&Configuration,
 			Option<TelemetryHandle>,
 			&TaskManager,
@@ -300,7 +305,7 @@ where
 	let parachain_config = prepare_node_config(parachain_config);
 
 	let params = new_partial::<RuntimeApi, BIQ>(&parachain_config, build_import_queue)?;
-	let (mut telemetry, telemetry_worker_handle) = params.other;
+	let (block_import, mut telemetry, telemetry_worker_handle) = params.other;
 
 	let client = params.client.clone();
 	let backend = params.backend.clone();
@@ -398,6 +403,7 @@ where
 	if validator {
 		let parachain_consensus = build_consensus(
 			client.clone(),
+			block_import,
 			prometheus_registry.as_ref(),
 			telemetry.as_ref().map(|t| t.handle()),
 			&task_manager,
@@ -554,6 +560,7 @@ where
 /// Build the import queue for Statemint and other Aura-based runtimes.
 pub fn aura_build_import_queue<RuntimeApi, AuraId: AppKey>(
 	client: Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
+	block_import: ParachainBlockImport<RuntimeApi>,
 	config: &Configuration,
 	telemetry_handle: Option<TelemetryHandle>,
 	task_manager: &TaskManager,
@@ -621,13 +628,7 @@ where
 	let registry = config.prometheus_registry();
 	let spawner = task_manager.spawn_essential_handle();
 
-	Ok(BasicQueue::new(
-		verifier,
-		Box::new(ParachainBlockImport::new(client)),
-		None,
-		&spawner,
-		registry,
-	))
+	Ok(BasicQueue::new(verifier, Box::new(block_import), None, &spawner, registry))
 }
 
 /// Generic implementation introduced by encointer.
