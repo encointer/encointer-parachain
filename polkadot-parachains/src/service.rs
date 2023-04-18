@@ -684,7 +684,7 @@ where
 		id,
 		rpc_extension_builder,
 		aura_build_import_queue::<_, AuraId>,
-		|client,
+		| client,
 		 block_import,
 		 prometheus_registry,
 		 telemetry,
@@ -740,7 +740,7 @@ where
 								)
 							})?;
 
-							Ok((slot, timestamp, parachain_inherent))
+									Ok((slot, timestamp, parachain_inherent))
 						}
 					},
 					block_import,
