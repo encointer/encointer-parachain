@@ -48,7 +48,7 @@ pub mod constants {
 				"Read weight should be at least 1 µs."
 			);
 			assert!(
-				W::get().writes(1) >= constants::WEIGHT_REF_TIME_PER_MICROS,
+				W::get().writes(1).ref_time() >= constants::WEIGHT_REF_TIME_PER_MICROS,
 				"Write weight should be at least 1 µs."
 			);
 			// At most 1 ms.
@@ -57,7 +57,7 @@ pub mod constants {
 				"Read weight should be at most 1 ms."
 			);
 			assert!(
-				W::get().writes(1) <= constants::WEIGHT_REF_TIME_PER_MILLIS,
+				W::get().writes(1).ref_time() <= constants::WEIGHT_REF_TIME_PER_MILLIS,
 				"Write weight should be at most 1 ms."
 			);
 		}
