@@ -85,11 +85,10 @@ pub use encointer_primitives::{
 	balances::{BalanceEntry, BalanceType, Demurrage},
 	bazaar::{BusinessData, BusinessIdentifier, OfferingData},
 	ceremonies::{AggregatedAccountData, CeremonyIndexType, CeremonyInfo, CommunityReputation},
-	common::BoundedPalletString,
+	common::PalletString,
 	communities::{CommunityIdentifier, Location},
 	scheduler::CeremonyPhaseType,
 };
-use sp_core::ConstU32;
 
 // XCM imports
 // Polkadot imports
@@ -462,10 +461,6 @@ impl pallet_encointer_communities::Config for Runtime {
 	type CommunityMaster = MoreThanHalfCouncil;
 	type TrustableForNonDestructiveAction = MoreThanHalfCouncil;
 	type WeightInfo = weights::pallet_encointer_communities::WeightInfo<Runtime>;
-	type MaxCommunityIdentifiers = ConstU32<10000>;
-	type MaxBootstrappers = ConstU32<10000>;
-	type MaxLocationsPerGeohash = ConstU32<10000>;
-	type MaxCommunityIdentifiersPerGeohash = ConstU32<10000>;
 }
 
 impl pallet_encointer_balances::Config for Runtime {
@@ -788,7 +783,7 @@ impl_runtime_apis! {
 			EncointerCommunities::get_cids()
 		}
 
-		fn get_name(cid: &CommunityIdentifier) -> Option<BoundedPalletString> {
+		fn get_name(cid: &CommunityIdentifier) -> Option<PalletString> {
 			EncointerCommunities::get_name(cid)
 		}
 
