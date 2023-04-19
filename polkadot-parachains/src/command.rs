@@ -351,7 +351,7 @@ pub fn run() -> Result<()> {
 				}),
 				#[cfg(not(feature = "runtime-benchmarks"))]
 				BenchmarkCmd::Storage(_) => Err(sc_cli::Error::Input(
-					"Compile with --features=runtime-benchmarks \
+						"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
 						.into(),
 				)),
