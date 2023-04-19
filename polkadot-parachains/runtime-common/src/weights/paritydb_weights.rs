@@ -44,7 +44,7 @@ pub mod constants {
 		fn sane() {
 			// At least 1 µs.
 			assert!(
-				W::get().reads(1) >= constants::WEIGHT_REF_TIME_PER_MICROS,
+				W::get().reads(1).ref_time() >= constants::WEIGHT_REF_TIME_PER_MICROS,
 				"Read weight should be at least 1 µs."
 			);
 			assert!(
@@ -53,7 +53,7 @@ pub mod constants {
 			);
 			// At most 1 ms.
 			assert!(
-				W::get().reads(1) <= constants::WEIGHT_REF_TIME_PER_MILLIS,
+				W::get().reads(1).ref_time() <= constants::WEIGHT_REF_TIME_PER_MILLIS,
 				"Read weight should be at most 1 ms."
 			);
 			assert!(
