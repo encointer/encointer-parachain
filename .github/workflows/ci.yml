@@ -59,6 +59,8 @@ jobs:
       RELEASE_NAME: debug
     steps:
       - uses: actions/checkout@v3
+      - name: Install protoc
+        run: sudo apt-get install protobuf-compiler
 
       - name: Print env
         run: |
