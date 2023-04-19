@@ -53,9 +53,10 @@ use sp_version::RuntimeVersion;
 use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{Contains, EitherOfDiverse},
-	weights::{ConstantMultiplier, DispatchClass, Weight},
+	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
+use frame_support::dispatch::DispatchClass;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,

@@ -53,9 +53,10 @@ use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::{
 	construct_runtime, parameter_types,
 	traits::{Contains, EitherOfDiverse, EqualPrivilegeOnly, InstanceFilter},
-	weights::{ConstantMultiplier, DispatchClass, Weight},
+	weights::{ConstantMultiplier, Weight},
 	PalletId, RuntimeDebug,
 };
+use frame_support::dispatch::DispatchClass;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
