@@ -51,12 +51,13 @@ use sp_version::RuntimeVersion;
 
 use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::{
-	construct_runtime, parameter_types,
+	construct_runtime,
+	dispatch::DispatchClass,
+	parameter_types,
 	traits::{Contains, EitherOfDiverse, EqualPrivilegeOnly, InstanceFilter},
 	weights::{ConstantMultiplier, Weight},
 	PalletId, RuntimeDebug,
 };
-use frame_support::dispatch::DispatchClass;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
@@ -622,7 +623,8 @@ pub type SignedExtra = (
 	pallet_asset_tx_payment::ChargeAssetTxPayment<Runtime>,
 );
 /// Unchecked extrinsic type as expected by this runtime.
-pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, SignedExtra>;
+pub type UncheckedExtrinsic =
+	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, SignedExtra>;
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, RuntimeCall, SignedExtra>;
 /// Executive: handles dispatch to the various modules.

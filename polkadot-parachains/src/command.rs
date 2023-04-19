@@ -31,9 +31,7 @@ use sc_cli::{
 	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
 	NetworkParams, Result, RuntimeVersion, SharedParams, SubstrateCli,
 };
-use sc_service::{
-	config::{BasePath, PrometheusConfig}
-};
+use sc_service::config::{BasePath, PrometheusConfig};
 use sp_core::hexdisplay::HexDisplay;
 use sp_runtime::traits::{AccountIdConversion, Block as BlockT};
 use std::net::SocketAddr;
@@ -352,12 +350,11 @@ pub fn run() -> Result<()> {
 					construct_benchmark_partials!(config, |partials| cmd.run(partials.client))
 				}),
 				#[cfg(not(feature = "runtime-benchmarks"))]
-				BenchmarkCmd::Storage(_) =>
-					Err(sc_cli::Error::Input(
-						"Compile with --features=runtime-benchmarks \
+				BenchmarkCmd::Storage(_) => Err(sc_cli::Error::Input(
+					"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
-							.into(),
-					)),
+						.into(),
+				)),
 				#[cfg(feature = "runtime-benchmarks")]
 				BenchmarkCmd::Storage(cmd) => runner.sync_run(|config| {
 					construct_benchmark_partials!(config, |partials| {

@@ -22,14 +22,15 @@ use cumulus_client_consensus_common::{
 };
 use cumulus_client_network::BlockAnnounceValidator;
 use cumulus_client_service::{
-	prepare_node_config, start_collator, start_full_node, StartCollatorParams, StartFullNodeParams, build_relay_chain_interface,
+	build_relay_chain_interface, prepare_node_config, start_collator, start_full_node,
+	StartCollatorParams, StartFullNodeParams,
 };
 use cumulus_primitives_core::{
 	relay_chain::v2::{Hash as PHash, PersistedValidationData},
 	ParaId,
 };
-use sc_consensus::ImportQueue;
 use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
+use sc_consensus::ImportQueue;
 use sp_core::Pair;
 
 use jsonrpsee::RpcModule;
@@ -683,7 +684,7 @@ where
 		id,
 		rpc_extension_builder,
 		aura_build_import_queue::<_, AuraId>,
-		| client,
+		|client,
 		 block_import,
 		 prometheus_registry,
 		 telemetry,
@@ -739,7 +740,7 @@ where
 								)
 							})?;
 
-									Ok((slot, timestamp, parachain_inherent))
+							Ok((slot, timestamp, parachain_inherent))
 						}
 					},
 					block_import,
