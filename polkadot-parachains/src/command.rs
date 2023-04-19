@@ -32,8 +32,7 @@ use sc_cli::{
 	NetworkParams, Result, RuntimeVersion, SharedParams, SubstrateCli,
 };
 use sc_service::{
-	config::{BasePath, PrometheusConfig},
-	TaskManager,
+	config::{BasePath, PrometheusConfig}
 };
 use sp_core::hexdisplay::HexDisplay;
 use sp_runtime::traits::{AccountIdConversion, Block as BlockT};

@@ -29,10 +29,7 @@ use cumulus_primitives_core::{
 	ParaId,
 };
 use sc_consensus::ImportQueue;
-use cumulus_relay_chain_inprocess_interface::build_inprocess_relay_chain;
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
-use cumulus_relay_chain_rpc_interface::{create_client_and_start_worker, RelayChainRpcInterface};
-use polkadot_service::CollatorPair;
+use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
 use sp_core::Pair;
 
 use jsonrpsee::RpcModule;
