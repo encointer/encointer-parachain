@@ -58,7 +58,6 @@ use frame_support::{
 	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
-use frame_support::dispatch::DispatchClass;
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
