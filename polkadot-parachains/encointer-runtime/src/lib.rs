@@ -455,6 +455,7 @@ impl pallet_encointer_ceremonies::Config for Runtime {
 	type MeetupNewbieLimitDivider = MeetupNewbieLimitDivider;
 	type CeremonyMaster = MoreThanHalfCouncil;
 	type WeightInfo = weights::pallet_encointer_ceremonies::WeightInfo<Runtime>;
+	type MaxAttestations = ConstU32<100>;
 }
 
 impl pallet_encointer_communities::Config for Runtime {
@@ -634,7 +635,10 @@ pub type Executive = frame_executive::Executive<
 	frame_system::ChainContext<Runtime>,
 	Runtime,
 	AllPalletsWithSystem,
-	(pallet_encointer_communities::migrations::v1::Migration<Runtime>),
+	(
+		pallet_encointer_communities::migrations::v1::Migration<Runtime>,
+		pallet_encointer_ceremonies::migrations::v1::Migration<Runtime>,
+	),
 >;
 
 #[cfg(feature = "runtime-benchmarks")]
