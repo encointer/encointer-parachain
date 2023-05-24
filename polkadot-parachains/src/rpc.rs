@@ -80,7 +80,7 @@ where
 
 	module.merge(System::new(client.clone(), pool, deny_unsafe).into_rpc())?;
 	module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
-	module.merge(BazaarRpc::new(client.clone(), deny_unsafe).into_rpc())?;
+	module.merge(BazaarRpc::new(client.clone()).into_rpc())?;
 
 	match backend.offchain_storage() {
 		Some(storage) => {
@@ -88,14 +88,13 @@ where
 				CommunitiesRpc::new(
 					client.clone(),
 					storage.clone(),
-					offchain_indexing_enabled,
-					deny_unsafe,
+					offchain_indexing_enabled
 				)
 				.into_rpc(),
 			)?;
 
 			module.merge(
-				CeremoniesRpc::new(client, deny_unsafe, storage, offchain_indexing_enabled)
+				CeremoniesRpc::new(client, storage, offchain_indexing_enabled)
 					.into_rpc(),
 			)?;
 		},
