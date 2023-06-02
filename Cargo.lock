@@ -2468,6 +2468,7 @@ dependencies = [
  "substrate-frame-rpc-system",
  "substrate-prometheus-endpoint",
  "tempfile",
+ "try-runtime-cli",
  "xcm",
 ]
 
@@ -12397,6 +12398,7 @@ source = "git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.37#6f
 dependencies = [
  "clap",
  "frame-remote-externalities",
+ "frame-try-runtime",
  "hex",
  "log",
  "parity-scale-codec",
