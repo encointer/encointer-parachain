@@ -148,8 +148,8 @@ Then run the state migrations with live data from the encointer-kusama parachain
 ```bash
 ./target/release/encointer-collator try-runtime \
   --chain encointer-kusama-local \
-  --runtime ./target/release/wbuild/encointer-runtime/encointer_runtime.wasm on-runtime-upgrade \
-  --checks=all \
+  --runtime ./target/release/wbuild/encointer-runtime/encointer_runtime.wasm \
+  on-runtime-upgrade --checks=all \
   live --uri wss://kusama.api.encointer.org:443
 ```
 
