@@ -29,7 +29,7 @@ use sp_std::marker::PhantomData;
 pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_balances::WeightInfo for WeightInfo<T> {
 	// Storage: System Account (r:1 w:1)
-	fn transfer() -> Weight {
+	fn transfer_allow_death() -> Weight {
 		Weight::from_ref_time(75_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
@@ -41,13 +41,13 @@ impl<T: frame_system::Config> pallet_balances::WeightInfo for WeightInfo<T> {
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
-	fn set_balance_creating() -> Weight {
+	fn force_set_balance_creating() -> Weight {
 		Weight::from_ref_time(28_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
 	}
 	// Storage: System Account (r:1 w:1)
-	fn set_balance_killing() -> Weight {
+	fn force_set_balance_killing() -> Weight {
 		Weight::from_ref_time(33_000_000)
 			.saturating_add(T::DbWeight::get().reads(1))
 			.saturating_add(T::DbWeight::get().writes(1))
