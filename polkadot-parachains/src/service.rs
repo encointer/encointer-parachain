@@ -25,10 +25,7 @@ use cumulus_client_service::{
 	build_relay_chain_interface, prepare_node_config, start_collator, start_full_node,
 	StartCollatorParams, StartFullNodeParams,
 };
-use cumulus_primitives_core::{
-	relay_chain::v2::{Hash as PHash, PersistedValidationData},
-	ParaId,
-};
+use cumulus_primitives_core::{relay_chain::v2::Hash as PHash, ParaId, PersistedValidationData};
 use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
 use sc_consensus::ImportQueue;
 use sp_core::Pair;
@@ -45,17 +42,15 @@ use sc_consensus::{
 	BlockImportParams,
 };
 use sc_executor::WasmExecutor;
-use sc_network::NetworkService;
-use sc_network_common::service::NetworkBlock;
+use sc_network::NetworkBlock;
+use sc_network_sync::SyncingService;
 use sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
 use sp_api::{ApiExt, ConstructRuntimeApi};
-use sp_consensus::CacheKeyId;
 use sp_consensus_aura::AuraApi;
-use sp_keystore::SyncCryptoStorePtr;
+use sp_keystore::KeystorePtr;
 use sp_runtime::{
-	app_crypto::AppKey,
-	generic::BlockId,
+	app_crypto::AppCrypto,
 	traits::{BlakeTwo256, Header as HeaderT},
 };
 use std::{marker::PhantomData, sync::Arc, time::Duration};
@@ -295,8 +290,8 @@ where
 				TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
 			>,
 		>,
-		Arc<NetworkService<Block, Hash>>,
-		SyncCryptoStorePtr,
+		Arc<SyncingService<Block>>,
+		KeystorePtr,
 		bool,
 	) -> Result<Box<dyn ParachainConsensus<Block>>, sc_service::Error>,
 {
@@ -319,7 +314,7 @@ where
 	)
 	.await
 	.map_err(|e| match e {
-		RelayChainError::ServiceError(polkadot_service::Error::Sub(x)) => x,
+		RelayChainError::Application(x) => x,
 		s => s.to_string().into(),
 	})?;
 
@@ -331,7 +326,7 @@ where
 	let transaction_pool = params.transaction_pool.clone();
 	let import_queue_service = params.import_queue.service();
 
-	let (network, system_rpc_tx, tx_handler_controller, start_network) =
+	let (network, system_rpc_tx, tx_handler_controller, start_network, sync_service) =
 		sc_service::build_network(sc_service::BuildNetworkParams {
 			config: &parachain_config,
 			client: client.clone(),
@@ -341,7 +336,7 @@ where
 			block_announce_validator_builder: Some(Box::new(|_| {
 				Box::new(block_announce_validator)
 			})),
-			warp_sync: None,
+			warp_sync_params: None,
 		})?;
 
 	let rpc_builder = {
@@ -370,9 +365,10 @@ where
 		transaction_pool: transaction_pool.clone(),
 		task_manager: &mut task_manager,
 		config: parachain_config,
-		keystore: params.keystore_container.sync_keystore(),
+		keystore: params.keystore_container.keystore(),
 		backend: backend.clone(),
 		network: network.clone(),
+		sync_service: sync_service.clone(),
 		system_rpc_tx,
 		tx_handler_controller,
 		telemetry: telemetry.as_mut(),
@@ -392,11 +388,15 @@ where
 	}
 
 	let announce_block = {
-		let network = network.clone();
-		Arc::new(move |hash, data| network.announce_block(hash, data))
+		let sync_service = sync_service.clone();
+		Arc::new(move |hash, data| sync_service.announce_block(hash, data))
 	};
 
 	let relay_chain_slot_duration = Duration::from_secs(6);
+
+	let overseer_handle = relay_chain_interface
+		.overseer_handle()
+		.map_err(|e| sc_service::Error::Application(Box::new(e)))?;
 
 	if validator {
 		let parachain_consensus = build_consensus(
@@ -407,8 +407,8 @@ where
 			&task_manager,
 			relay_chain_interface.clone(),
 			transaction_pool,
-			network,
-			params.keystore_container.sync_keystore(),
+			sync_service.clone(),
+			params.keystore_container.keystore(),
 			force_authoring,
 		)?;
 
@@ -426,6 +426,8 @@ where
 			import_queue: import_queue_service,
 			collator_key: collator_key.expect("Command line arguments do not allow this. qed"),
 			relay_chain_slot_duration,
+			recovery_handle: Box::new(overseer_handle),
+			sync_service: sync_service.clone(),
 		};
 
 		start_collator(params).await?;
@@ -438,6 +440,8 @@ where
 			relay_chain_interface,
 			relay_chain_slot_duration,
 			import_queue: import_queue_service,
+			recovery_handle: Box::new(overseer_handle),
+			sync_service: sync_service.clone(),
 		};
 
 		start_full_node(params)?;
@@ -499,11 +503,10 @@ where
 		relay_parent: PHash,
 		validation_data: &PersistedValidationData,
 	) -> Option<ParachainCandidate<Block>> {
-		let block_id = BlockId::hash(parent.hash());
 		if self
 			.client
 			.runtime_api()
-			.has_api::<dyn AuraApi<Block, AuraId>>(&block_id)
+			.has_api::<dyn AuraApi<Block, AuraId>>(parent.hash())
 			.unwrap_or(false)
 		{
 			self.aura_consensus
@@ -539,13 +542,11 @@ where
 	async fn verify(
 		&mut self,
 		block_import: BlockImportParams<Block, ()>,
-	) -> Result<(BlockImportParams<Block, ()>, Option<Vec<(CacheKeyId, Vec<u8>)>>), String> {
-		let block_id = BlockId::hash(*block_import.header.parent_hash());
-
+	) -> Result<BlockImportParams<Block, ()>, String> {
 		if self
 			.client
 			.runtime_api()
-			.has_api::<dyn AuraApi<Block, AuraId>>(&block_id)
+			.has_api::<dyn AuraApi<Block, AuraId>>(*block_import.header.parent_hash())
 			.unwrap_or(false)
 		{
 			self.aura_verifier.get_mut().verify(block_import).await
@@ -556,7 +557,7 @@ where
 }
 
 /// Build the import queue for Statemint and other Aura-based runtimes.
-pub fn aura_build_import_queue<RuntimeApi, AuraId: AppKey>(
+pub fn aura_build_import_queue<RuntimeApi, AuraId: AppCrypto>(
 	client: Arc<TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>>,
 	block_import: ParachainBlockImport<RuntimeApi>,
 	config: &Configuration,
@@ -582,9 +583,9 @@ where
 			StateBackend = sc_client_api::StateBackendFor<TFullBackend<Block>, Block>,
 		> + sp_offchain::OffchainWorkerApi<Block>
 		+ sp_block_builder::BlockBuilder<Block>
-		+ sp_consensus_aura::AuraApi<Block, <<AuraId as AppKey>::Pair as Pair>::Public>,
+		+ sp_consensus_aura::AuraApi<Block, <<AuraId as AppCrypto>::Pair as Pair>::Public>,
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
-	<<AuraId as AppKey>::Pair as Pair>::Signature:
+	<<AuraId as AppCrypto>::Pair as Pair>::Signature:
 		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
 {
 	let client2 = client.clone();
@@ -592,25 +593,26 @@ where
 	let aura_verifier = move || {
 		let slot_duration = cumulus_client_consensus_aura::slot_duration(&*client2).unwrap();
 
-		Box::new(
-			cumulus_client_consensus_aura::build_verifier::<<AuraId as AppKey>::Pair, _, _, _>(
-				cumulus_client_consensus_aura::BuildVerifierParams {
-					client: client2.clone(),
-					create_inherent_data_providers: move |_, _| async move {
-						let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
+		Box::new(cumulus_client_consensus_aura::build_verifier::<
+			<AuraId as AppCrypto>::Pair,
+			_,
+			_,
+			_,
+		>(cumulus_client_consensus_aura::BuildVerifierParams {
+			client: client2.clone(),
+			create_inherent_data_providers: move |_, _| async move {
+				let timestamp = sp_timestamp::InherentDataProvider::from_system_time();
 
-						let slot =
+				let slot =
 							sp_consensus_aura::inherents::InherentDataProvider::from_timestamp_and_slot_duration(
 								*timestamp,
 								slot_duration,
 							);
 
-						Ok((slot, timestamp))
-					},
-					telemetry: telemetry_handle,
-				},
-			),
-		) as Box<_>
+				Ok((slot, timestamp))
+			},
+			telemetry: telemetry_handle,
+		})) as Box<_>
 	};
 
 	let relay_chain_verifier =
@@ -633,7 +635,7 @@ where
 ///
 /// The trait bounds of the generic parameters are copied from the above `start_node_impl` except
 /// for the one mentioned below.
-pub async fn start_parachain_node<RuntimeApi, AuraId: AppKey, RpcBuilder>(
+pub async fn start_parachain_node<RuntimeApi, AuraId: AppCrypto, RpcBuilder>(
 	parachain_config: Configuration,
 	polkadot_config: Configuration,
 	collator_options: CollatorOptions,
@@ -658,11 +660,11 @@ where
 		> + sp_offchain::OffchainWorkerApi<Block>
 		+ sp_block_builder::BlockBuilder<Block>
 		+ cumulus_primitives_core::CollectCollationInfo<Block>
-		+ sp_consensus_aura::AuraApi<Block, <<AuraId as AppKey>::Pair as Pair>::Public>
+		+ sp_consensus_aura::AuraApi<Block, <<AuraId as AppCrypto>::Pair as Pair>::Public>
 		+ pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>
 		+ frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	sc_client_api::StateBackendFor<TFullBackend<Block>, Block>: sp_api::StateBackend<BlakeTwo256>,
-	<<AuraId as AppKey>::Pair as Pair>::Signature:
+	<<AuraId as AppCrypto>::Pair as Pair>::Signature:
 		TryFrom<Vec<u8>> + std::hash::Hash + sp_runtime::traits::Member + Codec,
 	RpcBuilder: Fn(
 			crate::rpc::FullDeps<
@@ -691,7 +693,7 @@ where
 		 task_manager,
 		 relay_chain_interface,
 		 transaction_pool,
-		 sync_oracle,
+		 sync_service,
 		 keystore,
 		 force_authoring| {
 			// Encointer customization: This part is different from upstream. We don't use the relay
@@ -712,7 +714,7 @@ where
 			);
 
 			// We don't use the `BuildOnAccess`, we directly return the aura consensus here.
-			Ok(AuraConsensus::build::<<AuraId as AppKey>::Pair, _, _, _, _, _, _>(
+			Ok(AuraConsensus::build::<<AuraId as AppCrypto>::Pair, _, _, _, _, _, _>(
 				BuildAuraConsensusParams {
 					proposer_factory,
 					create_inherent_data_providers: move |_, (relay_parent, validation_data)| {
@@ -746,7 +748,7 @@ where
 					block_import,
 					para_client: client,
 					backoff_authoring_blocks: Option::<()>::None,
-					sync_oracle,
+					sync_oracle: sync_service.clone(),
 					keystore,
 					force_authoring,
 					slot_duration,

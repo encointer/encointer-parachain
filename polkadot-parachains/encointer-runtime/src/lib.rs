@@ -300,6 +300,10 @@ impl pallet_balances::Config for Runtime {
 	type WeightInfo = weights::pallet_balances::WeightInfo<Runtime>;
 	type MaxReserves = MaxReserves;
 	type ReserveIdentifier = [u8; 8];
+	type HoldIdentifier = ();
+	type FreezeIdentifier = ();
+	type MaxHolds = ();
+	type MaxFreezes = ();
 }
 
 parameter_types! {
@@ -414,6 +418,7 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
 	type WeightInfo = weights::cumulus_pallet_xcmp_queue::WeightInfo<Runtime>;
+	type PriceForSiblingDelivery = ();
 }
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
@@ -523,6 +528,8 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type DefaultVote = pallet_collective::PrimeDefaultVote;
 	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = weights::pallet_collective::WeightInfo<Runtime>;
+	type SetMembersOrigin = MoreThanHalfCouncil;
+	type MaxProposalWeight = ();
 }
 
 // support for collective pallet
@@ -693,6 +700,13 @@ impl_runtime_apis! {
 		fn metadata() -> OpaqueMetadata {
 			OpaqueMetadata::new(Runtime::metadata().into())
 		}
+		fn metadata_at_version(version: u32) -> Option<OpaqueMetadata> {
+			Runtime::metadata_at_version(version)
+		}
+
+		fn metadata_versions() -> sp_std::vec::Vec<u32> {
+			Runtime::metadata_versions()
+		}
 	}
 
 	impl sp_block_builder::BlockBuilder<Block> for Runtime {
@@ -762,6 +776,12 @@ impl_runtime_apis! {
 			len: u32,
 		) -> pallet_transaction_payment::FeeDetails<Balance> {
 			TransactionPayment::query_fee_details(uxt, len)
+		}
+		fn query_weight_to_fee(weight: Weight) -> Balance {
+			TransactionPayment::weight_to_fee(weight)
+	}
+		fn query_length_to_fee(length: u32) -> Balance {
+			TransactionPayment::length_to_fee(length)
 		}
 	}
 
