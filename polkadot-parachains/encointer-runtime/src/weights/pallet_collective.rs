@@ -33,7 +33,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Voting (r:100 w:100)
 	// Storage: Collective Prime (r:0 w:1)
 	fn set_members(m: u32, n: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(0)
+		Weight::from_ref_time(0, 0)
 			// Standard Error: 206_000
 			.saturating_add(Weight::from_ref_time(19_611_000_u64).saturating_mul(m.into()))
 			// Standard Error: 206_000
@@ -47,7 +47,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	}
 	// Storage: Collective Members (r:1 w:0)
 	fn execute(b: u32, m: u32, ) -> Weight {
-		Weight::from_ref_time(28_352_000)
+		Weight::from_ref_time(28_352_000, 0)
 			// Standard Error: 0
 			.saturating_add(Weight::from_ref_time(3_000_u64).saturating_mul(b.into()))
 			// Standard Error: 0
@@ -57,7 +57,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Members (r:1 w:0)
 	// Storage: Collective ProposalOf (r:1 w:0)
 	fn propose_execute(b: u32, m: u32, ) -> Weight {
-		Weight::from_ref_time(34_024_000)
+		Weight::from_ref_time(34_024_000, 0)
 			// Standard Error: 0
 			.saturating_add(Weight::from_ref_time(2_000_u64).saturating_mul(b.into()))
 			// Standard Error: 1_000
@@ -70,7 +70,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective ProposalCount (r:1 w:1)
 	// Storage: Collective Voting (r:0 w:1)
 	fn propose_proposed(b: u32, m: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(35_045_000)
+		Weight::from_ref_time(35_045_000, 0)
 			// Standard Error: 0
 			.saturating_add(Weight::from_ref_time(23_000_u64).saturating_mul(b.into()))
 			// Standard Error: 3_000
@@ -83,7 +83,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Members (r:1 w:0)
 	// Storage: Collective Voting (r:1 w:1)
 	fn vote(m: u32, ) -> Weight {
-		Weight::from_ref_time(54_429_000)
+		Weight::from_ref_time(54_429_000, 0)
 			// Standard Error: 6_000
 			.saturating_add(Weight::from_ref_time(437_000_u64).saturating_mul(m.into()))
 			.saturating_add(T::DbWeight::get().reads(2))
@@ -94,7 +94,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Proposals (r:1 w:1)
 	// Storage: Collective ProposalOf (r:0 w:1)
 	fn close_early_disapproved(m: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(69_509_000)
+		Weight::from_ref_time(69_509_000, 0)
 			// Standard Error: 8_000
 			.saturating_add(Weight::from_ref_time(54_000_u64).saturating_mul(m.into()))
 			// Standard Error: 8_000
@@ -107,7 +107,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective ProposalOf (r:1 w:1)
 	// Storage: Collective Proposals (r:1 w:1)
 	fn close_early_approved(_b: u32, m: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(90_585_000)
+		Weight::from_ref_time(90_585_000, 0)
 			// Standard Error: 6_000
 			.saturating_add(Weight::from_ref_time(109_000_u64).saturating_mul(m.into()))
 			// Standard Error: 6_000
@@ -121,7 +121,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Proposals (r:1 w:1)
 	// Storage: Collective ProposalOf (r:0 w:1)
 	fn close_disapproved(m: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(59_699_000)
+		Weight::from_ref_time(59_699_000, 0)
 			// Standard Error: 9_000
 			.saturating_add(Weight::from_ref_time(281_000_u64).saturating_mul(m.into()))
 			// Standard Error: 8_000
@@ -135,7 +135,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective ProposalOf (r:1 w:1)
 	// Storage: Collective Proposals (r:1 w:1)
 	fn close_approved(b: u32, m: u32, p: u32, ) -> Weight {
-		Weight::from_ref_time(77_812_000)
+		Weight::from_ref_time(77_812_000, 0)
 			// Standard Error: 0
 			.saturating_add(Weight::from_ref_time(1_000_u64).saturating_mul(b.into()))
 			// Standard Error: 4_000
@@ -149,7 +149,7 @@ impl<T: frame_system::Config> pallet_collective::WeightInfo for WeightInfo<T> {
 	// Storage: Collective Voting (r:0 w:1)
 	// Storage: Collective ProposalOf (r:0 w:1)
 	fn disapprove_proposal(p: u32, ) -> Weight {
-		Weight::from_ref_time(34_862_000)
+		Weight::from_ref_time(34_862_000, 0)
 			// Standard Error: 2_000
 			.saturating_add(Weight::from_ref_time(322_000_u64).saturating_mul(p.into()))
 			.saturating_add(T::DbWeight::get().reads(1))
