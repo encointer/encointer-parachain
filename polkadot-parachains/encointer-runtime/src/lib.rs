@@ -511,6 +511,7 @@ parameter_types! {
 	pub const CouncilMotionDuration: BlockNumber = 7 * DAYS;
 	pub const CouncilMaxProposals: u32 = 100;
 	pub const CouncilMaxMembers: u32 = 100;
+	pub MaxProposalWeight: Weight = sp_runtime::Perbill::from_percent(50) * RuntimeBlockWeights::get().max_block;
 }
 
 type MoreThanHalfCouncil = EitherOfDiverse<
@@ -529,7 +530,7 @@ impl pallet_collective::Config<CouncilCollective> for Runtime {
 	type MaxMembers = CouncilMaxMembers;
 	type WeightInfo = weights::pallet_collective::WeightInfo<Runtime>;
 	type SetMembersOrigin = MoreThanHalfCouncil;
-	type MaxProposalWeight = ();
+	type MaxProposalWeight = MaxProposalWeight;
 }
 
 // support for collective pallet
