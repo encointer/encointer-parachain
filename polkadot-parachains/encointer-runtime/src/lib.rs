@@ -54,7 +54,7 @@ use frame_support::{
 	construct_runtime,
 	dispatch::DispatchClass,
 	parameter_types,
-	traits::{ConstU32, Contains, EitherOfDiverse, EqualPrivilegeOnly, InstanceFilter},
+	traits::{Contains, EitherOfDiverse, EqualPrivilegeOnly, InstanceFilter},
 	weights::{ConstantMultiplier, Weight},
 	PalletId, RuntimeDebug,
 };
