@@ -71,7 +71,7 @@ jobs:
       - name: Setup Rust toolchain
         run: rustup show
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.os }}-${{ env.RUST_BIN_DIR }}-${{ matrix.binary }}
 
@@ -114,7 +114,7 @@ jobs:
       - name: Setup Rust toolchain
         run: rustup show
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.rust-target }}-${{ matrix.check }}
 
@@ -152,7 +152,7 @@ jobs:
         run: sudo apt-get install protobuf-compiler
         
       - name: Cache target dir
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: "${{ github.workspace }}/runtime/${{ matrix.runtime }}/target"
           key: srtool-target-${{ matrix.runtime }}-${{ github.sha }}
