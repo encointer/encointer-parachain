@@ -21,20 +21,6 @@ env:
 
 
 jobs:
-
-  # this job set up dynamic configuration shared among jobs
-  config:
-    name: Set up Config
-    runs-on: ubuntu-latest
-    env:
-      ENABLE_CHECK: true
-    outputs:
-      check: ${{ steps.check.outputs.check }}
-      runs: ${{ steps.runs.outputs.runs }}
-    steps:
-      - id: check
-        run: echo "{check}"="{${{ env.ENABLE_CHECK }}}" >> $GITHUB_OUTPUT
-
   cancel_previous_runs:
     name: Cancel Previous Runs
     runs-on: ubuntu-20.04
@@ -90,8 +76,6 @@ jobs:
   # Run all checks and unit test. This always run on debug mode
   check:
     name: Rust check ${{ matrix.check }} (${{ matrix.rust-target }})
-    needs: config
-    if: ${{ needs.config.outputs.check == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
