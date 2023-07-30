@@ -50,11 +50,15 @@ use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
 use codec::{Decode, Encode, MaxEncodedLen};
+use encointer_balances_tx_payment::{AssetBalanceOf, AssetIdOf, BalanceToCommunityBalance};
 use frame_support::{
 	construct_runtime,
 	dispatch::DispatchClass,
 	parameter_types,
-	traits::{Contains, EitherOfDiverse, EqualPrivilegeOnly, InstanceFilter},
+	traits::{
+		tokens::ConversionToAssetBalance, Contains, EitherOfDiverse, EqualPrivilegeOnly,
+		InstanceFilter,
+	},
 	weights::{ConstantMultiplier, Weight},
 	PalletId, RuntimeDebug,
 };
@@ -109,6 +113,9 @@ pub(crate) use runtime_common::{
 /// A type to hold UTC unix epoch [ms]
 pub type Moment = u64;
 pub const ONE_DAY: Moment = 86_400_000;
+
+pub type AssetId = AssetIdOf<Runtime>;
+pub type AssetBalance = AssetBalanceOf<Runtime>;
 
 impl_opaque_keys! {
 	pub struct SessionKeys {
@@ -830,6 +837,14 @@ impl_runtime_apis! {
 
 		fn get_businesses(community: &CommunityIdentifier) -> Vec<(AccountId, BusinessData)>{
 			EncointerBazaar::get_businesses(community)
+		}
+	}
+
+	impl encointer_balances_tx_payment_rpc_runtime_api::BalancesTxPaymentApi<Block, Balance, AssetId, AssetBalance> for Runtime {
+		fn balance_to_asset_balance(amount: Balance, asset_id: AssetId) -> Result<AssetBalance, encointer_balances_tx_payment_rpc_runtime_api::Error> {
+			BalanceToCommunityBalance::<Runtime>::to_asset_balance(amount, asset_id).map_err(|_e|
+				encointer_balances_tx_payment_rpc_runtime_api::Error::RuntimeError
+			)
 		}
 	}
 

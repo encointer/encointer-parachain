@@ -2622,6 +2622,7 @@ dependencies = [
  "cumulus-primitives-timestamp",
  "cumulus-primitives-utility",
  "encointer-balances-tx-payment",
+ "encointer-balances-tx-payment-rpc-runtime-api",
  "encointer-primitives",
  "frame-benchmarking",
  "frame-executive",
