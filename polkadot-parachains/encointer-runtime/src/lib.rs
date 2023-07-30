@@ -82,6 +82,8 @@ pub use pallet_encointer_bazaar::Call as EncointerBazaarCall;
 pub use pallet_encointer_ceremonies::Call as EncointerCeremoniesCall;
 pub use pallet_encointer_communities::Call as EncointerCommunitiesCall;
 // pub use pallet_encointer_personhood_oracle::Call as EncointerPersonhoodOracleCall;
+pub use pallet_encointer_faucet::Call as EncointerFaucetCall;
+pub use pallet_encointer_reputation_commitments::Call as EncointerReputationCommitmentsCall;
 pub use pallet_encointer_scheduler::Call as EncointerSchedulerCall;
 // pub use pallet_encointer_sybil_gate_template::Call as EncointerSybilGateCall;
 
@@ -675,6 +677,8 @@ mod benches {
 		[pallet_encointer_bazaar, EncointerBazaar]
 		[pallet_encointer_ceremonies, EncointerCeremonies]
 		[pallet_encointer_communities, EncointerCommunities]
+		[pallet_encointer_faucet, EncointerFaucet]
+		[pallet_encointer_reputation_commitments, EncointerReputationCommitments]
 		[pallet_encointer_scheduler, EncointerScheduler]
 		[cumulus_pallet_xcmp_queue, XcmpQueue]
 	);
