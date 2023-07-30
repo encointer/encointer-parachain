@@ -440,6 +440,7 @@ parameter_types! {
 	pub const MeetupSizeTarget: u64 = 10;
 	pub const MeetupMinSize: u64 = 3;
 	pub const MeetupNewbieLimitDivider: u64 = 2; // 2 means 1/3 of participants may be newbies
+	pub const FaucetPalletId: PalletId = PalletId(*b"ectrfct0");
 }
 
 impl pallet_encointer_scheduler::Config for Runtime {
@@ -487,19 +488,18 @@ impl pallet_encointer_bazaar::Config for Runtime {
 	type WeightInfo = weights::pallet_encointer_bazaar::WeightInfo<Runtime>;
 }
 
-// impl pallet_encointer_personhood_oracle::Config for Runtime {
-// 	type RuntimeEvent = RuntimeEvent;
-// 	type XcmSender = XcmRouter;
-// }
-//
-// impl pallet_encointer_sybil_gate_template::Config for Runtime {
-// 	type RuntimeEvent = RuntimeEvent;
-// 	type RuntimeCall = RuntimeCall;
-// 	type XcmSender = XcmRouter;
-// 	type Currency = Balances;
-// 	type Public = <Signature as Verify>::Signer;
-// 	type Signature = Signature;
-// }
+impl pallet_encointer_reputation_commitments::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = weights::pallet_encointer_reputation_commitments::WeightInfo<Runtime>;
+}
+
+impl pallet_encointer_faucet::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type ControllerOrigin = EnsureRoot<AccountId>;
+	type Currency = Balances;
+	type PalletId = FaucetPalletId;
+	type WeightInfo = weights::pallet_encointer_faucet::WeightInfo<Runtime>;
+}
 
 impl pallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
@@ -601,9 +601,8 @@ construct_runtime! {
 		EncointerCommunities: pallet_encointer_communities::{Pallet, Call, Storage, Config, Event<T>} = 62,
 		EncointerBalances: pallet_encointer_balances::{Pallet, Call, Storage, Config, Event<T>} = 63,
 		EncointerBazaar: pallet_encointer_bazaar::{Pallet, Call, Storage, Event<T>} = 64,
-		//
-		// EncointerPersonhoodOracle: pallet_encointer_personhood_oracle::{Pallet, Call, Event} = 70,
-		// EncointerSybilGate: pallet_encointer_sybil_gate_template::{Pallet, Call, Storage, Event<T>} = 71,
+		EncointerReputationCommitments: pallet_encointer_reputation_commitments::{Pallet, Call, Storage, Event<T>} = 65,
+		EncointerFaucet: pallet_encointer_faucet::{Pallet, Call, Storage, Config<T>, Event<T>} = 66,
 	}
 }
 

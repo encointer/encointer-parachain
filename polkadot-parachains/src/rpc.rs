@@ -21,7 +21,7 @@
 use std::sync::Arc;
 
 use parachain_runtime::Moment;
-use parachains_common::{AccountId, Balance, Block, BlockNumber, Index as Nonce};
+use parachains_common::{AccountId, cumulus_primitives_core::{AssetBalance, AssetId}, Balance, Block, BlockNumber, Index as Nonce};
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};
 use sc_transaction_pool_api::TransactionPool;
@@ -66,6 +66,12 @@ where
 	C::Api:
 		pallet_encointer_communities_rpc_runtime_api::CommunitiesApi<Block, AccountId, BlockNumber>,
 	C::Api: pallet_encointer_bazaar_rpc_runtime_api::BazaarApi<Block, AccountId>,
+	C::Api: encointer_balances_tx_payment_rpc_runtime_api::BalancesTxPaymentApi<
+		Block,
+		Balance,
+		AssetId,
+		AssetBalance,
+	>,
 	TBackend: sc_client_api::Backend<Block>, // added by encointer
 	<TBackend as sc_client_api::Backend<Block>>::OffchainStorage: 'static, // added by encointer
 {

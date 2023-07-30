@@ -35,6 +35,7 @@ pallet-encointer-ceremonies-rpc = { git = "https://github.com/encointer/pallets"
 pallet-encointer-ceremonies-rpc-runtime-api = { git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.42-pallets-v1.3.0" }
 pallet-encointer-communities-rpc = { git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.42-pallets-v1.3.0" }
 pallet-encointer-communities-rpc-runtime-api = { git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.42-pallets-v1.3.0" }
+encointer-balances-tx-payment-rpc-runtime-api = { git = "https://github.com/encointer/pallets", branch = "polkadot-v0.9.42-pallets-v1.3.0" }
 
 # Substrate dependencies
 frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.42" }

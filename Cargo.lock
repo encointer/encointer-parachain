@@ -2462,6 +2462,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "encointer-balances-tx-payment-rpc-runtime-api"
+version = "1.0.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.42-pallets-v1.3.0#c0084c23dd241e45cc09d8c6ac0e5f12e39abc43"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api",
+ "sp-std",
+]
+
+[[package]]
 name = "encointer-ceremonies-assignment"
 version = "1.2.0"
 source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.42-pallets-v1.3.0#c0084c23dd241e45cc09d8c6ac0e5f12e39abc43"
@@ -2489,6 +2502,7 @@ dependencies = [
  "cumulus-relay-chain-inprocess-interface",
  "cumulus-relay-chain-interface",
  "cumulus-relay-chain-rpc-interface",
+ "encointer-balances-tx-payment-rpc-runtime-api",
  "encointer-runtime",
  "frame-benchmarking",
  "frame-benchmarking-cli",
@@ -2629,6 +2643,8 @@ dependencies = [
  "pallet-encointer-ceremonies-rpc-runtime-api",
  "pallet-encointer-communities",
  "pallet-encointer-communities-rpc-runtime-api",
+ "pallet-encointer-faucet",
+ "pallet-encointer-reputation-commitments",
  "pallet-encointer-scheduler",
  "pallet-insecure-randomness-collective-flip",
  "pallet-membership",
@@ -6358,6 +6374,49 @@ source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.42-palle
 dependencies = [
  "encointer-primitives",
  "sp-api",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-faucet"
+version = "1.2.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.42-pallets-v1.3.0#c0084c23dd241e45cc09d8c6ac0e5f12e39abc43"
+dependencies = [
+ "approx",
+ "encointer-primitives",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-communities",
+ "pallet-encointer-reputation-commitments",
+ "pallet-treasury",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-reputation-commitments"
+version = "1.2.0"
+source = "git+https://github.com/encointer/pallets?branch=polkadot-v0.9.42-pallets-v1.3.0#c0084c23dd241e45cc09d8c6ac0e5f12e39abc43"
+dependencies = [
+ "approx",
+ "encointer-primitives",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-ceremonies",
+ "pallet-encointer-communities",
+ "pallet-encointer-scheduler",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-runtime",
  "sp-std",
 ]
 
