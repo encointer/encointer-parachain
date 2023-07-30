@@ -242,7 +242,7 @@ fn encointer_genesis(
 		},
 		encointer_faucet: parachain_runtime::EncointerFaucetConfig {
 			reserve_amount: 10_000_000_000_000,
-		}
+		},
 	}
 }
 
