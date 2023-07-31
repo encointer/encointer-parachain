@@ -191,7 +191,6 @@ jobs:
         uses: chevdor/srtool-actions@v0.7.0
         with:
           chain: ${{ matrix.runtime }}
-          tag: 1.66.1
           runtime_dir: polkadot-parachains/${{ matrix.runtime }}-runtime
 
       - name: Summary
