@@ -67,6 +67,8 @@ use frame_system::{
 	EnsureRoot,
 };
 pub use parachains_common as common;
+pub use parachains_common::MILLISECS_PER_BLOCK;
+
 use parachains_common::{
 	opaque, AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
 	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
