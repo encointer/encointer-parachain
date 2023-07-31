@@ -675,6 +675,7 @@ mod benches {
 		[pallet_timestamp, Timestamp]
 		[pallet_treasury, Treasury]
 		[pallet_utility, Utility]
+		[pallet_proxy, Proxy]
 		[pallet_encointer_balances, EncointerBalances]
 		[pallet_encointer_bazaar, EncointerBazaar]
 		[pallet_encointer_ceremonies, EncointerCeremonies]

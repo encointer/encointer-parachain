@@ -115,6 +115,7 @@ runtime-benchmarks = [
     "pallet-balances/runtime-benchmarks",
     "pallet-collective/runtime-benchmarks",
     "pallet-membership/runtime-benchmarks",
+    "pallet-proxy/runtime-benchmarks",
     "pallet-timestamp/runtime-benchmarks",
     "pallet-treasury/runtime-benchmarks",
     "pallet-utility/runtime-benchmarks",
@@ -177,6 +178,7 @@ std = [
     # encointer
     "runtime-common/std",
     "encointer-balances-tx-payment/std",
+    "encointer-balances-tx-payment-rpc-runtime-api/std",
     "encointer-primitives/std",
     "encointer-primitives/serde_derive",
     "pallet-encointer-balances/std",
