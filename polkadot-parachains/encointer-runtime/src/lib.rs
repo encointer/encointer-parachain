@@ -505,7 +505,7 @@ impl pallet_encointer_reputation_commitments::Config for Runtime {
 
 impl pallet_encointer_faucet::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type ControllerOrigin = EnsureRoot<AccountId>;
+	type ControllerOrigin = MoreThanHalfCouncil;
 	type Currency = Balances;
 	type PalletId = FaucetPalletId;
 	type WeightInfo = weights::pallet_encointer_faucet::WeightInfo<Runtime>;
