@@ -21,7 +21,7 @@
 use std::sync::Arc;
 
 use parachain_runtime::{AssetBalance, AssetId, Moment};
-use parachains_common::{AccountId, Balance, Block, BlockNumber, Index as Nonce};
+use parachains_common::{AccountId, Balance, Block, BlockNumber, Nonce};
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};
 use sc_transaction_pool_api::TransactionPool;

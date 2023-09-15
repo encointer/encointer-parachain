@@ -200,11 +200,18 @@ fn encointer_genesis(
 		},
 		parachain_system: Default::default(),
 		balances: parachain_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: parachain_runtime::ParachainInfoConfig { parachain_id: id },
-		aura: parachain_runtime::AuraConfig { authorities: initial_authorities },
+		parachain_info: parachain_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
+		aura: parachain_runtime::AuraConfig {
+			authorities: initial_authorities,
+			..Default::default()
+		},
 		aura_ext: Default::default(),
 		polkadot_xcm: parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			_config: Default::default(),
 		},
 		treasury: Default::default(),
 		collective: Default::default(),
@@ -220,6 +227,7 @@ fn encointer_genesis(
 				(CeremonyPhaseType::Assigning, 86400000),    // 1d
 				(CeremonyPhaseType::Attesting, 172800000),   // 2d
 			],
+			_config: Default::default(),
 		},
 		encointer_ceremonies: parachain_runtime::EncointerCeremoniesConfig {
 			ceremony_reward: BalanceType::from_num(1),
@@ -262,14 +270,19 @@ fn launch_genesis(
 			code: launch_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+			_config: Default::default(),
 		},
 		parachain_system: Default::default(),
 		balances: launch_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: launch_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: launch_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			_config: Default::default(),
+		},
 		aura: launch_runtime::AuraConfig { authorities: initial_authorities },
 		aura_ext: Default::default(),
 		polkadot_xcm: launch_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			_config: Default::default(),
 		},
 		treasury: Default::default(),
 		collective: Default::default(),

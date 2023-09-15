@@ -28,17 +28,16 @@ use frame_support::{
 };
 use frame_system::EnsureRoot;
 use pallet_xcm::XcmPassthrough;
-use parachains_common::xcm_config::{DenyReserveTransferToRelayChain, DenyThenTry};
 use polkadot_parachain::primitives::Sibling;
 use sp_core::ConstU32;
 use xcm::latest::prelude::*;
 use xcm_builder::{
 	AccountId32Aliases, AllowKnownQueryResponses, AllowSubscriptionsFrom,
-	AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter, EnsureXcmOrigin,
-	FixedWeightBounds, IsConcrete, NativeAsset, ParentAsSuperuser, ParentIsPreset,
-	RelayChainAsNative, SiblingParachainAsNative, SiblingParachainConvertsVia,
-	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
-	UsingComponents,
+	AllowTopLevelPaidExecutionFrom, AllowUnpaidExecutionFrom, CurrencyAdapter,
+	DenyReserveTransferToRelayChain, DenyThenTry, EnsureXcmOrigin, FixedWeightBounds, IsConcrete,
+	NativeAsset, ParentAsSuperuser, ParentIsPreset, RelayChainAsNative, SiblingParachainAsNative,
+	SiblingParachainConvertsVia, SignedAccountId32AsNative, SignedToAccountId32,
+	SovereignSignedViaLocation, TakeWeightCredit, UsingComponents,
 };
 use xcm_executor::XcmExecutor;
 
@@ -173,6 +172,7 @@ impl xcm_executor::Config for XcmConfig {
 	type SafeCallFilter = SafeCallFilter;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type CallDispatcher = RuntimeCall;
+	type Aliasers = Nothing;
 }
 
 /// Converts a local signed origin into an XCM multilocation.
@@ -220,6 +220,8 @@ impl pallet_xcm::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type ReachableDest = ReachableDest;
 	type UniversalLocation = UniversalLocation;
+	type MaxRemoteLockConsumers = ConstU32<0>;
+	type RemoteLockConsumerIdentifier = ();
 }
 
 impl cumulus_pallet_xcm::Config for Runtime {
