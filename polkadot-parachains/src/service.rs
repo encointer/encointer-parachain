@@ -250,7 +250,17 @@ where
 		+ sp_block_builder::BlockBuilder<Block>
 		+ cumulus_primitives_core::CollectCollationInfo<Block>,
 	sc_client_api::StateBackendFor<ParachainBackend, Block>: sp_api::StateBackend<BlakeTwo256>,
-	RB: Fn(Arc<ParachainClient<RuntimeApi>>) -> Result<jsonrpsee::RpcModule<()>, sc_service::Error>
+	RB: Fn(
+			crate::rpc::FullDeps<
+				TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
+				sc_transaction_pool::FullPool<
+					Block,
+					TFullClient<Block, RuntimeApi, WasmExecutor<HostFunctions>>,
+				>,
+				TFullBackend<Block>,
+			>,
+		) -> Result<RpcModule<()>, sc_service::Error>
+		+ Send
 		+ 'static,
 	BIQ: FnOnce(
 		Arc<ParachainClient<RuntimeApi>>,
@@ -316,8 +326,24 @@ where
 		.await?;
 
 	let rpc_client = client.clone();
-	let rpc_builder = Box::new(move |_, _| rpc_ext_builder(rpc_client.clone()));
+	let rpc_builder = {
+		let client = client.clone();
+		let transaction_pool = transaction_pool.clone();
+		let backend = backend.clone();
+		let offchain_indexing_enabled = parachain_config.offchain_worker.indexing_enabled;
 
+		// `backend` and offchain_indexing_enabled` are encointer customizations.
+		Box::new(move |deny_unsafe, _| {
+			let deps = rpc::FullDeps {
+				client: client.clone(),
+				pool: transaction_pool.clone(),
+				backend: backend.clone(),
+				offchain_indexing_enabled,
+				deny_unsafe,
+			};
+			rpc_ext_builder(deps)
+		})
+	};
 	sc_service::spawn_tasks(sc_service::SpawnTasksParams {
 		rpc_builder,
 		client: client.clone(),
@@ -643,7 +669,7 @@ where
 		polkadot_config,
 		collator_options,
 		id,
-		|_| Ok(RpcModule::new(())),
+		rpc_extension_builder,
 		aura_build_import_queue::<_, AuraId>,
 		|client,
 		 block_import,
