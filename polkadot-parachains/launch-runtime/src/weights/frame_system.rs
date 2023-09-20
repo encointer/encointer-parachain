@@ -39,6 +39,9 @@ impl<T: frame_system::Config> frame_system::WeightInfo for WeightInfo<T> {
 			// Standard Error: 0
 			.saturating_add(Weight::from_parts(2_000_u64, 0).saturating_mul(b.into()))
 	}
+	fn set_code() -> Weight {
+		Weight::from_parts(1_000_000, 0)
+	}
 	// Storage: System Digest (r:1 w:1)
 	// Storage: unknown [0x3a686561707061676573] (r:0 w:1)
 	fn set_heap_pages() -> Weight {

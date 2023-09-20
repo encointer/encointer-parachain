@@ -160,14 +160,6 @@ impl SubstrateCli for Cli {
 	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 		load_spec(id)
 	}
-
-	fn native_runtime_version(chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		if chain_spec.is_launch() {
-			&launch_runtime::VERSION
-		} else {
-			&parachain_runtime::VERSION
-		}
-	}
 }
 
 impl SubstrateCli for RelayChainCli {
@@ -203,10 +195,6 @@ impl SubstrateCli for RelayChainCli {
 
 	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 		polkadot_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
-	}
-
-	fn native_runtime_version(chain_spec: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		polkadot_cli::Cli::native_runtime_version(chain_spec)
 	}
 }
 
@@ -310,14 +298,10 @@ pub fn run() -> Result<()> {
 				cmd.run(config, polkadot_config)
 			})
 		},
-		Some(Subcommand::ExportGenesisState(cmd)) => {
-			let runner = cli.create_runner(cmd)?;
-			runner.sync_run(|_config| {
-				let spec = cli.load_spec(&cmd.shared_params.chain.clone().unwrap_or_default())?;
-				let state_version = Cli::native_runtime_version(&spec).state_version();
-				cmd.run::<crate::service::Block>(&*spec, state_version)
-			})
-		},
+		Some(Subcommand::ExportGenesisState(cmd)) =>
+			construct_async_run!(|components, cli, cmd, config| {
+				Ok(async move { cmd.run(&*config.chain_spec, &*components.client) })
+			}),
 		Some(Subcommand::ExportGenesisWasm(cmd)) => {
 			let runner = cli.create_runner(cmd)?;
 			runner.sync_run(|_config| {
@@ -332,15 +316,7 @@ pub fn run() -> Result<()> {
 			match cmd {
 				BenchmarkCmd::Pallet(cmd) =>
 					if cfg!(feature = "runtime-benchmarks") {
-						runner.sync_run(|config| {
-							if config.chain_spec.is_launch() {
-								cmd.run::<Block, LaunchParachainRuntimeExecutor>(config)
-							} else if config.chain_spec.is_encointer() {
-								cmd.run::<Block, EncointerParachainRuntimeExecutor>(config)
-							} else {
-								Err("Chain doesn't support benchmarking".into())
-							}
-						})
+						runner.sync_run(|config| cmd.run::<Block, ()>(config))
 					} else {
 						Err("Benchmarking wasn't enabled when building the node. \
 				You can enable it with `--features runtime-benchmarks`."
@@ -350,11 +326,13 @@ pub fn run() -> Result<()> {
 					construct_benchmark_partials!(config, |partials| cmd.run(partials.client))
 				}),
 				#[cfg(not(feature = "runtime-benchmarks"))]
-				BenchmarkCmd::Storage(_) => Err(sc_cli::Error::Input(
-					"Compile with --features=runtime-benchmarks \
+				BenchmarkCmd::Storage(_) =>
+					return Err(sc_cli::Error::Input(
+						"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
-						.into(),
-				)),
+							.into(),
+					)
+					.into()),
 				#[cfg(feature = "runtime-benchmarks")]
 				BenchmarkCmd::Storage(cmd) => runner.sync_run(|config| {
 					construct_benchmark_partials!(config, |partials| {
@@ -404,14 +382,43 @@ pub fn run() -> Result<()> {
 			let collator_options = cli.run.collator_options();
 
 			runner.run_node_until_exit(|config| async move {
-				let hwbench = if !cli.no_hardware_benchmarks {
+				// If Statemint (Statemine, Westmint, Rockmine) DB exists and we're using the
+				// asset-hub chain spec, then rename the base path to the new chain ID. In the case
+				// that both file paths exist, the node will exit, as the user must decide (by
+				// deleting one path) the information that they want to use as their DB.
+				let old_name = match config.chain_spec.id() {
+					"asset-hub-polkadot" => Some("statemint"),
+					"asset-hub-kusama" => Some("statemine"),
+					"asset-hub-westend" => Some("westmint"),
+					"asset-hub-rococo" => Some("rockmine"),
+					_ => None,
+				};
+
+				if let Some(old_name) = old_name {
+					let new_path = config.base_path.config_dir(config.chain_spec.id());
+					let old_path = config.base_path.config_dir(old_name);
+
+					if old_path.exists() && new_path.exists() {
+						return Err(format!(
+							"Found legacy {} path {} and new asset-hub path {}. Delete one path such that only one exists.",
+							old_name, old_path.display(), new_path.display()
+						).into())
+					}
+
+					if old_path.exists() {
+						std::fs::rename(old_path.clone(), new_path.clone())?;
+						info!(
+							"Statemint renamed to Asset Hub. The filepath with associated data on disk has been renamed from {} to {}.",
+							old_path.display(), new_path.display()
+						);
+					}
+				}
+
+				let hwbench = (!cli.no_hardware_benchmarks).then_some(
 					config.database.path().map(|database_path| {
 						let _ = std::fs::create_dir_all(database_path);
 						sc_sysinfo::gather_hwbench(Some(database_path))
-					})
-				} else {
-					None
-				};
+					})).flatten();
 
 				let para_id = chain_spec::Extensions::try_get(&*config.chain_spec)
 					.map(|e| e.para_id)
@@ -425,16 +432,7 @@ pub fn run() -> Result<()> {
 				let id = ParaId::from(para_id);
 
 				let parachain_account =
-					AccountIdConversion::<polkadot_primitives::AccountId>::into_account_truncating(
-						&id,
-					);
-
-				let state_version = Cli::native_runtime_version(&config.chain_spec).state_version();
-
-				let block: crate::service::Block =
-					generate_genesis_block(&*config.chain_spec, state_version)
-						.map_err(|e| format!("{:?}", e))?;
-				let genesis_state = format!("0x{:?}", HexDisplay::from(&block.header().encode()));
+					AccountIdConversion::<polkadot_primitives::AccountId>::into_account_truncating(&id);
 
 				let tokio_handle = config.tokio_handle.clone();
 				let polkadot_config =
@@ -443,7 +441,6 @@ pub fn run() -> Result<()> {
 
 				info!("Parachain id: {:?}", id);
 				info!("Parachain Account: {}", parachain_account);
-				info!("Parachain genesis state: {}", genesis_state);
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				if config.chain_spec.is_launch() {
@@ -479,12 +476,8 @@ impl DefaultConfigurationValues for RelayChainCli {
 		30334
 	}
 
-	fn rpc_ws_listen_port() -> u16 {
+	fn rpc_listen_port() -> u16 {
 		9945
-	}
-
-	fn rpc_http_listen_port() -> u16 {
-		9934
 	}
 
 	fn prometheus_listen_port() -> u16 {
@@ -516,16 +509,8 @@ impl CliConfiguration<Self> for RelayChainCli {
 			.or_else(|| self.base_path.clone().map(Into::into)))
 	}
 
-	fn rpc_http(&self, default_listen_port: u16) -> Result<Option<SocketAddr>> {
-		self.base.base.rpc_http(default_listen_port)
-	}
-
-	fn rpc_ipc(&self) -> Result<Option<String>> {
-		self.base.base.rpc_ipc()
-	}
-
-	fn rpc_ws(&self, default_listen_port: u16) -> Result<Option<SocketAddr>> {
-		self.base.base.rpc_ws(default_listen_port)
+	fn rpc_addr(&self, default_listen_port: u16) -> Result<Option<SocketAddr>> {
+		self.base.base.rpc_addr(default_listen_port)
 	}
 
 	fn prometheus_config(
@@ -567,8 +552,8 @@ impl CliConfiguration<Self> for RelayChainCli {
 		self.base.base.rpc_methods()
 	}
 
-	fn rpc_ws_max_connections(&self) -> Result<Option<usize>> {
-		self.base.base.rpc_ws_max_connections()
+	fn rpc_max_connections(&self) -> Result<u32> {
+		self.base.base.rpc_max_connections()
 	}
 
 	fn rpc_cors(&self, is_dev: bool) -> Result<Option<Vec<String>>> {

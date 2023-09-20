@@ -26,10 +26,10 @@ pub use crate::chain_spec_helpers::{
 };
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::GenesisConfig, Extensions>;
+pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// Specialized `ChainSpec` for the launch parachain runtime.
-pub type LaunchChainSpec = GenericChainSpec<launch_runtime::GenesisConfig, Extensions>;
+pub type LaunchChainSpec = GenericChainSpec<launch_runtime::RuntimeGenesisConfig, Extensions>;
 
 pub const ENDOWED_FUNDING: u128 = 1 << 60;
 
@@ -124,14 +124,14 @@ pub fn launch_spec(
 ///
 /// Intended to remove redundant code when defining encointer-launch-runtime and
 /// encointer-parachain-runtime chain-specs.
-fn chain_spec<F: Fn() -> GenesisConfig + 'static + Send + Sync, GenesisConfig>(
+fn chain_spec<F: Fn() -> RuntimeGenesisConfig + 'static + Send + Sync, RuntimeGenesisConfig>(
 	chain_name: &str,
 	testnet_constructor: F,
 	chain_type: ChainType,
 	para_id: ParaId,
 	relay_chain: &RelayChain,
-) -> GenericChainSpec<GenesisConfig, Extensions> {
-	GenericChainSpec::<GenesisConfig, Extensions>::from_genesis(
+) -> GenericChainSpec<RuntimeGenesisConfig, Extensions> {
+	GenericChainSpec::<RuntimeGenesisConfig, Extensions>::from_genesis(
 		chain_name,
 		&format!("encointer-{}", relay_chain.to_string()),
 		chain_type,
@@ -190,20 +190,28 @@ fn encointer_genesis(
 	initial_authorities: Vec<AuraId>,
 	endowance_allocation: Vec<(AccountId, u128)>,
 	id: ParaId,
-) -> parachain_runtime::GenesisConfig {
-	parachain_runtime::GenesisConfig {
+) -> parachain_runtime::RuntimeGenesisConfig {
+	parachain_runtime::RuntimeGenesisConfig {
 		system: parachain_runtime::SystemConfig {
 			code: parachain_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+			_config: Default::default(),
 		},
 		parachain_system: Default::default(),
 		balances: parachain_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: parachain_runtime::ParachainInfoConfig { parachain_id: id },
-		aura: parachain_runtime::AuraConfig { authorities: initial_authorities },
+		parachain_info: parachain_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
+		aura: parachain_runtime::AuraConfig {
+			authorities: initial_authorities,
+			..Default::default()
+		},
 		aura_ext: Default::default(),
 		polkadot_xcm: parachain_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			_config: Default::default(),
 		},
 		treasury: Default::default(),
 		collective: Default::default(),
@@ -219,6 +227,7 @@ fn encointer_genesis(
 				(CeremonyPhaseType::Assigning, 86400000),    // 1d
 				(CeremonyPhaseType::Attesting, 172800000),   // 2d
 			],
+			_config: Default::default(),
 		},
 		encointer_ceremonies: parachain_runtime::EncointerCeremoniesConfig {
 			ceremony_reward: BalanceType::from_num(1),
@@ -229,19 +238,23 @@ fn encointer_genesis(
 			reputation_lifetime: 5,
 			inactivity_timeout: 5, // idle ceremonies before purging community
 			meetup_time_offset: 0,
+			_config: Default::default(),
 		},
 		encointer_communities: parachain_runtime::EncointerCommunitiesConfig {
 			min_solar_trip_time_s: 1, // [s]
 			max_speed_mps: 1,         // [m/s] suggested would be 83m/s for security,
+			_config: Default::default(),
 		},
 		encointer_balances: parachain_runtime::EncointerBalancesConfig {
 			// for relative adjustment.
 			// 100_000 translates 5uKSM to 0.01 CC if ceremony reward is 20 CC
 			// lower values lead to lower fees in CC proportionally
 			fee_conversion_factor: 100_000,
+			_config: Default::default(),
 		},
 		encointer_faucet: parachain_runtime::EncointerFaucetConfig {
 			reserve_amount: 10_000_000_000_000,
+			_config: Default::default(),
 		},
 	}
 }
@@ -251,20 +264,25 @@ fn launch_genesis(
 	initial_authorities: Vec<AuraId>,
 	endowance_allocation: Vec<(AccountId, u128)>,
 	id: ParaId,
-) -> launch_runtime::GenesisConfig {
-	launch_runtime::GenesisConfig {
+) -> launch_runtime::RuntimeGenesisConfig {
+	launch_runtime::RuntimeGenesisConfig {
 		system: launch_runtime::SystemConfig {
 			code: launch_runtime::WASM_BINARY
 				.expect("WASM binary was not build, please build it!")
 				.to_vec(),
+			_config: Default::default(),
 		},
 		parachain_system: Default::default(),
 		balances: launch_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: launch_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: launch_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			_config: Default::default(),
+		},
 		aura: launch_runtime::AuraConfig { authorities: initial_authorities },
 		aura_ext: Default::default(),
 		polkadot_xcm: launch_runtime::PolkadotXcmConfig {
 			safe_xcm_version: Some(SAFE_XCM_VERSION),
+			_config: Default::default(),
 		},
 		treasury: Default::default(),
 		collective: Default::default(),

@@ -56,8 +56,8 @@ use frame_support::{
 	dispatch::DispatchClass,
 	parameter_types,
 	traits::{
-		tokens::ConversionToAssetBalance, Contains, EitherOfDiverse, EqualPrivilegeOnly,
-		InstanceFilter,
+		tokens::ConversionToAssetBalance, ConstBool, ConstU32, Contains, EitherOfDiverse,
+		EqualPrivilegeOnly, InstanceFilter,
 	},
 	weights::{ConstantMultiplier, Weight},
 	PalletId, RuntimeDebug,
@@ -70,8 +70,8 @@ pub use parachains_common as common;
 pub use parachains_common::MILLISECS_PER_BLOCK;
 
 use parachains_common::{
-	opaque, AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
-	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
+	AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
+	SLOT_DURATION,
 };
 use xcm_config::{KsmLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 
@@ -97,7 +97,6 @@ pub use encointer_primitives::{
 	communities::{CommunityIdentifier, Location},
 	scheduler::CeremonyPhaseType,
 };
-use sp_core::ConstU32;
 
 // XCM imports
 // Polkadot imports
@@ -133,7 +132,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("encointer-parachain"),
 	impl_name: create_runtime_str!("encointer-parachain"),
 	authoring_version: 1,
-	spec_version: 15,
+	spec_version: 16,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 3,
@@ -256,16 +255,16 @@ impl Contains<RuntimeCall> for BaseFilter {
 // Configure FRAME pallets to include in runtime.
 impl frame_system::Config for Runtime {
 	type BaseCallFilter = BaseFilter;
+	// The block type.
+	type Block = generic::Block<Header, UncheckedExtrinsic>;
 	type BlockWeights = RuntimeBlockWeights;
 	type BlockLength = RuntimeBlockLength;
 	type AccountId = AccountId;
 	type RuntimeCall = RuntimeCall;
 	type Lookup = AccountIdLookup<AccountId, ()>;
-	type Index = Index;
-	type BlockNumber = BlockNumber;
+	type Nonce = Nonce;
 	type Hash = Hash;
 	type Hashing = BlakeTwo256;
-	type Header = Header;
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeOrigin = RuntimeOrigin;
 	type BlockHashCount = BlockHashCount;
@@ -311,7 +310,7 @@ impl pallet_balances::Config for Runtime {
 	type WeightInfo = weights::pallet_balances::WeightInfo<Runtime>;
 	type MaxReserves = MaxReserves;
 	type ReserveIdentifier = [u8; 8];
-	type HoldIdentifier = ();
+	type RuntimeHoldReason = ();
 	type FreezeIdentifier = ();
 	type MaxHolds = ConstU32<0>;
 	type MaxFreezes = ConstU32<0>;
@@ -516,6 +515,7 @@ impl pallet_aura::Config for Runtime {
 	type AuthorityId = AuraId;
 	type DisabledValidators = ();
 	type MaxAuthorities = MaxAuthorities;
+	type AllowMultipleBlocksPerSlot = ConstBool<false>;
 }
 
 parameter_types! {
@@ -569,19 +569,15 @@ impl pallet_asset_tx_payment::Config for Runtime {
 }
 
 construct_runtime! {
-	pub enum Runtime where
-		Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic,
-	{
+	pub enum Runtime {
 		// System support stuff.
-		System: frame_system::{Pallet, Call, Config, Storage, Event<T>} = 0,
+		System: frame_system::{Pallet, Call, Config<T>, Storage, Event<T>} = 0,
 		ParachainSystem: cumulus_pallet_parachain_system::{
-			Pallet, Call, Config, Storage, Inherent, Event<T>, ValidateUnsigned,
+			Pallet, Call, Config<T>, Storage, Inherent, Event<T>, ValidateUnsigned,
 		} = 1,
 		RandomnessCollectiveFlip: pallet_insecure_randomness_collective_flip::{Pallet, Storage} = 2,
 		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent} = 3,
-		ParachainInfo: parachain_info::{Pallet, Storage, Config} = 4,
+		ParachainInfo: parachain_info::{Pallet, Storage, Config<T>} = 4,
 
 		// Monetary stuff.
 		Balances: pallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 10,
@@ -589,17 +585,17 @@ construct_runtime! {
 		AssetTxPayment: pallet_asset_tx_payment::{Pallet, Storage, Event<T>} = 12,
 
 		Aura: pallet_aura::{Pallet, Storage, Config<T>} = 23,
-		AuraExt: cumulus_pallet_aura_ext::{Pallet, Storage, Config} = 24,
+		AuraExt: cumulus_pallet_aura_ext::{Pallet, Storage, Config<T>} = 24,
 
 		// XCM helpers.
 		XcmpQueue: cumulus_pallet_xcmp_queue::{Pallet, Call, Storage, Event<T>} = 30,
-		PolkadotXcm: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config} = 31,
+		PolkadotXcm: pallet_xcm::{Pallet, Call, Storage, Event<T>, Origin, Config<T>} = 31,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Event<T>, Origin} = 32,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event<T>} = 33,
 
 		// Handy utilities.
 		Utility: pallet_utility::{Pallet, Call, Event} = 40,
-		Treasury: pallet_treasury::{Pallet, Call, Storage, Config, Event<T>} = 43,
+		Treasury: pallet_treasury::{Pallet, Call, Storage, Config<T>, Event<T>} = 43,
 		Proxy: pallet_proxy::{Pallet, Call, Storage, Event<T>} = 44,
 		Scheduler: pallet_scheduler::{Pallet, Call, Storage, Event<T>} = 48,
 
@@ -609,8 +605,8 @@ construct_runtime! {
 
 		EncointerScheduler: pallet_encointer_scheduler::{Pallet, Call, Storage, Config<T>, Event} = 60,
 		EncointerCeremonies: pallet_encointer_ceremonies::{Pallet, Call, Storage, Config<T>, Event<T>} = 61,
-		EncointerCommunities: pallet_encointer_communities::{Pallet, Call, Storage, Config, Event<T>} = 62,
-		EncointerBalances: pallet_encointer_balances::{Pallet, Call, Storage, Config, Event<T>} = 63,
+		EncointerCommunities: pallet_encointer_communities::{Pallet, Call, Storage, Config<T>, Event<T>} = 62,
+		EncointerBalances: pallet_encointer_balances::{Pallet, Call, Storage, Config<T>, Event<T>} = 63,
 		EncointerBazaar: pallet_encointer_bazaar::{Pallet, Call, Storage, Event<T>} = 64,
 		EncointerReputationCommitments: pallet_encointer_reputation_commitments::{Pallet, Call, Storage, Event<T>} = 65,
 		EncointerFaucet: pallet_encointer_faucet::{Pallet, Call, Storage, Config<T>, Event<T>} = 66,
@@ -620,7 +616,7 @@ construct_runtime! {
 /// `parachains_common` is an upstream crate, where they are started to define common types.
 ///
 /// The re-export is added by encointer.
-pub use parachains_common::{AccountId, Balance, BlockNumber, Hash, Header, Index, Signature};
+pub use parachains_common::{AccountId, Balance, BlockNumber, Hash, Header, Nonce, Signature};
 
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
@@ -774,8 +770,8 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Index> for Runtime {
-		fn account_nonce(account: AccountId) -> Index {
+	impl frame_system_rpc_runtime_api::AccountNonceApi<Block, AccountId, Nonce> for Runtime {
+		fn account_nonce(account: AccountId) -> Nonce {
 			System::account_nonce(account)
 		}
 	}
