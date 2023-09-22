@@ -18,22 +18,17 @@ use crate::{
 	chain_spec,
 	chain_spec::{EncointerChainSpec, GenesisKeys, LaunchChainSpec, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
-	service::{
-		new_partial, Block, EncointerParachainRuntimeExecutor, LaunchParachainRuntimeExecutor,
-	},
+	service::{new_partial, Block},
 };
-use codec::Encode;
-use cumulus_client_cli::generate_genesis_block;
 use cumulus_primitives_core::ParaId;
 use frame_benchmarking_cli::{BenchmarkCmd, SUBSTRATE_REFERENCE_HARDWARE};
 use log::info;
 use sc_cli::{
 	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
-	NetworkParams, Result, RuntimeVersion, SharedParams, SubstrateCli,
+	NetworkParams, Result, SharedParams, SubstrateCli,
 };
 use sc_service::config::{BasePath, PrometheusConfig};
-use sp_core::hexdisplay::HexDisplay;
-use sp_runtime::traits::{AccountIdConversion, Block as BlockT};
+use sp_runtime::traits::AccountIdConversion;
 use std::net::SocketAddr;
 
 trait IdentifyChain {
