@@ -20,13 +20,12 @@ use cumulus_client_consensus_aura::{AuraConsensus, BuildAuraConsensusParams, Slo
 use cumulus_client_consensus_common::{
 	ParachainBlockImport as TParachainBlockImport, ParachainCandidate, ParachainConsensus,
 };
-use cumulus_client_network::BlockAnnounceValidator;
 use cumulus_client_service::{
 	build_network, build_relay_chain_interface, prepare_node_config, start_collator,
 	start_full_node, BuildNetworkParams, StartCollatorParams, StartFullNodeParams,
 };
 use cumulus_primitives_core::{relay_chain::v2::Hash as PHash, ParaId, PersistedValidationData};
-use cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface};
+use cumulus_relay_chain_interface::RelayChainInterface;
 use sc_consensus::ImportQueue;
 use sp_core::Pair;
 
@@ -325,7 +324,6 @@ where
 		})
 		.await?;
 
-	let rpc_client = client.clone();
 	let rpc_builder = {
 		let client = client.clone();
 		let transaction_pool = transaction_pool.clone();
