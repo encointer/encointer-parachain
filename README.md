@@ -8,51 +8,16 @@ It is forked from the [Cumulus](https://github.com/paritytech/cumulus) repositor
 * [Sybil Defense Demo](docs/sybil-demo)
 * [Native Downward-/ Upward Token Tx Demo](docs/downward-upward-native-token-tx)
 
-## Launch a local setup with polkadot-launch
+## Zombienet
 
-###Build sudo-patched polkadot binary  
-Inside the parent directory of this repo, execute the following commands:
-```bash
-git clone https://github.com/paritytech/polkadot
-cd polkadot
-git fetch
-git checkout v0.9.18
-# add sudo to all types of relaychain to simplify and accelerate testing
-git cherry-pick 755a4b69c94ba75618080c76d25133b11c1d58db
-# use `cargo install diener` if not done already
-diener update --substrate --branch polkadot-v0.9.18
-cargo build --release
+1. Download zombienet from the releases in the [zombienet](https://github.com/paritytech/zombienet) repository.
+2. Copy it to `~/.local/bin/`
+3. Launch it in your terminal
+```
+zombienet-linux-x64 spawn --provider native zombienet/rococo-local-with-encointer.toml
 ```
 
-Run:
-`cp target/release/polkadot ../../bin/polkadot-0.9.24-sudo`  
-It is assumed that the bin directory exists at this relative path.
-Note: When using the `launch-rococo-local-with-encointer` setup it is assumed that the `bin` folder also contains a `polkadot-v0.9.37` binary.
-
-
-### Setup local testnet with polkadot-launch
-[polkadot-launch](https://github.com/paritytech/polkadot-launch) lets you easily setup a local testnet. The following procedure will setup a local testnet with three relay chain nodes and two encointer parachains. It will also setup up a XCM (cross chain messaging) channel between the two chains.
-
-**Note 2:** The `polkadot-launch-config.json` and the commands below assume that the polkadot-launch directory is on the same level as this repo's directory.
-
-**Preliminaries:** you need to have yarn and node installed
-
-Inside the parent directory of this repo, execute the following commands:
-```bash
-# We need to build it from source. The one from the yarn registry does not work with our code.
-git clone https://github.com/paritytech/polkadot-launch
-cd polkadot-launch
-yarn install
-yarn build
-
-cd ../encointer-parachain
-cargo build --release
-node ../polkadot-launch/dist/cli.js ./polkadot-launch/launch-rococo-local-with-launch.json
-```
-
-This launches the local testnet and creates 5 log files: `alice.log`, `bob.log`, `charlie.log`, which are the logs of the relay chain nodes and `9944.log`, `9955.log`, which are the logs of the two parachains.
-
-Executing the `./tmux_setup.sh` script at the project root will set up tmux with three panes that tailing the logs of `alice.log`, `9944.log` and `9955.log`.
+**Note:** You can also set a chain-spec path to the zombienet config, but the config param is named `chain_spec_path`.
 
 ## manual test setup step by step
 
@@ -101,6 +66,9 @@ cargo build --release
 # should print the phase
 ./target/release/encointer-client-notee -p 9946 next-phase
 # should progress phase
+./target/release/encointer-client-notee -p 9946 list-communities
+# should print 0 communities, if `--enable-offchain-indexing` is `true` or panic otherwise
+
 ```
 
 ### Deploy on rococo

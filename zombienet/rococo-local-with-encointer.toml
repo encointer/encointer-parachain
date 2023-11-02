@@ -1,0 +1,48 @@
+[settings]
+timeout = 10000
+
+[relaychain]
+default_command = "~/bin/polkadot-v0.9.42"
+default_args = [ "-lparachain=debug" ]
+
+chain = "rococo-local"
+
+    [[relaychain.nodes]]
+    name = "alice"
+    validator = true
+    ws_port = 9999
+
+    [[relaychain.nodes]]
+    name = "bob"
+    validator = true
+    ws_port = 9988
+
+    [[relaychain.nodes]]
+    name = "charlie"
+    validator = true
+    ws_port = 9977
+
+[[parachains]]
+id = 1003
+addToGenesis = true
+cumulus_based = true
+chain = "encointer-rococo-local-dev"
+
+    [[parachains.collators]]
+    name = "encointer-collator01"
+    command = "./target/release/encointer-collator"
+    args = [
+        "--enable-offchain-indexing=true",
+        "-lencointer=debug",
+    ]
+    ws_port = 9944
+
+    [[parachains.collators]]
+    name = "encointer-collator02"
+    command = "./target/release/encointer-collator"
+    args = [
+        "--enable-offchain-indexing=true",
+        "-lencointer=debug",
+    ]
+    ws_port = 9945
+
