@@ -75,7 +75,9 @@ parachains-common = { default-features = false, version = "3.0.0" }
 # Cumulus dependencies
 cumulus-pallet-aura-ext = { default-features = false, version = "0.3.0" }
 cumulus-pallet-dmp-queue = { default-features = false, version = "0.3.0" }
-cumulus-pallet-parachain-system = { default-features = false, version = "0.3.0" }
+cumulus-pallet-parachain-system = { default-features = false, features = [
+    "parameterized-consensus-hook",
+], version = "0.3.0" }
 cumulus-pallet-xcm = { default-features = false, version = "0.3.0" }
 cumulus-pallet-xcmp-queue = { default-features = false, version = "0.3.0" }
 cumulus-primitives-core = { default-features = false, version = "0.3.0" }
