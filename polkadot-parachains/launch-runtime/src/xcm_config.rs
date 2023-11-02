@@ -28,7 +28,7 @@ use frame_support::{
 };
 use frame_system::EnsureRoot;
 use pallet_xcm::XcmPassthrough;
-use polkadot_parachain::primitives::Sibling;
+use polkadot_parachain_primitives::primitives::Sibling;
 use sp_core::ConstU32;
 use xcm::latest::prelude::*;
 use xcm_builder::{
