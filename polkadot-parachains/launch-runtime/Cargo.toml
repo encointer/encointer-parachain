@@ -11,7 +11,7 @@ codec = { package = "parity-scale-codec", version = "3.0.0", default-features = 
     "derive",
 ] }
 log = { version = "0.4.17", default-features = false }
-parachain-info = { default-features = false, git = "https://github.com/paritytech/polkadot-sdk", tag = "polkadot-v1.2.0" }
+parachain-info = { package = "staging-parachain-info", default-features = false, version = "0.3.0" }
 scale-info = { version = "2.5.0", default-features = false, features = [
     "derive",
 ] }
