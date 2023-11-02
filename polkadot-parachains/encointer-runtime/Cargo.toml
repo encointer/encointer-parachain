@@ -88,7 +88,7 @@ pallet-xcm = { default-features = false, version = "3.0.0" }
 polkadot-parachain-primitives = { default-features = false, version = "2.0.0" }
 polkadot-runtime-common = { default-features = false, version = "3.0.0" }
 xcm = { package = "staging-xcm", default-features = false, version = "3.0.0" }
-xcm-builder ={ package = "staging-xcm-builder", default-features = false, version = "3.0.0" }
+xcm-builder = { package = "staging-xcm-builder", default-features = false, version = "3.0.0" }
 xcm-executor = { package = "staging-xcm-executor", default-features = false, version = "3.0.0" }
 
 # used for try-runtime
@@ -227,4 +227,4 @@ try-runtime = [
     "parachain-info/try-runtime",
 ]
 
-experimental = [ "pallet-aura/experimental" ]
+experimental = ["pallet-aura/experimental"]
