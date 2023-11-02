@@ -88,8 +88,10 @@ xcm = { package = "staging-xcm", default-features = false, version = "3.0.0" }
 
 # Cumulus
 cumulus-client-cli = "0.3.0"
+cumulus-client-collator = "0.3.0"
 cumulus-client-consensus-aura = "0.3.0"
 cumulus-client-consensus-common = "0.3.0"
+cumulus-client-consensus-proposer = "0.3.0"
 cumulus-client-consensus-relay-chain = "0.3.0"
 cumulus-client-network = "0.3.0"
 cumulus-client-service = "0.3.0"
