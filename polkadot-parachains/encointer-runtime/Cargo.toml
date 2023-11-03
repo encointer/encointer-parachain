@@ -11,7 +11,7 @@ edition = "2021"
 codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = [
     "derive",
 ] }
-log = { version = "0.4.14", default-features = false }
+log = { version = "0.4.20", default-features = false }
 parachain-info = { package = "staging-parachain-info", default-features = false, version = "0.3.0" }
 scale-info = { version = "2.0.1", default-features = false, features = [
     "derive",
@@ -49,7 +49,6 @@ sp-session = { default-features = false, version = "23.0.0" }
 sp-std = { default-features = false, version = "11.0.0" }
 sp-transaction-pool = { default-features = false, version = "22.0.0" }
 sp-version = { default-features = false, version = "25.0.0" }
-
 
 frame-executive = { default-features = false, version = "24.0.0" }
 frame-support = { default-features = false, version = "24.0.0" }
@@ -202,6 +201,7 @@ try-runtime = [
     "cumulus-pallet-xcm/try-runtime",
     "cumulus-pallet-xcmp-queue/try-runtime",
     "frame-executive/try-runtime",
+    "frame-support/try-runtime",
     "frame-system/try-runtime",
     "frame-try-runtime/try-runtime",
     "pallet-asset-tx-payment/try-runtime",
