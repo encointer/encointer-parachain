@@ -15,7 +15,9 @@
     "/dns/boot.metaspan.io/tcp/26072/p2p/12D3KooWLmgaZQ1dyUBpd2CPPVsq4UDovsQXuvfvtGuf95i8Lv1y",
     "/dns/boot.metaspan.io/tcp/26076/wss/p2p/12D3KooWLmgaZQ1dyUBpd2CPPVsq4UDovsQXuvfvtGuf95i8Lv1y",
     "/dns/enc14.rotko.net/tcp/33504/p2p/12D3KooWJ3327ZoZcR96pToGsXa8Xbehh8z25daxYseYXF46UDCZ",
-    "/dns/enc14.rotko.net/tcp/35504/wss/p2p/12D3KooWJ3327ZoZcR96pToGsXa8Xbehh8z25daxYseYXF46UDCZ"
+    "/dns/enc14.rotko.net/tcp/35504/wss/p2p/12D3KooWJ3327ZoZcR96pToGsXa8Xbehh8z25daxYseYXF46UDCZ",
+    "/dns/encointer-kusama-bootnode.radiumblock.com/tcp/30333/p2p/12D3KooWQJgWAciHe3z8U7Zi9kmKoKYfFqRdaaLUyDMyNrBynSsJ",
+    "/dns/encointer-kusama-bootnode.radiumblock.com/tcp/30336/wss/p2p/12D3KooWQJgWAciHe3z8U7Zi9kmKoKYfFqRdaaLUyDMyNrBynSsJ"
   ],
   "chainType": "Live",
   "codeSubstitutes": {},
