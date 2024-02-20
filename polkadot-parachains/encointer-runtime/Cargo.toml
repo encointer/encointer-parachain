@@ -8,9 +8,9 @@ license = "GPL-3.0"
 edition = "2021"
 
 [dependencies]
-parity-scale-codec = { workspace = true }
 log = { workspace = true }
 parachain-info = { workspace = true }
+parity-scale-codec = { workspace = true }
 scale-info = { workspace = true }
 serde = { workspace = true }
 

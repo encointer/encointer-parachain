@@ -13,11 +13,11 @@ path = "src/main.rs"
 [dependencies]
 async-trait = { workspace = true }
 clap = { workspace = true }
-parity-scale-codec = { workspace = true }
 futures = { workspace = true }
 hex-literal = { workspace = true }
 jsonrpsee = { workspace = true }
 log = { workspace = true, features = ["std"] }
+parity-scale-codec = { workspace = true }
 serde = { workspace = true, features = ["std"] }
 
 # added by encointer
@@ -83,7 +83,7 @@ sc-transaction-pool-api = { workspace = true }
 polkadot-cli = { workspace = true }
 polkadot-parachain-primitives = { workspace = true }
 polkadot-primitives = { workspace = true }
-polkadot-service ={ workspace = true }
+polkadot-service = { workspace = true }
 xcm = { workspace = true, features = ["std"] }
 
 # Cumulus
