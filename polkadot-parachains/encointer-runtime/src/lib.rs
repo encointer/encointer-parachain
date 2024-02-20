@@ -50,7 +50,6 @@ use sp_std::prelude::*;
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
 
-use codec::{Decode, Encode, MaxEncodedLen};
 use encointer_balances_tx_payment::{AssetBalanceOf, AssetIdOf, BalanceToCommunityBalance};
 use frame_support::{
 	construct_runtime,
@@ -68,6 +67,7 @@ use frame_system::{
 	EnsureRoot,
 };
 pub use parachains_common as common;
+use parity_scale_codec::{Decode, Encode, MaxEncodedLen};
 use sp_runtime::RuntimeDebug;
 
 use parachains_common::{

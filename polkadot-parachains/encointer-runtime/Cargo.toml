@@ -8,99 +8,91 @@ license = "GPL-3.0"
 edition = "2021"
 
 [dependencies]
-codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = [
-    "derive",
-] }
-log = { version = "0.4.20", default-features = false }
-parachain-info = { package = "staging-parachain-info", default-features = false, version = "0.3.0" }
-scale-info = { version = "2.0.1", default-features = false, features = [
-    "derive",
-] }
-serde = { version = "1.0.132", default-features = false, optional = true, features = [
-    "derive",
-] }
+parity-scale-codec = { workspace = true }
+log = { workspace = true }
+parachain-info = { workspace = true }
+scale-info = { workspace = true }
+serde = { workspace = true }
 
 # encointer deps
-encointer-balances-tx-payment = { default-features = false, version = "2.0.0" }
-encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "2.0.0" }
-encointer-primitives = { default-features = false, version = "2.0.0" }
-pallet-encointer-balances = { default-features = false, version = "2.0.0" }
-pallet-encointer-bazaar = { default-features = false, version = "2.0.0" }
-pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "2.0.0" }
-pallet-encointer-ceremonies = { default-features = false, version = "2.0.0" }
-pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "2.0.0" }
-pallet-encointer-communities = { default-features = false, version = "2.0.0" }
-pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "2.0.0" }
-pallet-encointer-faucet = { default-features = false, version = "2.0.0" }
-pallet-encointer-reputation-commitments = { default-features = false, version = "2.0.0" }
-pallet-encointer-scheduler = { default-features = false, version = "2.0.0" }
+encointer-balances-tx-payment = { workspace = true }
+encointer-balances-tx-payment-rpc-runtime-api = { workspace = true }
+encointer-primitives = { workspace = true }
+pallet-encointer-balances = { workspace = true }
+pallet-encointer-bazaar = { workspace = true }
+pallet-encointer-bazaar-rpc-runtime-api = { workspace = true }
+pallet-encointer-ceremonies = { workspace = true }
+pallet-encointer-ceremonies-rpc-runtime-api = { workspace = true }
+pallet-encointer-communities = { workspace = true }
+pallet-encointer-communities-rpc-runtime-api = { workspace = true }
+pallet-encointer-faucet = { workspace = true }
+pallet-encointer-reputation-commitments = { workspace = true }
+pallet-encointer-scheduler = { workspace = true }
 
 # Substrate dependencies (figure out crates.io versions in the respective release-crates-io-* branch: https://github.com/paritytech/polkadot-sdk/blob/release-crates-io-v1.2.0/Cargo.lock
 
-sp-api = { default-features = false, version = "22.0.0" }
-sp-block-builder = { default-features = false, version = "22.0.0" }
-sp-consensus-aura = { default-features = false, version = "0.28.0" }
-sp-core = { default-features = false, version = "24.0.0" }
-sp-inherents = { default-features = false, version = "22.0.0" }
-sp-io = { default-features = false, version = "26.0.0" }
-sp-offchain = { default-features = false, version = "22.0.0" }
-sp-runtime = { default-features = false, version = "27.0.0" }
-sp-session = { default-features = false, version = "23.0.0" }
-sp-std = { default-features = false, version = "11.0.0" }
-sp-transaction-pool = { default-features = false, version = "22.0.0" }
-sp-version = { default-features = false, version = "25.0.0" }
+sp-api = { workspace = true }
+sp-block-builder = { workspace = true }
+sp-consensus-aura = { workspace = true }
+sp-core = { workspace = true }
+sp-inherents = { workspace = true }
+sp-io = { workspace = true }
+sp-offchain = { workspace = true }
+sp-runtime = { workspace = true }
+sp-session = { workspace = true }
+sp-std = { workspace = true }
+sp-transaction-pool = { workspace = true }
+sp-version = { workspace = true }
 
-frame-executive = { default-features = false, version = "24.0.0" }
-frame-support = { default-features = false, version = "24.0.0" }
-frame-system = { default-features = false, version = "24.0.0" }
-frame-system-rpc-runtime-api = { default-features = false, version = "22.0.0" }
-pallet-asset-tx-payment = { default-features = false, version = "24.0.0" }
-pallet-aura = { default-features = false, version = "23.0.0" }
-pallet-balances = { default-features = false, version = "24.0.0" }
-pallet-collective = { default-features = false, version = "24.0.0" }
-pallet-insecure-randomness-collective-flip = { default-features = false, version = "12.0.0" }
-pallet-membership = { default-features = false, version = "24.0.0" }
-pallet-proxy = { default-features = false, version = "24.0.0" }
-pallet-scheduler = { default-features = false, version = "25.0.0" }
-pallet-timestamp = { default-features = false, version = "23.0.0" }
-pallet-transaction-payment = { default-features = false, version = "24.0.0" }
-pallet-transaction-payment-rpc-runtime-api = { default-features = false, version = "24.0.0" }
-pallet-treasury = { default-features = false, version = "23.0.0" }
-pallet-utility = { default-features = false, version = "24.0.0" }
+frame-executive = { workspace = true }
+frame-support = { workspace = true }
+frame-system = { workspace = true }
+frame-system-rpc-runtime-api = { workspace = true }
+pallet-asset-tx-payment = { workspace = true }
+pallet-aura = { workspace = true }
+pallet-balances = { workspace = true }
+pallet-collective = { workspace = true }
+pallet-insecure-randomness-collective-flip = { workspace = true }
+pallet-membership = { workspace = true }
+pallet-proxy = { workspace = true }
+pallet-scheduler = { workspace = true }
+pallet-timestamp = { workspace = true }
+pallet-transaction-payment = { workspace = true }
+pallet-transaction-payment-rpc-runtime-api = { workspace = true }
+pallet-treasury = { workspace = true }
+pallet-utility = { workspace = true }
 
-parachains-common = { default-features = false, version = "3.0.0" }
+parachains-common = { workspace = true }
 
 # Cumulus dependencies
-cumulus-pallet-aura-ext = { default-features = false, version = "0.3.0" }
-cumulus-pallet-dmp-queue = { default-features = false, version = "0.3.0" }
-cumulus-pallet-parachain-system = { default-features = false, features = [
-    "parameterized-consensus-hook",
-], version = "0.3.0" }
-cumulus-pallet-xcm = { default-features = false, version = "0.3.0" }
-cumulus-pallet-xcmp-queue = { default-features = false, version = "0.3.0" }
-cumulus-primitives-core = { default-features = false, version = "0.3.0" }
-cumulus-primitives-timestamp = { default-features = false, version = "0.3.0" }
-cumulus-primitives-utility = { default-features = false, version = "0.3.0" }
+cumulus-pallet-aura-ext = { workspace = true }
+cumulus-pallet-dmp-queue = { workspace = true }
+cumulus-pallet-parachain-system = { workspace = true }
+cumulus-pallet-xcm = { workspace = true }
+cumulus-pallet-xcmp-queue = { workspace = true }
+cumulus-primitives-core = { workspace = true }
+cumulus-primitives-timestamp = { workspace = true }
+cumulus-primitives-utility = { workspace = true }
 
 # Polkadot dependencies
-pallet-xcm = { default-features = false, version = "3.0.0" }
-polkadot-parachain-primitives = { default-features = false, version = "2.0.0" }
-polkadot-runtime-common = { default-features = false, version = "3.0.0" }
-xcm = { package = "staging-xcm", default-features = false, version = "3.0.0" }
-xcm-builder = { package = "staging-xcm-builder", default-features = false, version = "3.0.0" }
-xcm-executor = { package = "staging-xcm-executor", default-features = false, version = "3.0.0" }
+pallet-xcm = { workspace = true }
+polkadot-parachain-primitives = { workspace = true }
+polkadot-runtime-common = { workspace = true }
+xcm = { workspace = true }
+xcm-builder = { workspace = true }
+xcm-executor = { workspace = true }
 
 # used for try-runtime
-frame-try-runtime = { default-features = false, optional = true, version = "0.30.0" }
-try-runtime-cli = { default-features = false, optional = true, version = "0.34.0" }
+frame-try-runtime = { workspace = true, optional = true }
+try-runtime-cli = { workspace = true, optional = true }
 
 # Used for runtime benchmarking
-frame-benchmarking = { default-features = false, optional = true, version = "24.0.0" }
-frame-system-benchmarking = { default-features = false, optional = true, version = "24.0.0" }
-hex-literal = { version = "0.3.1", optional = true }
+frame-benchmarking = { workspace = true, optional = true }
+frame-system-benchmarking = { workspace = true, optional = true }
+hex-literal = { workspace = true, optional = true }
 
 [build-dependencies]
-substrate-wasm-builder = { optional = true, version = "13.0.0" }
+substrate-wasm-builder = { workspace = true, optional = true }
 
 [features]
 default = ["std"]
@@ -131,7 +123,7 @@ runtime-benchmarks = [
     "xcm-executor/runtime-benchmarks",
 ]
 std = [
-    "codec/std",
+    "parity-scale-codec/std",
     "cumulus-pallet-aura-ext/std",
     "cumulus-pallet-dmp-queue/std",
     "cumulus-pallet-parachain-system/std",
