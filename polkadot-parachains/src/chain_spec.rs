@@ -18,7 +18,6 @@ use cumulus_primitives_core::ParaId;
 use parachain_runtime::{BalanceType, CeremonyPhaseType};
 use parachains_common::{AccountId, AuraId};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
-use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
 
 pub use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys};
@@ -133,40 +132,40 @@ fn encointer_genesis(
 		"aura": {
 			"authorities": initial_authorities,
 		},
-		"collective": {
+		"membership": {
 			"members": encointer_council,
 		},
-		"encointer_scheduler": {
-			"current_phase": CeremonyPhaseType::Registering,
-			"current_ceremony_index": 1,
-			"phase_durations": vec![
+		"encointerScheduler": {
+			"currentPhase": CeremonyPhaseType::Registering,
+			"currentCeremonyIndex": 1,
+			"phaseDurations": vec![
 				(CeremonyPhaseType::Registering, 604800000u64), // 7d
 				(CeremonyPhaseType::Assigning, 86400000u64),    // 1d
 				(CeremonyPhaseType::Attesting, 172800000u64),   // 2d
 			],
 		},
-		"encointer_ceremonies": {
-			"ceremony_reward": BalanceType::from_num(1),
-			"time_tolerance": 600_000u64,   // +-10min
-			"location_tolerance": 1_000, // [m]
-			"endorsement_tickets_per_bootstrapper": 10,
-			"endorsement_tickets_per_reputable": 5,
-			"reputation_lifetime": 5,
-			"inactivity_timeout": 5, // idle ceremonies before purging community
-			"meetup_time_offset": 0,
+		"encointerCeremonies": {
+			"ceremonyReward": BalanceType::from_num(1),
+			"timeTolerance": 600_000u64,   // +-10min
+			"locationTolerance": 1_000, // [m]
+			"endorsementTicketsPerBootstrapper": 10,
+			"endorsementTicketsPerReputable": 5,
+			"reputationLifetime": 5,
+			"inactivityTimeout": 5, // idle ceremonies before purging community
+			"meetupTimeOffset": 0,
 		},
-		"encointer_communities": {
-			"min_solar_trip_time_s": 1, // [s]
-			"max_speed_mps": 1,         // [m/s] suggested would be 83m/s for security,
+		"encointerCommunities": {
+			"minSolarTripTimeS": 1, // [s]
+			"maxSpeedMps": 1,         // [m/s] suggested would be 83m/s for security,
 		},
-		"encointer_balances": {
+		"encointerBalances": {
 			// for relative adjustment.
 			// 100_000 translates 5uKSM to 0.01 CC if ceremony reward is 20 CC
 			// lower values lead to lower fees in CC proportionally
-			"fee_conversion_factor": 100_000,
+			"feeConversionFactor": 100_000u32,
 		},
-		"encointer_faucet": {
-			"reserve_amount": 10_000_000_000_000u128,
+		"encointerFaucet": {
+			"reserveAmount": 10_000_000_000_000u128,
 		},
 	})
 }
