@@ -191,6 +191,8 @@ jobs:
         uses: chevdor/srtool-actions@v0.9.2
         with:
           chain: ${{ matrix.runtime }}
+          # todo: remove this again as soon as srtool is released for latest stable
+          tag: 1.74.0
           runtime_dir: polkadot-parachains/${{ matrix.runtime }}-runtime
 
       - name: Summary
