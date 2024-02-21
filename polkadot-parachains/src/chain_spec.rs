@@ -21,15 +21,10 @@ use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::{ChainType, GenericChainSpec};
 use serde::{Deserialize, Serialize};
 
-pub use crate::chain_spec_helpers::{
-	public_from_ss58, rococo_properties, EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys,
-};
+pub use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type EncointerChainSpec = GenericChainSpec<parachain_runtime::RuntimeGenesisConfig, Extensions>;
-
-/// Specialized `ChainSpec` for the launch parachain runtime.
-pub type LaunchChainSpec = GenericChainSpec<launch_runtime::RuntimeGenesisConfig, Extensions>;
+pub type ChainSpec = sc_service::GenericChainSpec<(), Extensions>;
 
 pub const ENDOWED_FUNDING: u128 = 1 << 60;
 
@@ -60,129 +55,63 @@ impl Extensions {
 
 /// Chain-spec for the encointer runtime
 pub fn encointer_spec(
-	id: ParaId,
-	genesis_keys: GenesisKeys,
-	relay_chain: RelayChain,
-) -> EncointerChainSpec {
-	let (council, endowed, authorities) = match genesis_keys {
-		GenesisKeys::Encointer =>
-			(EncointerKeys::council(), [].to_vec(), EncointerKeys::authorities()),
-		GenesisKeys::EncointerWithCouncilEndowed =>
-			(EncointerKeys::council(), EncointerKeys::council(), EncointerKeys::authorities()),
-		GenesisKeys::WellKnown =>
-			(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
-	};
-
-	chain_spec(
-		"Encointer Network",
-		move || {
-			encointer_genesis(
-				council.clone(),
-				authorities.clone(),
-				allocate_endowance(endowed.clone()),
-				id,
-			)
-		},
-		relay_chain.chain_type(),
-		id,
-		&relay_chain,
-	)
-}
-
-/// Chain-spec for the launch runtime
-pub fn launch_spec(
-	id: ParaId,
-	genesis_keys: GenesisKeys,
-	relay_chain: RelayChain,
-) -> LaunchChainSpec {
-	let (council, endowed, authorities) = match genesis_keys {
-		GenesisKeys::Encointer =>
-			(EncointerKeys::council(), [].to_vec(), EncointerKeys::authorities()),
-		GenesisKeys::EncointerWithCouncilEndowed =>
-			(EncointerKeys::council(), EncointerKeys::council(), EncointerKeys::authorities()),
-		GenesisKeys::WellKnown =>
-			(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
-	};
-
-	chain_spec(
-		"Encointer Launch",
-		move || {
-			launch_genesis(
-				council.clone(),
-				authorities.clone(),
-				allocate_endowance(endowed.clone()),
-				id,
-			)
-		},
-		relay_chain.chain_type(),
-		id,
-		&relay_chain,
-	)
-}
-
-/// decorates the given `testnet_constructor` with metadata.
-///
-/// Intended to remove redundant code when defining encointer-launch-runtime and
-/// encointer-parachain-runtime chain-specs.
-fn chain_spec<F: Fn() -> RuntimeGenesisConfig + 'static + Send + Sync, RuntimeGenesisConfig>(
-	chain_name: &str,
-	testnet_constructor: F,
-	chain_type: ChainType,
 	para_id: ParaId,
-	relay_chain: &RelayChain,
-) -> GenericChainSpec<RuntimeGenesisConfig, Extensions> {
-	GenericChainSpec::<RuntimeGenesisConfig, Extensions>::from_genesis(
-		chain_name,
-		&format!("encointer-{}", relay_chain.to_string()),
-		chain_type,
-		testnet_constructor,
-		Vec::new(),
-		// telemetry endpoints
-		None,
-		// protocol id
-		Some(&format!("nctr-{}", relay_chain.to_string().chars().next().unwrap())),
-		// properties
-		None,
-		Some(relay_chain.properties()),
+	genesis_keys: GenesisKeys,
+	relay_chain: RelayChain,
+) -> ChainSpec {
+	let (council, endowed, authorities) = match genesis_keys {
+		GenesisKeys::Encointer =>
+			(EncointerKeys::council(), [].to_vec(), EncointerKeys::authorities()),
+		GenesisKeys::EncointerWithCouncilEndowed =>
+			(EncointerKeys::council(), EncointerKeys::council(), EncointerKeys::authorities()),
+		GenesisKeys::WellKnown =>
+			(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
+	};
+
+	#[allow(deprecated)]
+	ChainSpec::builder(
+		parachain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
 		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
 	)
+	.with_name("Encointer Network")
+	.with_id(&format!("encointer-{}", relay_chain.to_string()))
+	.with_protocol_id(&format!("nctr-{}", relay_chain.to_string().chars().next().unwrap()))
+	.with_chain_type(relay_chain.chain_type())
+	.with_properties(relay_chain.properties())
+	.with_genesis_config_patch(encointer_genesis(
+		council.clone(),
+		authorities.clone(),
+		allocate_endowance(endowed.clone()),
+		para_id,
+	))
+	.build()
 }
 
-pub fn sybil_dummy_spec(id: ParaId, relay_chain: RelayChain) -> EncointerChainSpec {
+pub fn sybil_dummy_spec(para_id: ParaId, relay_chain: RelayChain) -> ChainSpec {
 	let (council, endowed, authorities) =
 		(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities());
+	let mut properties = sc_chain_spec::Properties::new();
+	properties.insert("tokenSymbol".into(), "DUM".into());
+	properties.insert("tokenDecimals".into(), 12.into());
+	properties.insert("ss58Format".into(), 13.into());
 
-	EncointerChainSpec::from_genesis(
-		"Sybil Dummy",
-		"sybil-dummy-rococo-v1",
-		relay_chain.chain_type(),
-		move || {
-			encointer_genesis(
-				council.clone(),
-				authorities.clone(),
-				allocate_endowance(endowed.clone()),
-				id,
-			)
-		},
-		Vec::new(),
-		// telemetry endpoints
-		None,
-		// protocol id
-		None,
-		None,
-		// properties
-		Some(
-			serde_json::from_str(
-				r#"{
-			"ss58Format": 2,
-			"tokenDecimals": 12,
-			"tokenSymbol": "DUM"
-		  }"#,
-			)
-			.unwrap(),
-		),
-		Extensions { relay_chain: relay_chain.to_string(), para_id: id.into() },
+	#[allow(deprecated)]
+	ChainSpec::builder(
+		parachain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+		Extensions { relay_chain: relay_chain.to_string(), para_id: para_id.into() },
 	)
+	.with_name("Sybil Dummy")
+	.with_id(&format!("sybil-dummy-{}", relay_chain.to_string()))
+	.with_protocol_id(&format!("nctr-{}", relay_chain.to_string().chars().next().unwrap()))
+	.with_chain_type(relay_chain.chain_type())
+	.with_properties(properties)
+	.with_genesis_config_patch(encointer_genesis(
+		council.clone(),
+		authorities.clone(),
+		allocate_endowance(endowed.clone()),
+		para_id,
+	))
+	.build()
 }
 
 fn encointer_genesis(
@@ -190,120 +119,69 @@ fn encointer_genesis(
 	initial_authorities: Vec<AuraId>,
 	endowance_allocation: Vec<(AccountId, u128)>,
 	id: ParaId,
-) -> parachain_runtime::RuntimeGenesisConfig {
-	parachain_runtime::RuntimeGenesisConfig {
-		system: parachain_runtime::SystemConfig {
-			code: parachain_runtime::WASM_BINARY
-				.expect("WASM binary was not build, please build it!")
-				.to_vec(),
-			_config: Default::default(),
+) -> serde_json::Value {
+	serde_json::json!({
+		"balances": {
+			"balances": endowance_allocation,
 		},
-		parachain_system: Default::default(),
-		balances: parachain_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: parachain_runtime::ParachainInfoConfig {
-			parachain_id: id,
-			..Default::default()
+		"parachainInfo": {
+			"parachainId": id,
 		},
-		aura: parachain_runtime::AuraConfig {
-			authorities: initial_authorities,
-			..Default::default()
+		"polkadotXcm": {
+			"safeXcmVersion": Some(SAFE_XCM_VERSION),
 		},
-		aura_ext: Default::default(),
-		polkadot_xcm: parachain_runtime::PolkadotXcmConfig {
-			safe_xcm_version: Some(SAFE_XCM_VERSION),
-			_config: Default::default(),
+		"aura": {
+			"authorities": initial_authorities,
 		},
-		treasury: Default::default(),
-		collective: Default::default(),
-		membership: parachain_runtime::MembershipConfig {
-			members: encointer_council.try_into().expect("Council below council max members; qed."),
-			phantom: Default::default(),
+		"collective": {
+			"members": encointer_council,
 		},
-		encointer_scheduler: parachain_runtime::EncointerSchedulerConfig {
-			current_phase: CeremonyPhaseType::Registering,
-			current_ceremony_index: 1,
-			phase_durations: vec![
-				(CeremonyPhaseType::Registering, 604800000), // 7d
-				(CeremonyPhaseType::Assigning, 86400000),    // 1d
-				(CeremonyPhaseType::Attesting, 172800000),   // 2d
+		"encointer_scheduler": {
+			"current_phase": CeremonyPhaseType::Registering,
+			"current_ceremony_index": 1,
+			"phase_durations": vec![
+				(CeremonyPhaseType::Registering, 604800000u64), // 7d
+				(CeremonyPhaseType::Assigning, 86400000u64),    // 1d
+				(CeremonyPhaseType::Attesting, 172800000u64),   // 2d
 			],
-			_config: Default::default(),
 		},
-		encointer_ceremonies: parachain_runtime::EncointerCeremoniesConfig {
-			ceremony_reward: BalanceType::from_num(1),
-			time_tolerance: 600_000,   // +-10min
-			location_tolerance: 1_000, // [m]
-			endorsement_tickets_per_bootstrapper: 10,
-			endorsement_tickets_per_reputable: 5,
-			reputation_lifetime: 5,
-			inactivity_timeout: 5, // idle ceremonies before purging community
-			meetup_time_offset: 0,
-			_config: Default::default(),
+		"encointer_ceremonies": {
+			"ceremony_reward": BalanceType::from_num(1),
+			"time_tolerance": 600_000u64,   // +-10min
+			"location_tolerance": 1_000, // [m]
+			"endorsement_tickets_per_bootstrapper": 10,
+			"endorsement_tickets_per_reputable": 5,
+			"reputation_lifetime": 5,
+			"inactivity_timeout": 5, // idle ceremonies before purging community
+			"meetup_time_offset": 0,
 		},
-		encointer_communities: parachain_runtime::EncointerCommunitiesConfig {
-			min_solar_trip_time_s: 1, // [s]
-			max_speed_mps: 1,         // [m/s] suggested would be 83m/s for security,
-			_config: Default::default(),
+		"encointer_communities": {
+			"min_solar_trip_time_s": 1, // [s]
+			"max_speed_mps": 1,         // [m/s] suggested would be 83m/s for security,
 		},
-		encointer_balances: parachain_runtime::EncointerBalancesConfig {
+		"encointer_balances": {
 			// for relative adjustment.
 			// 100_000 translates 5uKSM to 0.01 CC if ceremony reward is 20 CC
 			// lower values lead to lower fees in CC proportionally
-			fee_conversion_factor: 100_000,
-			_config: Default::default(),
+			"fee_conversion_factor": 100_000,
 		},
-		encointer_faucet: parachain_runtime::EncointerFaucetConfig {
-			reserve_amount: 10_000_000_000_000,
-			_config: Default::default(),
+		"encointer_faucet": {
+			"reserve_amount": 10_000_000_000_000u128,
 		},
-	}
+	})
 }
 
-fn launch_genesis(
-	encointer_council: Vec<AccountId>,
-	initial_authorities: Vec<AuraId>,
-	endowance_allocation: Vec<(AccountId, u128)>,
-	id: ParaId,
-) -> launch_runtime::RuntimeGenesisConfig {
-	launch_runtime::RuntimeGenesisConfig {
-		system: launch_runtime::SystemConfig {
-			code: launch_runtime::WASM_BINARY
-				.expect("WASM binary was not build, please build it!")
-				.to_vec(),
-			_config: Default::default(),
-		},
-		parachain_system: Default::default(),
-		balances: launch_runtime::BalancesConfig { balances: endowance_allocation },
-		parachain_info: launch_runtime::ParachainInfoConfig {
-			parachain_id: id,
-			_config: Default::default(),
-		},
-		aura: launch_runtime::AuraConfig { authorities: initial_authorities },
-		aura_ext: Default::default(),
-		polkadot_xcm: launch_runtime::PolkadotXcmConfig {
-			safe_xcm_version: Some(SAFE_XCM_VERSION),
-			_config: Default::default(),
-		},
-		treasury: Default::default(),
-		collective: Default::default(),
-		membership: launch_runtime::MembershipConfig {
-			members: encointer_council.try_into().expect("Council below council max members; qed."),
-			phantom: Default::default(),
-		},
-	}
+/// hard-coded runtime config for rococo
+pub fn encointer_rococo() -> Result<ChainSpec, String> {
+	ChainSpec::from_json_bytes(&include_bytes!("../res/encointer-rococo.json")[..])
 }
 
-/// hard-coded launch-runtime config for rococo
-pub fn launch_rococo() -> Result<LaunchChainSpec, String> {
-	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/encointer-rococo.json")[..])
+/// hard-coded runtime config for kusama
+pub fn encointer_kusama() -> Result<ChainSpec, String> {
+	ChainSpec::from_json_bytes(&include_bytes!("../res/encointer-kusama.json")[..])
 }
 
-/// hard-coded launch-runtime config for kusama
-pub fn launch_kusama() -> Result<LaunchChainSpec, String> {
-	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/encointer-kusama.json")[..])
-}
-
-/// hard-coded launch-runtime config for westend
-pub fn launch_westend() -> Result<LaunchChainSpec, String> {
-	LaunchChainSpec::from_json_bytes(&include_bytes!("../res/encointer-westend.json")[..])
+/// hard-coded runtime config for westend
+pub fn encointer_westend() -> Result<ChainSpec, String> {
+	ChainSpec::from_json_bytes(&include_bytes!("../res/encointer-westend.json")[..])
 }

@@ -1,33 +1,22 @@
-// Copyright 2021 Parity Technologies (UK) Ltd.
-// This file is part of Cumulus.
-
-// Cumulus is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// Cumulus is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with Cumulus.  If not, see <http://www.gnu.org/licenses/>.
-
-//! Parachain-specific RPCs implementation.
+//! A collection of node-specific RPC methods.
+//! Substrate provides the `sc-rpc` crate, which defines the core RPC layer
+//! used by Substrate nodes. This file extends those RPC definitions with
+//! capabilities that are specific to this project's runtime configuration.
 
 #![warn(missing_docs)]
 
+use sc_client_api::AuxStore;
 use std::sync::Arc;
 
-use parachain_runtime::{AssetBalance, AssetId, Moment};
-use parachains_common::{AccountId, Balance, Block, BlockNumber, Nonce};
-use sc_client_api::AuxStore;
-pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};
+use parachain_runtime::{AccountId, AssetBalance, AssetId, Balance, BlockNumber, Moment, Nonce};
+use parachains_common::opaque::Block;
+
+pub use sc_rpc::DenyUnsafe;
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;
 use sp_block_builder::BlockBuilder;
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
+
 /// A type representing all RPC extensions.
 pub type RpcExtension = jsonrpsee::RpcModule<()>;
 
@@ -57,8 +46,8 @@ where
 		+ Send
 		+ Sync
 		+ 'static,
-	C::Api: frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
+	C::Api: frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + Sync + Send + 'static,
 	C::Api: pallet_encointer_ceremonies_rpc_runtime_api::CeremoniesApi<Block, AccountId, Moment>,
@@ -102,35 +91,6 @@ where
 			Will not initialize custom RPCs for 'CommunitiesApi' and 'CeremoniesApi'"
 		),
 	};
-
-	Ok(module)
-}
-
-/// Instantiate reduced RPC extensions for launch runtime
-pub fn create_launch_ext<C, P, TBackend>(
-	deps: FullDeps<C, P, TBackend>,
-) -> Result<RpcExtension, Box<dyn std::error::Error + Send + Sync>>
-where
-	C: ProvideRuntimeApi<Block>
-		+ HeaderBackend<Block>
-		+ AuxStore
-		+ HeaderMetadata<Block, Error = BlockChainError>
-		+ Send
-		+ Sync
-		+ 'static,
-	C::Api: frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
-	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
-	C::Api: BlockBuilder<Block>,
-	P: TransactionPool + Sync + Send + 'static,
-{
-	use frame_rpc_system::{System, SystemApiServer};
-	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
-
-	let mut module = RpcExtension::new(());
-	let FullDeps { client, pool, backend: _, offchain_indexing_enabled: _, deny_unsafe } = deps;
-
-	module.merge(System::new(client.clone(), pool, deny_unsafe).into_rpc())?;
-	module.merge(TransactionPayment::new(client).into_rpc())?;
 
 	Ok(module)
 }

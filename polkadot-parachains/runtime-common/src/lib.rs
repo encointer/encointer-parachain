@@ -23,7 +23,7 @@ pub mod deal_with_fees;
 pub mod weights;
 
 // copied from cumulus/parachains/runtimes/assets/statemine/constants
-mod constants;
+pub mod constants;
 pub use constants::{currency, fee};
 
 pub const MILLISECS_PER_BLOCK: u64 = 12000;

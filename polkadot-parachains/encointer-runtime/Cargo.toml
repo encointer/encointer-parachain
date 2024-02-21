@@ -84,7 +84,7 @@ xcm-executor = { workspace = true }
 
 # used for try-runtime
 frame-try-runtime = { workspace = true, optional = true }
-try-runtime-cli = { workspace = true, optional = true }
+
 
 # Used for runtime benchmarking
 frame-benchmarking = { workspace = true, optional = true }

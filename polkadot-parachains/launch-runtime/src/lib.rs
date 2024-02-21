@@ -64,9 +64,9 @@ use frame_system::{
 };
 pub use parachains_common as common;
 use parachains_common::{
-	kusama::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS, AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS,
-	HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
+	AuraId, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO,
 };
+use runtime_common::constants::consensus::RELAY_CHAIN_SLOT_DURATION_MILLIS;
 use xcm_config::{KsmLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 
 #[cfg(any(feature = "std", test))]
@@ -285,7 +285,6 @@ impl cumulus_pallet_parachain_system::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type SelfParaId = parachain_info::Pallet<Runtime>;
-	type DmpMessageHandler = DmpQueue;
 	type ReservedDmpWeight = ReservedDmpWeight;
 	type OutboundXcmpMessageSource = XcmpQueue;
 	type XcmpMessageHandler = XcmpQueue;
@@ -312,10 +311,8 @@ parameter_types! {
 
 impl cumulus_pallet_xcmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type ChannelInfo = ParachainSystem;
 	type VersionWrapper = PolkadotXcm;
-	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
 	type ControllerOrigin = EitherOfDiverse<
 		EnsureRoot<AccountId>,
 		EnsureXcm<IsMajorityOfBody<KsmLocation, ExecutiveBody>>,
@@ -327,8 +324,8 @@ impl cumulus_pallet_xcmp_queue::Config for Runtime {
 
 impl cumulus_pallet_dmp_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type XcmExecutor = XcmExecutor<XcmConfig>;
-	type ExecuteOverweightOrigin = EnsureRoot<AccountId>;
+	type WeightInfo = ();
+	type DmpSink = frame_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 }
 
 parameter_types! {
