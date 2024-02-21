@@ -13,7 +13,6 @@
 
 // You should have received a copy of the GNU General Public License
 // along with Cumulus.  If not, see <http://www.gnu.org/licenses/>.
-use codec::Codec;
 use cumulus_client_cli::CollatorOptions;
 use cumulus_client_collator::service::CollatorService;
 use cumulus_client_consensus_aura::collators::basic::{
@@ -29,6 +28,7 @@ use cumulus_client_service::{
 };
 use cumulus_primitives_core::{relay_chain::v2::Hash as PHash, ParaId, PersistedValidationData};
 use cumulus_relay_chain_interface::{OverseerHandle, RelayChainInterface};
+use parity_scale_codec::Codec;
 use sc_consensus::ImportQueue;
 use sp_core::Pair;
 
