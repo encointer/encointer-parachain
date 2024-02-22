@@ -123,3 +123,86 @@ jobs:
         if: failure()
         uses: andymckay/cancel-action@0.2
 
+  create_artifacts:
+    needs: [ build_primary_binaries ]
+    runs-on: ubuntu-20.04
+    env:
+      CHAIN_SPEC: ${{ matrix.chain }}-${{ matrix.config }}
+    strategy:
+      fail-fast: false
+      matrix:
+        chain: [ encointer ]
+        config: [ rococo, westend, kusama ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: encointer-collator-${{ github.sha }}
+
+      - name: 'Create binaries for artifacts'
+        # The build-spec cmd does not create a deterministic key order in the produced json. Hence, we sort the keys
+        # before we use it to deterministically create the state.
+        run: |
+          chmod +x ./encointer-collator
+          ./encointer-collator build-spec --chain ${{ env.CHAIN_SPEC }} --disable-default-bootnode --raw > ${{ env.CHAIN_SPEC }}-unsorted.json
+          jq --sort-keys . ${{ env.CHAIN_SPEC }}-unsorted.json > ${{ env.CHAIN_SPEC }}.json
+          ./encointer-collator export-genesis-state --chain ${{ env.CHAIN_SPEC }}.json >  ${{ env.CHAIN_SPEC }}.json.state
+          ./encointer-collator export-genesis-state --chain ${{ env.CHAIN_SPEC }} >  ${{ env.CHAIN_SPEC }}.state
+
+      - name: Compute file metadata
+        id: vars
+        run: |
+          sha256sum ${{ env.CHAIN_SPEC }}.state >> checksums.txt
+          sha256sum ${{ env.CHAIN_SPEC }}.json >> checksums.txt
+          sha256sum ${{ env.CHAIN_SPEC }}.json.state >> checksums.txt
+
+      - name: Upload ${{ env.CHAIN_SPEC }} Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.CHAIN_SPEC }}-genesis-spec-${{ github.sha }}
+          path: |
+            checksums.txt
+            ${{ env.CHAIN_SPEC }}.state
+            ${{ env.CHAIN_SPEC }}.json
+            ${{ env.CHAIN_SPEC }}.json.state
+
+  release:
+    name: Draft Release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    needs: [create_artifacts, build_primary_binaries, check]
+    outputs:
+      release_url: ${{ steps.create-release.outputs.html_url }}
+      asset_upload_url: ${{ steps.create-release.outputs.upload_url }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Integritee Collator
+        uses: actions/download-artifact@v3
+        with:
+          name: encointer-collator-${{ github.sha }}
+
+      - name: Create required package.json
+        run: test -f package.json || echo '{}' >package.json
+
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: .
+
+      - name: Release
+        id: create-release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: true
+          files: |
+            encointer-collator
