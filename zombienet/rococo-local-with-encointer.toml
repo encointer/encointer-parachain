@@ -2,8 +2,8 @@
 timeout = 10000
 
 [relaychain]
-default_command = "~/bin/polkadot-v0.9.42"
-default_args = [ "-lparachain=debug" ]
+default_command = "~/bin/polkadot"
+default_args = [ "-lparachain=debug,xcm=trace" ]
 
 chain = "rococo-local"
 
@@ -33,7 +33,7 @@ chain = "encointer-rococo-local-dev"
     command = "./target/release/encointer-collator"
     args = [
         "--enable-offchain-indexing=true",
-        "-lencointer=debug",
+        "-lencointer=debug,xcm=trace",
     ]
     ws_port = 9944
 
@@ -42,7 +42,7 @@ chain = "encointer-rococo-local-dev"
     command = "./target/release/encointer-collator"
     args = [
         "--enable-offchain-indexing=true",
-        "-lencointer=debug",
+        "-lencointer=debug,xcm=trace",
     ]
     ws_port = 9945
 

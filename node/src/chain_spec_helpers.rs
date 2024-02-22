@@ -138,34 +138,25 @@ impl RelayChain {
 }
 
 pub fn rococo_properties() -> Properties {
-	serde_json::from_str(
-		r#"{
-				"ss58Format": 2,
-				"tokenDecimals": 12,
-				"tokenSymbol": "ROC"
-				}"#,
-	)
-	.unwrap()
+	let mut properties = sc_chain_spec::Properties::new();
+	properties.insert("tokenSymbol".into(), "ROC".into());
+	properties.insert("tokenDecimals".into(), 12.into());
+	properties.insert("ss58Format".into(), 2.into());
+	properties
 }
 
 pub fn kusama_properties() -> Properties {
-	serde_json::from_str(
-		r#"{
-				"ss58Format": 2,
-				"tokenDecimals": 12,
-				"tokenSymbol": "KSM"
-				}"#,
-	)
-	.unwrap()
+	let mut properties = sc_chain_spec::Properties::new();
+	properties.insert("tokenSymbol".into(), "KSM".into());
+	properties.insert("tokenDecimals".into(), 12.into());
+	properties.insert("ss58Format".into(), 2.into());
+	properties
 }
 
 pub fn westend_properties() -> Properties {
-	serde_json::from_str(
-		r#"{
-				"ss58Format": 2,
-				"tokenDecimals": 12,
-				"tokenSymbol": "WND"
-				}"#,
-	)
-	.unwrap()
+	let mut properties = sc_chain_spec::Properties::new();
+	properties.insert("tokenSymbol".into(), "WND".into());
+	properties.insert("tokenDecimals".into(), 12.into());
+	properties.insert("ss58Format".into(), 2.into());
+	properties
 }

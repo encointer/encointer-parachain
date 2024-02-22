@@ -1,7 +1,7 @@
 [package]
 name = "encointer-collator"
 # align major.minor revision with the runtimes. bump patch revision ad lib. make this the github release tag
-version = "1.6.0"
+version = "1.7.0"
 authors = ["Encointer <info@encointer.org>"]
 build = "build.rs"
 edition = "2021"
@@ -13,6 +13,7 @@ path = "src/main.rs"
 [dependencies]
 async-trait = { workspace = true }
 clap = { workspace = true }
+color-print = { workspace = true }
 futures = { workspace = true }
 hex-literal = { workspace = true }
 jsonrpsee = { workspace = true }
@@ -25,9 +26,7 @@ parachains-common = { workspace = true, features = ["std"] }
 serde_json = { workspace = true }
 
 # Parachain runtimes
-launch-runtime = { package = "launch-runtime", path = "launch-runtime" }
-parachain-runtime = { package = "encointer-runtime", path = "encointer-runtime" }
-#parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/brenzi/runtimes.git", branch = "main" }
+parachain-runtime = { workspace = true, features = ["std"] }
 
 # encointer dependencies
 encointer-balances-tx-payment-rpc-runtime-api = { workspace = true, features = ["std"] }
@@ -50,6 +49,7 @@ sc-executor = { workspace = true }
 sc-network = { workspace = true }
 sc-network-common = { workspace = true }
 sc-network-sync = { workspace = true }
+sc-offchain = { workspace = true }
 sc-rpc = { workspace = true }
 sc-service = { workspace = true }
 sc-sysinfo = { workspace = true }
@@ -72,7 +72,6 @@ sp-session = { workspace = true, features = ["std"] }
 sp-timestamp = { workspace = true, features = ["std"] }
 sp-transaction-pool = { workspace = true, features = ["std"] }
 substrate-prometheus-endpoint = { workspace = true }
-try-runtime-cli = { workspace = true, optional = true }
 
 # RPC related dependencies
 frame-rpc-system = { workspace = true }
@@ -113,7 +112,6 @@ tempfile = { workspace = true }
 default = []
 runtime-benchmarks = [
     'polkadot-service/runtime-benchmarks',
-    'launch-runtime/runtime-benchmarks',
     'parachain-runtime/runtime-benchmarks',
 ]
-try-runtime = ["parachain-runtime/try-runtime", "try-runtime-cli/try-runtime"]
+try-runtime = ["parachain-runtime/try-runtime"]

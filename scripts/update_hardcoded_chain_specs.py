@@ -32,7 +32,7 @@ SPECS = [
     }
 ]
 COLLATOR = "target/release/encointer-collator"
-RES_DIR = "polkadot-parachains/res"
+RES_DIR = "node/res"
 
 
 def main(regenesis: bool):
