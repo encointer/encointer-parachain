@@ -5,7 +5,6 @@
 
 #![warn(missing_docs)]
 
-use sc_client_api::AuxStore;
 use std::sync::Arc;
 
 use parachain_runtime::{AccountId, AssetBalance, AssetId, Balance, BlockNumber, Moment, Nonce};
@@ -41,7 +40,6 @@ pub fn create_full<C, P, TBackend>(
 where
 	C: ProvideRuntimeApi<Block>
 		+ HeaderBackend<Block>
-		+ AuxStore
 		+ HeaderMetadata<Block, Error = BlockChainError>
 		+ Send
 		+ Sync
