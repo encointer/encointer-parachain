@@ -25,27 +25,27 @@ smallvec = "1.11.2"
 tempfile = "3.8.1"
 
 # encointer deps
-encointer-balances-tx-payment = { default-features = false, version = "6.0.0" }
-encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "6.0.0" }
-encointer-primitives = { default-features = false, version = "6.0.1" }
-pallet-encointer-balances = { default-features = false, version = "6.0.0" }
-pallet-encointer-bazaar = { default-features = false, version = "6.0.0" }
-pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "6.0.0" }
-pallet-encointer-ceremonies = { default-features = false, version = "6.0.0" }
-pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "6.0.0" }
-pallet-encointer-communities = { default-features = false, version = "6.0.0" }
-pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "6.0.0" }
-pallet-encointer-faucet = { default-features = false, version = "6.0.0" }
-pallet-encointer-reputation-commitments = { default-features = false, version = "6.0.0" }
-pallet-encointer-scheduler = { default-features = false, version = "6.0.0" }
+encointer-balances-tx-payment = { default-features = false, version = "~6.0.0" }
+encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "~6.0.0" }
+encointer-primitives = { default-features = false, version = "~6.0.2" }
+pallet-encointer-balances = { default-features = false, version = "~6.0.0" }
+pallet-encointer-bazaar = { default-features = false, version = "~6.0.0" }
+pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "~6.0.0" }
+pallet-encointer-ceremonies = { default-features = false, version = "~6.0.0" }
+pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~6.0.0" }
+pallet-encointer-communities = { default-features = false, version = "~6.0.0" }
+pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~6.0.0" }
+pallet-encointer-faucet = { default-features = false, version = "~6.0.0" }
+pallet-encointer-reputation-commitments = { default-features = false, version = "~6.0.0" }
+pallet-encointer-scheduler = { default-features = false, version = "~6.0.0" }
 # rpc [std]
-pallet-encointer-bazaar-rpc = "6.0.0"
-pallet-encointer-ceremonies-rpc = "6.0.0"
-pallet-encointer-communities-rpc = "6.0.0"
+pallet-encointer-bazaar-rpc = "~6.0.0"
+pallet-encointer-ceremonies-rpc = "~6.0.0"
+pallet-encointer-communities-rpc = "~6.0.0"
 
-# fellowship runtimes
-kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "bkontur/bko-bump-to-1.7" }
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "bkontur/bko-bump-to-1.7" }
+# fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
+kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "polkadot-v1.7.0" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "polkadot-v1.7.0" }
 
 # polkadot-sdk [no_std]
 cumulus-pallet-aura-ext = { default-features = false, version = "0.8.0" }
@@ -96,7 +96,7 @@ sp-std = { default-features = false, version = "14.0.0" }
 sp-transaction-pool = { default-features = false, version = "27.0.0" }
 sp-version = { default-features = false, version = "30.0.0" }
 substrate-wasm-builder = { version = "18.0.0" }
-xcm = { package = "staging-xcm", default-features = false, version = "8.0.0" }
+xcm = { package = "staging-xcm", default-features = false, version = "8.0.1" }
 xcm-builder = { package = "staging-xcm-builder", default-features = false, version = "8.0.0" }
 xcm-executor = { package = "staging-xcm-executor", default-features = false, version = "8.0.0" }
 
