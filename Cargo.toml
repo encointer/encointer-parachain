@@ -167,4 +167,3 @@ substrate-prometheus-endpoint = "0.17.0"
 #pallet-encointer-bazaar-rpc-runtime-api = { path = "../pallets/bazaar/rpc/runtime-api" }
 #pallet-encointer-faucet = { path = "../pallets/faucet" }
 #pallet-encointer-reputation-commitments = { path = "../pallets/reputation-commitments" }
-
