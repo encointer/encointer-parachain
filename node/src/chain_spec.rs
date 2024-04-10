@@ -16,7 +16,8 @@
 
 use cumulus_primitives_core::ParaId;
 use parachain_runtime::{BalanceType, CeremonyPhaseType};
-use parachains_common::{AccountId, AuraId};
+use parachains_common::{AccountId, AuraId, Balance};
+use parity_scale_codec::{Decode, Encode};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use serde::{Deserialize, Serialize};
 
@@ -26,6 +27,7 @@ pub use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, Well
 pub type ChainSpec = sc_service::GenericChainSpec<(), Extensions>;
 
 pub const ENDOWED_FUNDING: u128 = 1 << 60;
+pub const ENCOINTER_KUSAMA_ED: Balance = parachain_runtime::ExistentialDeposit::get();
 
 /// Configure `endowed_accounts` with initial balance of `ENDOWED_FUNDING`.
 pub fn allocate_endowance(endowed_accounts: Vec<AccountId>) -> Vec<(AccountId, u128)> {
@@ -60,11 +62,11 @@ pub fn encointer_spec(
 ) -> ChainSpec {
 	let (council, endowed, authorities) = match genesis_keys {
 		GenesisKeys::Encointer =>
-			(EncointerKeys::council(), [].to_vec(), EncointerKeys::authorities()),
+			(EncointerKeys::council(), [].to_vec(), EncointerKeys::invulnerables()),
 		GenesisKeys::EncointerWithCouncilEndowed =>
-			(EncointerKeys::council(), EncointerKeys::council(), EncointerKeys::authorities()),
+			(EncointerKeys::council(), EncointerKeys::council(), EncointerKeys::invulnerables()),
 		GenesisKeys::WellKnown =>
-			(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities()),
+			(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::invulnerables()),
 	};
 
 	#[allow(deprecated)]
@@ -88,7 +90,7 @@ pub fn encointer_spec(
 
 pub fn sybil_dummy_spec(para_id: ParaId, relay_chain: RelayChain) -> ChainSpec {
 	let (council, endowed, authorities) =
-		(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::authorities());
+		(WellKnownKeys::council(), WellKnownKeys::endowed(), WellKnownKeys::invulnerables());
 	let mut properties = sc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "DUM".into());
 	properties.insert("tokenDecimals".into(), 12.into());
@@ -115,7 +117,7 @@ pub fn sybil_dummy_spec(para_id: ParaId, relay_chain: RelayChain) -> ChainSpec {
 
 fn encointer_genesis(
 	encointer_council: Vec<AccountId>,
-	initial_authorities: Vec<AuraId>,
+	invulnerables: Vec<AccountId>,
 	endowance_allocation: Vec<(AccountId, u128)>,
 	id: ParaId,
 ) -> serde_json::Value {
@@ -129,8 +131,22 @@ fn encointer_genesis(
 		"polkadotXcm": {
 			"safeXcmVersion": Some(SAFE_XCM_VERSION),
 		},
-		"aura": {
-			"authorities": initial_authorities,
+		"collatorSelection": parachain_runtime::CollatorSelectionConfig {
+			invulnerables: invulnerables.clone(),
+			candidacy_bond: ENCOINTER_KUSAMA_ED * 16,
+			..Default::default()
+		},
+		"session": parachain_runtime::SessionConfig {
+			keys: invulnerables
+				.into_iter()
+				.map(|acc| {
+					(
+						acc.clone(),                         // account id
+						acc.clone(),                                 // validator id
+						parachain_runtime::SessionKeys { aura: Decode::decode(&mut acc.encode().as_ref()).unwrap() }, // session keys
+					)
+				})
+				.collect(),
 		},
 		"membership": {
 			"members": encointer_council,

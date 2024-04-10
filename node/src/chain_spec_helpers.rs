@@ -19,7 +19,7 @@
 //! Only moved stuff here that is not in the `chain_spec.rs` upstream to prevent upstream merge
 //! confusion.
 
-use parachains_common::{AccountId, AuraId};
+use parachains_common::{AccountId};
 use sc_chain_spec::Properties;
 use sc_service::ChainType;
 use sp_core::{crypto::Ss58Codec, sr25519, Public};
@@ -27,136 +27,136 @@ use sp_keyring::AccountKeyring::{Alice, Bob, Charlie};
 use std::str::FromStr;
 
 pub fn public_from_ss58<TPublic: Public + FromStr>(ss58: &str) -> TPublic
-where
-	<TPublic as FromStr>::Err: std::fmt::Debug,
+    where
+        <TPublic as FromStr>::Err: std::fmt::Debug,
 {
-	TPublic::from_ss58check(ss58).expect("supply valid ss58!")
+    TPublic::from_ss58check(ss58).expect("supply valid ss58!")
 }
 
 /// Defines the key set to use for root, endowed accounts, or authorities.
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub enum GenesisKeys {
-	/// Use Encointer keys. Root is not in endowed keys.
-	Encointer,
-	/// Use Encointer keys. the council is in endowed keys.
-	EncointerWithCouncilEndowed,
-	/// Use Keys from the keyring for a test setup
-	WellKnown,
+    /// Use Encointer keys. Root is not in endowed keys.
+    Encointer,
+    /// Use Encointer keys. the council is in endowed keys.
+    EncointerWithCouncilEndowed,
+    /// Use Keys from the keyring for a test setup
+    WellKnown,
 }
 
 pub struct WellKnownKeys;
 
 impl WellKnownKeys {
-	pub fn endowed() -> Vec<AccountId> {
-		vec![Alice.to_account_id(), Bob.to_account_id(), Charlie.to_account_id()]
-	}
+    pub fn endowed() -> Vec<AccountId> {
+        vec![Alice.to_account_id(), Bob.to_account_id(), Charlie.to_account_id()]
+    }
 
-	pub fn authorities() -> Vec<AuraId> {
-		vec![Alice.public().into()]
-	}
+    pub fn invulnerables() -> Vec<AccountId> {
+        vec![Alice.public().into(), Bob.public().into()]
+    }
 
-	pub fn council() -> Vec<AccountId> {
-		vec![Alice.to_account_id()]
-	}
+    pub fn council() -> Vec<AccountId> {
+        vec![Alice.to_account_id()]
+    }
 }
 
 pub struct EncointerKeys;
 
 impl EncointerKeys {
-	pub fn authorities() -> Vec<AuraId> {
-		vec![
-			public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
-				.into(),
-			public_from_ss58::<sr25519::Public>("5CMekcxVqQ1ziRHoibG2w5Co7wXu7LWXtX7yTK67NWrJ61a9")
-				.into(),
-			public_from_ss58::<sr25519::Public>("5Gdh3vLvFKPMwMf2h4sngMgxSnaYGZUJTPGkGwoVmZFM2Ss5")
-				.into(),
-			public_from_ss58::<sr25519::Public>("5DhVfSunCNHy1R1ozJx1V59YbjDAEzEsaAghmzE77opGVUNf")
-				.into(),
-			public_from_ss58::<sr25519::Public>("5EWpnnj53PL9KbJAMnsrezQYZhwQ6UwnqSknnXd1ptVvRfVJ")
-				.into(),
-		]
-	}
+    pub fn invulnerables() -> Vec<AccountId> {
+        vec![
+            public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
+                .into(),
+            public_from_ss58::<sr25519::Public>("5CMekcxVqQ1ziRHoibG2w5Co7wXu7LWXtX7yTK67NWrJ61a9")
+                .into(),
+            public_from_ss58::<sr25519::Public>("5Gdh3vLvFKPMwMf2h4sngMgxSnaYGZUJTPGkGwoVmZFM2Ss5")
+                .into(),
+            public_from_ss58::<sr25519::Public>("5DhVfSunCNHy1R1ozJx1V59YbjDAEzEsaAghmzE77opGVUNf")
+                .into(),
+            public_from_ss58::<sr25519::Public>("5EWpnnj53PL9KbJAMnsrezQYZhwQ6UwnqSknnXd1ptVvRfVJ")
+                .into(),
+        ]
+    }
 
-	pub fn council() -> Vec<AccountId> {
-		vec![
-			public_from_ss58::<sr25519::Public>("D5eJR9q92FPG2gTKc46URfFhWFdfueNEPjgKRSH1sVjEnk1")
-				.into(),
-			public_from_ss58::<sr25519::Public>("GcXMwCNrK3YoaZKRyZk4CiHvAxMBtJm2vb1LzGNohUm2vgL")
-				.into(),
-			public_from_ss58::<sr25519::Public>("Ckz9Mgx5ZfpbN52aHFQ68nUCPVhEjUx8X8wLySZwoiCSpEe")
-				.into(),
-			public_from_ss58::<sr25519::Public>("JCmeshGL5mdw6gzCViGvVWxP9tUQXYGEpr7iuRQNksUbSUU")
-				.into(),
-			public_from_ss58::<sr25519::Public>("GCFEM2oEpqD8EXnZNiva9cmfK6UWgWqFycxwn88s1gkuqvF")
-				.into(),
-		]
-	}
+    pub fn council() -> Vec<AccountId> {
+        vec![
+            public_from_ss58::<sr25519::Public>("D5eJR9q92FPG2gTKc46URfFhWFdfueNEPjgKRSH1sVjEnk1")
+                .into(),
+            public_from_ss58::<sr25519::Public>("GcXMwCNrK3YoaZKRyZk4CiHvAxMBtJm2vb1LzGNohUm2vgL")
+                .into(),
+            public_from_ss58::<sr25519::Public>("Ckz9Mgx5ZfpbN52aHFQ68nUCPVhEjUx8X8wLySZwoiCSpEe")
+                .into(),
+            public_from_ss58::<sr25519::Public>("JCmeshGL5mdw6gzCViGvVWxP9tUQXYGEpr7iuRQNksUbSUU")
+                .into(),
+            public_from_ss58::<sr25519::Public>("GCFEM2oEpqD8EXnZNiva9cmfK6UWgWqFycxwn88s1gkuqvF")
+                .into(),
+        ]
+    }
 }
 
 pub enum RelayChain {
-	Kusama,
-	KusamaLocal,
-	Rococo,
-	RococoLocal,
-	Westend,
-	WestendLocal,
+    Kusama,
+    KusamaLocal,
+    Rococo,
+    RococoLocal,
+    Westend,
+    WestendLocal,
 }
 
 impl ToString for RelayChain {
-	fn to_string(&self) -> String {
-		match self {
-			RelayChain::Rococo => "rococo".into(),
-			RelayChain::RococoLocal => "rococo-local".into(),
-			RelayChain::Kusama => "kusama".into(),
-			RelayChain::KusamaLocal => "kusama-local".into(),
-			RelayChain::Westend => "westend".into(),
-			RelayChain::WestendLocal => "westend-local".into(),
-		}
-	}
+    fn to_string(&self) -> String {
+        match self {
+            RelayChain::Rococo => "rococo".into(),
+            RelayChain::RococoLocal => "rococo-local".into(),
+            RelayChain::Kusama => "kusama".into(),
+            RelayChain::KusamaLocal => "kusama-local".into(),
+            RelayChain::Westend => "westend".into(),
+            RelayChain::WestendLocal => "westend-local".into(),
+        }
+    }
 }
 
 impl RelayChain {
-	pub fn chain_type(&self) -> ChainType {
-		match self {
-			RelayChain::Rococo => ChainType::Live,
-			RelayChain::RococoLocal => ChainType::Local,
-			RelayChain::Kusama => ChainType::Live,
-			RelayChain::KusamaLocal => ChainType::Local,
-			RelayChain::Westend => ChainType::Live,
-			RelayChain::WestendLocal => ChainType::Local,
-		}
-	}
+    pub fn chain_type(&self) -> ChainType {
+        match self {
+            RelayChain::Rococo => ChainType::Live,
+            RelayChain::RococoLocal => ChainType::Local,
+            RelayChain::Kusama => ChainType::Live,
+            RelayChain::KusamaLocal => ChainType::Local,
+            RelayChain::Westend => ChainType::Live,
+            RelayChain::WestendLocal => ChainType::Local,
+        }
+    }
 
-	pub fn properties(&self) -> Properties {
-		match self {
-			RelayChain::Kusama | RelayChain::KusamaLocal => kusama_properties(),
-			RelayChain::Rococo | RelayChain::RococoLocal => rococo_properties(),
-			RelayChain::Westend | RelayChain::WestendLocal => westend_properties(),
-		}
-	}
+    pub fn properties(&self) -> Properties {
+        match self {
+            RelayChain::Kusama | RelayChain::KusamaLocal => kusama_properties(),
+            RelayChain::Rococo | RelayChain::RococoLocal => rococo_properties(),
+            RelayChain::Westend | RelayChain::WestendLocal => westend_properties(),
+        }
+    }
 }
 
 pub fn rococo_properties() -> Properties {
-	let mut properties = sc_chain_spec::Properties::new();
-	properties.insert("tokenSymbol".into(), "ROC".into());
-	properties.insert("tokenDecimals".into(), 12.into());
-	properties.insert("ss58Format".into(), 2.into());
-	properties
+    let mut properties = sc_chain_spec::Properties::new();
+    properties.insert("tokenSymbol".into(), "ROC".into());
+    properties.insert("tokenDecimals".into(), 12.into());
+    properties.insert("ss58Format".into(), 2.into());
+    properties
 }
 
 pub fn kusama_properties() -> Properties {
-	let mut properties = sc_chain_spec::Properties::new();
-	properties.insert("tokenSymbol".into(), "KSM".into());
-	properties.insert("tokenDecimals".into(), 12.into());
-	properties.insert("ss58Format".into(), 2.into());
-	properties
+    let mut properties = sc_chain_spec::Properties::new();
+    properties.insert("tokenSymbol".into(), "KSM".into());
+    properties.insert("tokenDecimals".into(), 12.into());
+    properties.insert("ss58Format".into(), 2.into());
+    properties
 }
 
 pub fn westend_properties() -> Properties {
-	let mut properties = sc_chain_spec::Properties::new();
-	properties.insert("tokenSymbol".into(), "WND".into());
-	properties.insert("tokenDecimals".into(), 12.into());
-	properties.insert("ss58Format".into(), 2.into());
-	properties
+    let mut properties = sc_chain_spec::Properties::new();
+    properties.insert("tokenSymbol".into(), "WND".into());
+    properties.insert("tokenDecimals".into(), 12.into());
+    properties.insert("ss58Format".into(), 2.into());
+    properties
 }

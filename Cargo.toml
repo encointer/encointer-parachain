@@ -35,7 +35,7 @@ pallet-encointer-ceremonies = { default-features = false, version = "~6.1.0" }
 pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~6.1.0" }
 pallet-encointer-communities = { default-features = false, version = "~6.1.0" }
 pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~6.1.0" }
-pallet-encointer-faucet = { default-features = false, version = "~6.1.0" }
+pallet-encointer-faucet = { default-features = false, version = "~6.2.0" }
 pallet-encointer-reputation-commitments = { default-features = false, version = "~6.1.0" }
 pallet-encointer-scheduler = { default-features = false, version = "~6.1.0" }
 # rpc [std]
@@ -59,14 +59,14 @@ cumulus-primitives-utility = { default-features = false, version = "0.8.0" }
 frame-benchmarking = { default-features = false, version = "29.0.0" }
 frame-executive = { default-features = false, version = "29.0.0" }
 frame-rpc-system = { package = "substrate-frame-rpc-system", version = "29.0.0" }
-frame-support = { default-features = false, version = "29.0.0" }
+frame-support = { default-features = false, version = "29.0.2" }
 frame-system = { default-features = false, version = "29.0.0" }
 frame-system-benchmarking = { default-features = false, version = "29.0.0" }
 frame-system-rpc-runtime-api = { default-features = false, version = "27.0.0" }
 frame-try-runtime = { default-features = false, version = "0.35.0" }
 pallet-asset-tx-payment = { default-features = false, version = "29.0.0" }
 pallet-aura = { default-features = false, version = "28.0.0" }
-pallet-balances = { default-features = false, version = "29.0.0" }
+pallet-balances = { default-features = false, version = "29.0.1" }
 pallet-collective = { default-features = false, version = "29.0.0" }
 pallet-insecure-randomness-collective-flip = { default-features = false, version = "17.0.0" }
 pallet-membership = { default-features = false, version = "29.0.0" }
@@ -144,26 +144,26 @@ substrate-build-script-utils = "11.0.0"
 substrate-prometheus-endpoint = "0.17.0"
 
 # ### only while debugging/developping
-#[patch."https://github.com/encointer/runtimes"]
-#kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
-#parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
-#
-#[patch.crates-io]
-#encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
-#encointer-balances-tx-payment-rpc = { path = "../pallets/balances-tx-payment/rpc" }
-#encointer-balances-tx-payment-rpc-runtime-api = { path = "../pallets/balances-tx-payment/rpc/runtime-api" }
-#encointer-ceremonies-assignment = { path = "../pallets/ceremonies/assignment" }
-#encointer-primitives = { path = "../pallets/primitives" }
-#pallet-encointer-ceremonies = { path = "../pallets/ceremonies" }
-#pallet-encointer-ceremonies-rpc = { path = "../pallets/ceremonies/rpc" }
-#pallet-encointer-ceremonies-rpc-runtime-api = { path = "../pallets/ceremonies/rpc/runtime-api" }
-#pallet-encointer-communities = { path = "../pallets/communities" }
-#pallet-encointer-communities-rpc = { path = "../pallets/communities/rpc" }
-#pallet-encointer-communities-rpc-runtime-api = { path = "../pallets/communities/rpc/runtime-api" }
-#pallet-encointer-balances = { path = "../pallets/balances" }
-#pallet-encointer-scheduler = { path = "../pallets/scheduler" }
-#pallet-encointer-bazaar = { path = "../pallets/bazaar" }
-#pallet-encointer-bazaar-rpc = { path = "../pallets/bazaar/rpc" }
-#pallet-encointer-bazaar-rpc-runtime-api = { path = "../pallets/bazaar/rpc/runtime-api" }
-#pallet-encointer-faucet = { path = "../pallets/faucet" }
-#pallet-encointer-reputation-commitments = { path = "../pallets/reputation-commitments" }
+[patch."https://github.com/encointer/runtimes"]
+kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
+parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
+
+[patch.crates-io]
+encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
+encointer-balances-tx-payment-rpc = { path = "../pallets/balances-tx-payment/rpc" }
+encointer-balances-tx-payment-rpc-runtime-api = { path = "../pallets/balances-tx-payment/rpc/runtime-api" }
+encointer-ceremonies-assignment = { path = "../pallets/ceremonies/assignment" }
+encointer-primitives = { path = "../pallets/primitives" }
+pallet-encointer-ceremonies = { path = "../pallets/ceremonies" }
+pallet-encointer-ceremonies-rpc = { path = "../pallets/ceremonies/rpc" }
+pallet-encointer-ceremonies-rpc-runtime-api = { path = "../pallets/ceremonies/rpc/runtime-api" }
+pallet-encointer-communities = { path = "../pallets/communities" }
+pallet-encointer-communities-rpc = { path = "../pallets/communities/rpc" }
+pallet-encointer-communities-rpc-runtime-api = { path = "../pallets/communities/rpc/runtime-api" }
+pallet-encointer-balances = { path = "../pallets/balances" }
+pallet-encointer-scheduler = { path = "../pallets/scheduler" }
+pallet-encointer-bazaar = { path = "../pallets/bazaar" }
+pallet-encointer-bazaar-rpc = { path = "../pallets/bazaar/rpc" }
+pallet-encointer-bazaar-rpc-runtime-api = { path = "../pallets/bazaar/rpc/runtime-api" }
+pallet-encointer-faucet = { path = "../pallets/faucet" }
+pallet-encointer-reputation-commitments = { path = "../pallets/reputation-commitments" }
