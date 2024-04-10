@@ -29,6 +29,7 @@ serde_json = { workspace = true }
 parachain-runtime = { workspace = true, features = ["std"] }
 
 # encointer dependencies
+encointer-balances-tx-payment-rpc = { workspace = true }
 encointer-balances-tx-payment-rpc-runtime-api = { workspace = true, features = ["std"] }
 pallet-encointer-bazaar-rpc = { workspace = true }
 pallet-encointer-bazaar-rpc-runtime-api = { workspace = true, features = ["std"] }
