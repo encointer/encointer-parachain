@@ -42,6 +42,7 @@ pallet-encointer-scheduler = { default-features = false, version = "~6.1.0" }
 pallet-encointer-bazaar-rpc = "~6.1.0"
 pallet-encointer-ceremonies-rpc = "~6.1.0"
 pallet-encointer-communities-rpc = "~6.1.0"
+encointer-balances-tx-payment-rpc = "~6.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
 kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "ab/upgrade-encointer-to-6.1" }
