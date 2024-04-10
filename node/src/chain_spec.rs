@@ -16,7 +16,7 @@
 
 use cumulus_primitives_core::ParaId;
 use parachain_runtime::{BalanceType, CeremonyPhaseType};
-use parachains_common::{AccountId, AuraId, Balance};
+use parachains_common::{AccountId, Balance};
 use parity_scale_codec::{Decode, Encode};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use serde::{Deserialize, Serialize};

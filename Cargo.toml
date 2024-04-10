@@ -42,10 +42,11 @@ pallet-encointer-scheduler = { default-features = false, version = "~6.1.0" }
 pallet-encointer-bazaar-rpc = "~6.1.0"
 pallet-encointer-ceremonies-rpc = "~6.1.0"
 pallet-encointer-communities-rpc = "~6.1.0"
+encointer-balances-tx-payment-rpc = "~6.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
-kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "ab/upgrade-encointer-to-6.1" }
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "ab/upgrade-encointer-to-6.1" }
+kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "ab/introduce_collator-selection" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "ab/introduce_collator-selection" }
 
 # polkadot-sdk [no_std]
 cumulus-pallet-aura-ext = { default-features = false, version = "0.8.0" }
@@ -144,26 +145,26 @@ substrate-build-script-utils = "11.0.0"
 substrate-prometheus-endpoint = "0.17.0"
 
 # ### only while debugging/developping
-[patch."https://github.com/encointer/runtimes"]
-kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
-parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
-
-[patch.crates-io]
-encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
-encointer-balances-tx-payment-rpc = { path = "../pallets/balances-tx-payment/rpc" }
-encointer-balances-tx-payment-rpc-runtime-api = { path = "../pallets/balances-tx-payment/rpc/runtime-api" }
-encointer-ceremonies-assignment = { path = "../pallets/ceremonies/assignment" }
-encointer-primitives = { path = "../pallets/primitives" }
-pallet-encointer-ceremonies = { path = "../pallets/ceremonies" }
-pallet-encointer-ceremonies-rpc = { path = "../pallets/ceremonies/rpc" }
-pallet-encointer-ceremonies-rpc-runtime-api = { path = "../pallets/ceremonies/rpc/runtime-api" }
-pallet-encointer-communities = { path = "../pallets/communities" }
-pallet-encointer-communities-rpc = { path = "../pallets/communities/rpc" }
-pallet-encointer-communities-rpc-runtime-api = { path = "../pallets/communities/rpc/runtime-api" }
-pallet-encointer-balances = { path = "../pallets/balances" }
-pallet-encointer-scheduler = { path = "../pallets/scheduler" }
-pallet-encointer-bazaar = { path = "../pallets/bazaar" }
-pallet-encointer-bazaar-rpc = { path = "../pallets/bazaar/rpc" }
-pallet-encointer-bazaar-rpc-runtime-api = { path = "../pallets/bazaar/rpc/runtime-api" }
-pallet-encointer-faucet = { path = "../pallets/faucet" }
-pallet-encointer-reputation-commitments = { path = "../pallets/reputation-commitments" }
+#[patch."https://github.com/encointer/runtimes"]
+#kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
+#parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
+#
+#[patch.crates-io]
+#encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
+#encointer-balances-tx-payment-rpc = { path = "../pallets/balances-tx-payment/rpc" }
+#encointer-balances-tx-payment-rpc-runtime-api = { path = "../pallets/balances-tx-payment/rpc/runtime-api" }
+#encointer-ceremonies-assignment = { path = "../pallets/ceremonies/assignment" }
+#encointer-primitives = { path = "../pallets/primitives" }
+#pallet-encointer-ceremonies = { path = "../pallets/ceremonies" }
+#pallet-encointer-ceremonies-rpc = { path = "../pallets/ceremonies/rpc" }
+#pallet-encointer-ceremonies-rpc-runtime-api = { path = "../pallets/ceremonies/rpc/runtime-api" }
+#pallet-encointer-communities = { path = "../pallets/communities" }
+#pallet-encointer-communities-rpc = { path = "../pallets/communities/rpc" }
+#pallet-encointer-communities-rpc-runtime-api = { path = "../pallets/communities/rpc/runtime-api" }
+#pallet-encointer-balances = { path = "../pallets/balances" }
+#pallet-encointer-scheduler = { path = "../pallets/scheduler" }
+#pallet-encointer-bazaar = { path = "../pallets/bazaar" }
+#pallet-encointer-bazaar-rpc = { path = "../pallets/bazaar/rpc" }
+#pallet-encointer-bazaar-rpc-runtime-api = { path = "../pallets/bazaar/rpc/runtime-api" }
+#pallet-encointer-faucet = { path = "../pallets/faucet" }
+#pallet-encointer-reputation-commitments = { path = "../pallets/reputation-commitments" }

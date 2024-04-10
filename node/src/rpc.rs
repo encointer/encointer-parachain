@@ -61,6 +61,7 @@ where
 	TBackend: sc_client_api::Backend<Block>, // added by encointer
 	<TBackend as sc_client_api::Backend<Block>>::OffchainStorage: 'static, // added by encointer
 {
+	use encointer_balances_tx_payment_rpc::{BalancesTxPaymentApiServer, BalancesTxPaymentRpc};
 	use frame_rpc_system::{System, SystemApiServer};
 	use pallet_encointer_bazaar_rpc::{BazaarApiServer, BazaarRpc};
 	use pallet_encointer_ceremonies_rpc::{CeremoniesApiServer, CeremoniesRpc};
@@ -72,6 +73,7 @@ where
 
 	module.merge(System::new(client.clone(), pool, deny_unsafe).into_rpc())?;
 	module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
+	module.merge(BalancesTxPaymentRpc::new(client.clone()).into_rpc())?;
 	module.merge(BazaarRpc::new(client.clone()).into_rpc())?;
 
 	match backend.offchain_storage() {
