@@ -145,9 +145,9 @@ substrate-build-script-utils = "11.0.0"
 substrate-prometheus-endpoint = "0.17.0"
 
 # ### only while debugging/developping
-#[patch."https://github.com/encointer/runtimes"]
-#kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
-#parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
+# [patch."https://github.com/encointer/runtimes"]
+# kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
+# parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
 #
 #[patch.crates-io]
 #encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
