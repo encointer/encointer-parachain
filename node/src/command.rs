@@ -16,10 +16,11 @@
 
 use crate::{
 	chain_spec,
-	chain_spec::{ChainSpec, GenesisKeys, RelayChain},
+	chain_spec::{ChainSpec as EncointerChainSpec, GenesisKeys, RelayChain},
 	cli::{Cli, RelayChainCli, Subcommand},
 	service::new_partial,
 };
+use cumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use cumulus_primitives_core::ParaId;
 use frame_benchmarking_cli::{BenchmarkCmd, SUBSTRATE_REFERENCE_HARDWARE};
 use log::info;
@@ -28,7 +29,10 @@ use sc_cli::{
 	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
 	Result, SharedParams, SubstrateCli,
 };
-use sc_service::config::{BasePath, PrometheusConfig};
+use sc_service::{
+	config::{BasePath, PrometheusConfig},
+	ChainSpec,
+};
 use sp_runtime::traits::AccountIdConversion;
 use std::net::SocketAddr;
 
@@ -36,7 +40,7 @@ use std::net::SocketAddr;
 #[rustfmt::skip]
 fn load_spec(
 	id: &str,
-) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+) -> std::result::Result<Box<dyn ChainSpec>, String> {
 	Ok(match id {
 		// live configs (hard coded genesis state. genesis will always be shell for a live system)
 		"encointer-rococo" 			=> Box::new(chain_spec::encointer_rococo()?),
@@ -74,7 +78,7 @@ fn load_spec(
 
 		"" => return Err("No chain-spec specified".into()),
 		path => {
-			let chain_spec = ChainSpec::from_json_file(path.into())?;
+			let chain_spec = EncointerChainSpec::from_json_file(path.into())?;
 			Box::new(chain_spec)
 		},
 	})
@@ -111,7 +115,7 @@ impl SubstrateCli for Cli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 		load_spec(id)
 	}
 }
@@ -147,7 +151,7 @@ impl SubstrateCli for RelayChainCli {
 		2017
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
 		polkadot_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
 	}
 }
@@ -211,7 +215,7 @@ pub fn run() -> Result<()> {
 					&polkadot_cli,
 					config.tokio_handle.clone(),
 				)
-					.map_err(|err| format!("Relay chain argument error: {}", err))?;
+				.map_err(|err| format!("Relay chain argument error: {}", err))?;
 
 				cmd.run(config, polkadot_config)
 			})
@@ -237,7 +241,7 @@ pub fn run() -> Result<()> {
 			match cmd {
 				BenchmarkCmd::Pallet(cmd) =>
 					if cfg!(feature = "runtime-benchmarks") {
-						runner.sync_run(|config| cmd.run::<Block, ()>(config))
+						runner.sync_run(|config| cmd.run_with_spec::<sp_runtime::traits::HashingFor<Block>, ReclaimHostFunctions>(Some(config.chain_spec)))
 					} else {
 						Err("Benchmarking wasn't enabled when building the node. \
 					You can enable it with `--features runtime-benchmarks`."
@@ -254,7 +258,7 @@ pub fn run() -> Result<()> {
 						to enable storage benchmarks."
 							.into(),
 					)
-						.into()),
+					.into()),
 				#[cfg(feature = "runtime-benchmarks")]
 				BenchmarkCmd::Storage(cmd) => runner.sync_run(|config| {
 					let partials = new_partial(&config)?;
@@ -270,7 +274,6 @@ pub fn run() -> Result<()> {
 				_ => Err("Benchmarking sub-command unsupported".into()),
 			}
 		},
-		Some(Subcommand::TryRuntime) => Err("The `try-runtime` subcommand has been migrated to a standalone CLI (https://github.com/paritytech/try-runtime-cli). It is no longer being maintained here and will be removed entirely some time after January 2024. Please remove this subcommand from your runtime and use the standalone CLI.".into()),
 		None => {
 			let runner = cli.create_runner(&cli.run.normalize())?;
 			let collator_options = cli.run.collator_options();
@@ -314,9 +317,9 @@ pub fn run() -> Result<()> {
 					id,
 					hwbench,
 				)
-					.await
-					.map(|r| r.0)
-					.map_err(Into::into)
+				.await
+				.map(|r| r.0)
+				.map_err(Into::into)
 			})
 		},
 	}
@@ -367,7 +370,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 	fn prometheus_config(
 		&self,
 		default_listen_port: u16,
-		chain_spec: &Box<dyn sc_service::ChainSpec>,
+		chain_spec: &Box<dyn ChainSpec>,
 	) -> Result<Option<PrometheusConfig>> {
 		self.base.base.prometheus_config(default_listen_port, chain_spec)
 	}
@@ -437,7 +440,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 
 	fn telemetry_endpoints(
 		&self,
-		chain_spec: &Box<dyn sc_service::ChainSpec>,
+		chain_spec: &Box<dyn ChainSpec>,
 	) -> Result<Option<sc_telemetry::TelemetryEndpoints>> {
 		self.base.base.telemetry_endpoints(chain_spec)
 	}
