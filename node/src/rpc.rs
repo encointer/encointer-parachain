@@ -45,7 +45,7 @@ where
 		+ Sync
 		+ 'static,
 	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
-	C::Api: frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
+	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Nonce>,
 	C::Api: BlockBuilder<Block>,
 	P: TransactionPool + Sync + Send + 'static,
 	C::Api: pallet_encointer_ceremonies_rpc_runtime_api::CeremoniesApi<Block, AccountId, Moment>,
@@ -62,11 +62,11 @@ where
 	<TBackend as sc_client_api::Backend<Block>>::OffchainStorage: 'static, // added by encointer
 {
 	use encointer_balances_tx_payment_rpc::{BalancesTxPaymentApiServer, BalancesTxPaymentRpc};
-	use frame_rpc_system::{System, SystemApiServer};
 	use pallet_encointer_bazaar_rpc::{BazaarApiServer, BazaarRpc};
 	use pallet_encointer_ceremonies_rpc::{CeremoniesApiServer, CeremoniesRpc};
 	use pallet_encointer_communities_rpc::{CommunitiesApiServer, CommunitiesRpc};
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
+	use substrate_frame_rpc_system::{System, SystemApiServer};
 
 	let mut module = RpcExtension::new(());
 	let FullDeps { client, pool, backend, offchain_indexing_enabled, deny_unsafe } = deps;
