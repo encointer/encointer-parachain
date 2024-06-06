@@ -19,7 +19,7 @@
 //! Only moved stuff here that is not in the `chain_spec.rs` upstream to prevent upstream merge
 //! confusion.
 
-use parachains_common::{AccountId, AuraId};
+use parachains_common::AccountId;
 use sc_chain_spec::Properties;
 use sc_service::ChainType;
 use sp_core::{crypto::Ss58Codec, sr25519, Public};
@@ -51,8 +51,8 @@ impl WellKnownKeys {
 		vec![Alice.to_account_id(), Bob.to_account_id(), Charlie.to_account_id()]
 	}
 
-	pub fn authorities() -> Vec<AuraId> {
-		vec![Alice.public().into()]
+	pub fn invulnerables() -> Vec<AccountId> {
+		vec![Alice.public().into(), Bob.public().into()]
 	}
 
 	pub fn council() -> Vec<AccountId> {
@@ -63,7 +63,7 @@ impl WellKnownKeys {
 pub struct EncointerKeys;
 
 impl EncointerKeys {
-	pub fn authorities() -> Vec<AuraId> {
+	pub fn invulnerables() -> Vec<AccountId> {
 		vec![
 			public_from_ss58::<sr25519::Public>("5ECixNNkkfjHYqzwEkbuoVdzRqBpW2eTp8rp2SYR8fuNfQ4G")
 				.into(),

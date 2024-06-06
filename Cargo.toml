@@ -35,7 +35,7 @@ pallet-encointer-ceremonies = { default-features = false, version = "~6.1.0" }
 pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~6.1.0" }
 pallet-encointer-communities = { default-features = false, version = "~6.1.0" }
 pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~6.1.0" }
-pallet-encointer-faucet = { default-features = false, version = "~6.1.0" }
+pallet-encointer-faucet = { default-features = false, version = "~6.2.0" }
 pallet-encointer-reputation-commitments = { default-features = false, version = "~6.1.0" }
 pallet-encointer-scheduler = { default-features = false, version = "~6.1.0" }
 # rpc [std]
@@ -45,8 +45,8 @@ pallet-encointer-communities-rpc = "~6.1.0"
 encointer-balances-tx-payment-rpc = "~6.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
-kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "ab/upgrade-encointer-to-6.1" }
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "ab/upgrade-encointer-to-6.1" }
+kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "ab/introduce_collator-selection" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "ab/introduce_collator-selection" }
 
 # polkadot-sdk [no_std]
 cumulus-pallet-aura-ext = { default-features = false, version = "0.8.0" }
@@ -60,14 +60,14 @@ cumulus-primitives-utility = { default-features = false, version = "0.8.0" }
 frame-benchmarking = { default-features = false, version = "29.0.0" }
 frame-executive = { default-features = false, version = "29.0.0" }
 frame-rpc-system = { package = "substrate-frame-rpc-system", version = "29.0.0" }
-frame-support = { default-features = false, version = "29.0.0" }
+frame-support = { default-features = false, version = "29.0.2" }
 frame-system = { default-features = false, version = "29.0.0" }
 frame-system-benchmarking = { default-features = false, version = "29.0.0" }
 frame-system-rpc-runtime-api = { default-features = false, version = "27.0.0" }
 frame-try-runtime = { default-features = false, version = "0.35.0" }
 pallet-asset-tx-payment = { default-features = false, version = "29.0.0" }
 pallet-aura = { default-features = false, version = "28.0.0" }
-pallet-balances = { default-features = false, version = "29.0.0" }
+pallet-balances = { default-features = false, version = "29.0.1" }
 pallet-collective = { default-features = false, version = "29.0.0" }
 pallet-insecure-randomness-collective-flip = { default-features = false, version = "17.0.0" }
 pallet-membership = { default-features = false, version = "29.0.0" }
@@ -145,9 +145,9 @@ substrate-build-script-utils = "11.0.0"
 substrate-prometheus-endpoint = "0.17.0"
 
 # ### only while debugging/developping
-#[patch."https://github.com/encointer/runtimes"]
-#kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
-#parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
+# [patch."https://github.com/encointer/runtimes"]
+# kusama-runtime-constants = { path = "../runtimes/relay/kusama/constants" }
+# parachain-runtime = { package = "encointer-kusama-runtime", path = "../runtimes/system-parachains/encointer" }
 #
 #[patch.crates-io]
 #encointer-balances-tx-payment = { path = "../pallets/balances-tx-payment" }
