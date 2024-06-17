@@ -1,7 +1,7 @@
 [package]
 name = "encointer-collator"
 # align major.minor revision with the polkadot-sdk release. bump patch revision ad lib. make this the github release tag
-version = "1.11.0"
+version = "1.11.1"
 authors = ["Encointer <info@encointer.org>"]
 build = "build.rs"
 edition = "2021"

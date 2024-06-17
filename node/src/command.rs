@@ -51,7 +51,7 @@ fn load_spec(
 		"rococo-fresh" 		=> Box::new(chain_spec::encointer_spec(
 			1003.into(), GenesisKeys::Encointer, RelayChain::Rococo)),
 		"westend-fresh" 		=> Box::new(chain_spec::encointer_spec(
-			1001.into(), GenesisKeys::Encointer, RelayChain::Westend)),
+			1003.into(), GenesisKeys::Encointer, RelayChain::Westend)),
 		"kusama-fresh" 		=> Box::new(chain_spec::encointer_spec(
 			1001.into(), GenesisKeys::Encointer, RelayChain::Kusama)),
 
@@ -62,9 +62,9 @@ fn load_spec(
 			1003.into(), GenesisKeys::WellKnown, RelayChain::RococoLocal)),
 
 		"encointer-westend-local" 		=> Box::new(chain_spec::encointer_spec(
-			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::WestendLocal)),
+			1003.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::WestendLocal)),
 		"encointer-westend-local-dev"	=> Box::new(chain_spec::encointer_spec(
-			1001.into(), GenesisKeys::WellKnown, RelayChain::WestendLocal)),
+			1003.into(), GenesisKeys::WellKnown, RelayChain::WestendLocal)),
 
 		"encointer-kusama-local" 		=> Box::new(chain_spec::encointer_spec(
 			1001.into(), GenesisKeys::EncointerWithCouncilEndowed, RelayChain::KusamaLocal)),
