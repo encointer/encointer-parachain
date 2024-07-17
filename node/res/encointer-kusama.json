@@ -19,7 +19,9 @@
     "/dns/encointer-kusama-bootnode.radiumblock.com/tcp/30333/p2p/12D3KooWQJgWAciHe3z8U7Zi9kmKoKYfFqRdaaLUyDMyNrBynSsJ",
     "/dns/encointer-kusama-bootnode.radiumblock.com/tcp/30336/wss/p2p/12D3KooWQJgWAciHe3z8U7Zi9kmKoKYfFqRdaaLUyDMyNrBynSsJ",
     "/dns/encointer-kusama.bootnodes.polkadotters.com/tcp/30535/p2p/12D3KooWNRWrCQJ2HKHhJr7hkqdYQKsUCTUrugXKmv4fk6Ee19mg",
-    "/dns/encointer-kusama.bootnodes.polkadotters.com/tcp/30537/wss/p2p/12D3KooWNRWrCQJ2HKHhJr7hkqdYQKsUCTUrugXKmv4fk6Ee19mg"
+    "/dns/encointer-kusama.bootnodes.polkadotters.com/tcp/30537/wss/p2p/12D3KooWNRWrCQJ2HKHhJr7hkqdYQKsUCTUrugXKmv4fk6Ee19mg",
+    "/dns/encointer-kusama.boot.stake.plus/tcp/30332/wss/p2p/12D3KooWBUH8j2WbtHA8XXfzPVBTDsdzYXhvEwuLtQeJ3mJ463aP",
+    "/dns/encointer-kusama.boot.stake.plus/tcp/31332/wss/p2p/12D3KooWPc12uKhwWNrpxr4H6ezQCfXJDsLP7BkS2xHvbgD1DC9G"
   ],
   "chainType": "Live",
   "codeSubstitutes": {},
