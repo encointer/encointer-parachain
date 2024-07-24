@@ -2936,7 +2936,7 @@ dependencies = [
 [[package]]
 name = "encointer-kusama-runtime"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=cl/bump-encointer-to-v1.14.0#95b6c8246765b6d532bdfbebf20e7e9499e4e952"
+source = "git+https://github.com/encointer/runtimes.git?branch=polkadot-v1.14.0#95b6c8246765b6d532bdfbebf20e7e9499e4e952"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-parachain-system",
