@@ -1,14 +1,10 @@
 # https://stackoverflow.com/questions/75955457/substrate-node-template-cannot-create-a-runtime-error-othercannot-deserialize
 [toolchain]
-channel = "nightly-2024-03-01"
+channel = "1.78.0"
 components = [
     "cargo",
     "clippy",
-    "rust-analyzer",
     "rust-src",
-    "rust-std",
-    "rustc",
-    "rustc-dev",
     "rustfmt",
 ]
 targets = ["wasm32-unknown-unknown"]
