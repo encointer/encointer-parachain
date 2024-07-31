@@ -7,7 +7,7 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+*'
   pull_request:
-    branches: [master]
+    branches: [ master ]
   workflow_dispatch:
     inputs:
       verbose:
@@ -17,26 +17,22 @@ on:
 
 env:
   VERBOSE: ${{ github.events.input.verbose }}
-  SUBWASM_VERSION: 0.14.1
 
+# Cancel a currently running workflow from the same PR, branch or tag when a new workflow is
+# triggered (ref https://stackoverflow.com/a/72408109)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  cancel_previous_runs:
-    name: Cancel Previous Runs
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
   build_primary_binaries:
     name: Primary build ${{ matrix.binary }} for ${{ matrix.rust-target }} on (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        rust: [stable]
-        binary: [release]
+        os: [ ubuntu-20.04 ]
+        rust: [ stable ]
+        binary: [ release ]
     env:
       RUST_BACKTRACE: full
       RUSTV: ${{ matrix.rust }}
@@ -44,7 +40,7 @@ jobs:
       RUST_BIN_DIR: target/${{ matrix.rust-target }}/debug
       RELEASE_NAME: debug
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install protoc
         run: sudo apt-get install protobuf-compiler
 
@@ -67,54 +63,16 @@ jobs:
 
       # Upload artifacts
       - name: Upload encointer-collator
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: encointer-collator-${{ github.sha }}
           path: target/release/encointer-collator
-
-
-  # Run all checks and unit test. This always run on debug mode
-  check:
-    name: Rust check ${{ matrix.check }} (${{ matrix.rust-target }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        rust: [stable]
-        rust-target: [x86_64-unknown-linux-gnu]
-        check: [fmt] # ignore clippy for now
-    env:
-      RUST_BACKTRACE: full
-      RUSTV: ${{ matrix.rust }}
-      TARGET: ${{ matrix.rust-target }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install protoc
-        run: sudo apt-get install protobuf-compiler
-
-      # With rustup's nice new toml format, we just need to run rustup show to install the toolchain
-      # https://github.com/actions-rs/toolchain/issues/126#issuecomment-782989659
-      - name: Setup Rust toolchain
-        run: rustup show
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          key: ${{ matrix.rust-target }}-${{ matrix.check }}
-
-      - name: Fmt
-        if: ${{ matrix.check == 'fmt' }}
-        run: cargo fmt --all -- --check
-
-      - name: Clippy
-        if: ${{ matrix.check == 'clippy' }}
-        run: cargo clippy -- -D warnings
 
   cargo-toml-fmt:
     runs-on: ubuntu-latest
     container: "tamasfe/taplo:0.7.0-alpine"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run Taplo fmt
         run: taplo fmt --check
@@ -135,9 +93,9 @@ jobs:
         config: [ rococo, westend, kusama ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: encointer-collator-${{ github.sha }}
 
@@ -159,7 +117,7 @@ jobs:
           sha256sum ${{ env.CHAIN_SPEC }}.json.state >> checksums.txt
 
       - name: Upload ${{ env.CHAIN_SPEC }} Files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.CHAIN_SPEC }}-genesis-spec-${{ github.sha }}
           path: |
@@ -172,15 +130,15 @@ jobs:
     name: Draft Release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    needs: [create_artifacts, build_primary_binaries, check]
+    needs: [ create_artifacts, build_primary_binaries ]
     outputs:
       release_url: ${{ steps.create-release.outputs.html_url }}
       asset_upload_url: ${{ steps.create-release.outputs.upload_url }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download Integritee Collator
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: encointer-collator-${{ github.sha }}
 

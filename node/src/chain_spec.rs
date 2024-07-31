@@ -24,7 +24,7 @@ use serde::{Deserialize, Serialize};
 pub use crate::chain_spec_helpers::{EncointerKeys, GenesisKeys, RelayChain, WellKnownKeys};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type ChainSpec = sc_service::GenericChainSpec<(), Extensions>;
+pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
 
 pub const ENDOWED_FUNDING: u128 = 1 << 60;
 pub const ENCOINTER_KUSAMA_ED: Balance = parachain_runtime::ExistentialDeposit::get();
