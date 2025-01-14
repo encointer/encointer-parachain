@@ -148,11 +148,11 @@ jobs:
 
       - name: Setup zombienet binaries
         run: |
+          mkdir -p zombienet-tests/bin
           wget -q "https://github.com/paritytech/zombienet/releases/download/${{ env.ZOMBIENET_VERSION }}/zombienet-linux-x64"
           chmod +x zombienet-linux-x64
           ./zombienet-linux-x64 setup polkadot -y || :
           ./zombienet-linux-x64 version
-          cp polkadot ~/bin/polkadot
 
       - name: Download Encointer Collator
         uses: actions/download-artifact@v4
@@ -164,12 +164,12 @@ jobs:
       - name: fix permissions of artifacts and move to test directory
         run: |
           chmod +x encointer-collator 
-          cp encointer-collator ./target/release/
+          cp encointer-collator zombienet-tests/bin
 
       - name: Start zombienet-setup
         # start setup and wait until the parachain produces blocks
         run: |
-          zombienet-linux-x64 spawn --provider native zombienet/rococo-local-with-encointer.toml &
+          zombienet-tests/bin/zombienet-linux-x64 spawn --provider native zombienet/github-actions-setup.toml &
           sleep 100
 
       - name: Bootstrap Demo Community
