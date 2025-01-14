@@ -161,6 +161,7 @@ jobs:
         with:
           #          name: encointer-collator-${{ github.sha }}
           name: encointer-collator
+          github-token: ${{ github.token }}
           run-id: 12772420910
 
       - name: fix permissions of artifacts and move to test directory
