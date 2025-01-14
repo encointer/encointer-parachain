@@ -138,23 +138,38 @@ jobs:
       #          #          test_bot_community.sh,
       #          #          test_register_business.sh
       #        ]
+      env:
+        ZOMBIENET_VERSION: v1.3.116
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
+
+        - name: Create testing directories
+          run: mkdir -p zombienet-tests/bin
+
+        - name: Setup zombienet binaries
+          run: |
+            wget -q "https://github.com/paritytech/zombienet/releases/download/${{ env.ZOMBIENET_VERSION }}/zombienet-linux-x64"
+            chmod +x zombienet-linux-x64
+            mv zombienet-linux-x64 zombienet
+            ./zombienet setup polkadot -y || :
+            ./zombienet version
+            cp polkadot ~/bin/polkadot
 
         - name: Download Encointer Collator
           uses: actions/download-artifact@v4
           with:
             name: encointer-collator-${{ github.sha }}
 
-        - name: fix permissions of artifacts and move to original folder
+        - name: fix permissions of artifacts and move to test directory
           run: |
-            chmod +x encointer-collator
-            mkdir -p target/release
-            mv encointer-collator target/release
+            chmod +x encointer-collator 
+            cp encointer-collator ./target/release/
 
-        - name: start dev node
-          run:
-            ./target/release/encointer-collator --tmp --chain encointer-rococo-local-dev --enable-offchain-indexing true --rpc-methods unsafe -- --chain rococo-local &
+        - name: Start zombienet-setup
+          # start setup and wait until the parachain produces blocks
+          run: |
+            zombienet-linux spawn --provider native zombienet/rococo-local-with-encointer.toml &
+            sleep 100
 
         - name: Bootstrap Demo Community
           run: ./scripts/docker_run_encointer_client_bootstrap_demo_community.sh
