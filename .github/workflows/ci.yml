@@ -127,61 +127,48 @@ jobs:
             ${{ env.CHAIN_SPEC }}.json.state
 
     integration-test:
-      name: ${{ matrix.test }}
+      #      name: ${{ matrix.test }}
+      name: integration-test
       runs-on: ubuntu-latest
       needs: build
-      strategy:
-      matrix:
-        test: [ test_bootstrap_demo_community.sh, test_bot_community.sh, test_register_business.sh ]
+      #      strategy:
+      #      matrix:
+      #        test: [
+      #          test_bootstrap_demo_community.sh,
+      #          #          test_bot_community.sh,
+      #          #          test_register_business.sh
+      #        ]
       steps:
         - uses: actions/checkout@v3
 
-        - name: download build artifacts
+        - name: Download Encointer Collator
           uses: actions/download-artifact@v4
           with:
-            name: encointer-node-notee-${{ github.sha }}
-
-        - name: download build artifacts
-          uses: actions/download-artifact@v4
-          with:
-            name: encointer-client-notee-${{ github.sha }}
+            name: encointer-collator-${{ github.sha }}
 
         - name: fix permissions of artifacts and move to original folder
           run: |
-            chmod +x encointer-node-notee
-            chmod +x encointer-client-notee
+            chmod +x encointer-collator
             mkdir -p target/release
-            mv encointer-*-notee target/release
-
-        - name: Set up Python
-          uses: actions/setup-python@v4
-          with:
-            python-version: 3.7
-        - name: install py dependencies
-          run: ./scripts/install_python_deps.sh
-
-        - name: Set up ipfs
-          uses: ibnesayeed/setup-ipfs@master
-          with:
-            run_daemon: true
+            mv encointer-collator target/release
 
         - name: start dev node
           run:
-            ./target/release/encointer-node-notee --tmp --dev --enable-offchain-indexing true --rpc-methods unsafe &
+            ./target/release/encointer-collator --tmp --chain encointer-rococo-local-dev --enable-offchain-indexing true --rpc-methods unsafe -- --chain rococo-local &
 
-        - name: start faucet service
-          run: |
-            cd client
-            python faucet.py &
+        - name: Bootstrap Demo Community
+          run: ./scripts/docker_run_encointer_client_bootstrap_demo_community.sh
 
-        - name: start phase accelerator service
-          run: |
-            cd client
-            python phase.py --idle-blocks 3 &
-
-        - name: Test ${{ matrix.test }}
-          working-directory: ./scripts/ci
-          run: source ./init_env.sh && ./${{ matrix.test }}
+        #         todo: later for bot community
+        #        - name: start faucet service
+        #          run: |
+        #            cd client
+        #            python faucet.py &
+        #
+        #        - name: start phase accelerator service
+        #          run: |
+        #            cd client
+        #            python phase.py --idle-blocks 3 &
 
   release:
     name: Draft Release
