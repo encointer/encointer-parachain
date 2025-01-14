@@ -173,6 +173,7 @@ jobs:
         # start setup and wait until the parachain produces blocks
         run: |
           zombienet-tests/bin/zombienet-linux-x64 spawn --provider native zombienet/github-actions-setup.toml &
+          echo "setup zombienet, sleep for 100 secs until parachain produces blocks"
           sleep 100
 
       - name: Bootstrap Demo Community
