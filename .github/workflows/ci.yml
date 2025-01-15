@@ -131,15 +131,15 @@ jobs:
     name: integration-test
     runs-on: ubuntu-latest
     needs: build_primary_binaries
-    #      strategy:
-    #      matrix:
-    #        test: [
-    #          test_bootstrap_demo_community.sh,
-    #          #          test_bot_community.sh,
-    #          #          test_register_business.sh
-    #        ]
+    strategy:
+      fail-fast: false
+      matrix:
+        test:
+          - bootstrap_demo_community.py --signer //Bob --test
+          - bot-community-test -f http://host.docker.internal:5000/api
     env:
       ZOMBIENET_VERSION: v1.3.116
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.14.4
     steps:
       - uses: actions/checkout@v4
 
@@ -158,10 +158,11 @@ jobs:
       - name: Download Encointer Collator
         uses: actions/download-artifact@v4
         with:
-          name: encointer-collator-${{ github.sha }}
+          #          name: encointer-collator-${{ github.sha }}
+          name: encointer-collator-df76f5ef098cb52bc24b1e085d9db716c02e4220
           # for debugging the integration tests, we can just download an image from a previous run
-          # github-token: ${{ github.token }}
-          # run-id: 12772420910
+          github-token: ${{ github.token }}
+          run-id: 12786706739
 
       - name: fix permissions of artifacts and move to test directory
         run: |
@@ -174,19 +175,40 @@ jobs:
           echo "setup zombienet, sleep for 100 secs until parachain produces blocks"
           sleep 100
 
-      - name: Bootstrap Demo Community
-        run: ./scripts/docker_run_encointer_client_bootstrap_demo_community.sh
+      - name: start dev node
+        run: |
+          docker run -p 30333:30333 -p 9944:9944 -p 9615:9615 \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} \
+            --dev \
+            --enable-offchain-indexing=true \
+            --rpc-methods=unsafe \
+            -lencointer=debug,parity_ws=warn \
+            --rpc-external &
 
-      #         todo: later for bot community
-      #        - name: start faucet service
-      #          run: |
-      #            cd client
-      #            python faucet.py &
-      #
-      #        - name: start phase accelerator service
-      #          run: |
-      #            cd client
-      #            python phase.py --idle-blocks 3 &
+      - name: start faucet service
+        run: |
+          docker run -p 5000:5000 \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} faucet.py \
+            -u ws://host.docker.internal \
+            --port 9944 &
+
+      - name: start phase accelerator service
+        run: |
+          docker run \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} phase.py \
+            -u ws://host.docker.internal \
+            --port 9944 --idle-blocks 3 &
+
+      - name: Test ${{ matrix.test }}
+        run: |
+          docker run \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} ${{ matrix.test }} \
+            -u ws://host.docker.internal \
+            --port 9944 \
+  
 
   release:
     name: Draft Release
