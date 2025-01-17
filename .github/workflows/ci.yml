@@ -135,8 +135,8 @@ jobs:
       fail-fast: false
       matrix:
         test:
-          - bootstrap_demo_community.py --signer //Bob --test
-          - bot-community-test -f http://host.docker.internal:5000/api
+          - bootstrap_demo_community.py -w collective --test
+          - bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7
     env:
       ZOMBIENET_VERSION: v1.3.116
       ENCOINTER_CLIENT_DOCKER_TAG: 1.14.4
@@ -194,12 +194,13 @@ jobs:
             --port 9944 &
 
       - name: start phase accelerator service
+        # 5 idle blocks needed, which is more than the solochain because fewer extrinsics fit into a block
         run: |
           docker run \
             --add-host host.docker.internal:host-gateway \
             encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} phase.py \
             -u ws://host.docker.internal \
-            --port 9944 --idle-blocks 3 &
+            --port 9944 --idle-blocks 5 &
 
       - name: Test ${{ matrix.test }}
         run: |
