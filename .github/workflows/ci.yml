@@ -139,7 +139,7 @@ jobs:
           - bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7
     env:
       ZOMBIENET_VERSION: v1.3.116
-      ENCOINTER_CLIENT_DOCKER_TAG: 1.14.4
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.14.5
     steps:
       - uses: actions/checkout@v4
 
