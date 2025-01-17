@@ -136,7 +136,7 @@ jobs:
       fail-fast: false
       matrix:
         test:
-          - bootstrap_demo_community.py --signer //Alice -w collective --test
+          - bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --test
           - bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7
     env:
       ZOMBIENET_VERSION: v1.3.116
