@@ -174,7 +174,7 @@ jobs:
         run: |
           zombienet-tests/bin/zombienet-linux-x64 spawn --provider native zombienet/github-actions-setup.toml &
           echo "setup zombienet, sleep for 100 secs until parachain produces blocks"
-          sleep 100
+          sleep 150
 
       - name: start dev node
         run: |
