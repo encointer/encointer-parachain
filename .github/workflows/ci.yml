@@ -135,9 +135,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test:
-          - bootstrap_demo_community.py --signer //Bob -w collective --batch-size 7 --test
-          - bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7
+        include:
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --test
+            # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
+            needs_phase_and_faucet: false
+          - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7
+            needs_phase_and_faucet: true
     env:
       ZOMBIENET_VERSION: v1.3.116
       ENCOINTER_CLIENT_DOCKER_TAG: 1.14.5
@@ -187,6 +190,7 @@ jobs:
             --rpc-external &
 
       - name: start faucet service
+        if: ${{ matrix.needs_phase_and_faucet }}
         run: |
           docker run -p 5000:5000 \
             --add-host host.docker.internal:host-gateway \
@@ -195,6 +199,7 @@ jobs:
             --port 9944 &
 
       - name: start phase accelerator service
+        if: ${{ matrix.needs_phase_and_faucet }}
         # 5 idle blocks needed, which is more than the solochain because fewer extrinsics fit into a block
         run: |
           docker run \
