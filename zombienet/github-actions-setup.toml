@@ -37,3 +37,11 @@ args = [
 ]
 ws_port = 9944
 
+[[parachains.collators]]
+name = "encointer-collator02"
+command = "zombienet-tests/bin/encointer-collator"
+args = [
+    "--enable-offchain-indexing=true",
+    "-lencointer=debug,xcm=trace",
+]
+ws_port = 9945
