@@ -159,11 +159,11 @@ jobs:
       - name: Download Encointer Collator
         uses: actions/download-artifact@v4
         with:
-          #          name: encointer-collator-${{ github.sha }}
-          name: encointer-collator-df76f5ef098cb52bc24b1e085d9db716c02e4220
+          name: encointer-collator-${{ github.sha }}
           # for debugging the integration tests, we can just download an image from a previous run
-          github-token: ${{ github.token }}
-          run-id: 12786706739
+      #          name: encointer-collator-df76f5ef098cb52bc24b1e085d9db716c02e4220
+      #          github-token: ${{ github.token }}
+      #          run-id: 12786706739
 
       - name: fix permissions of artifacts and move to test directory
         run: |
