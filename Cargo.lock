@@ -2936,7 +2936,7 @@ dependencies = [
 [[package]]
 name = "encointer-kusama-runtime"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=polkadot-v1.14.0#95b6c8246765b6d532bdfbebf20e7e9499e4e952"
+source = "git+https://github.com/encointer/runtimes.git?tag=v1.3.4#3b18d942c766c7f358da50608b44edbe218284a4"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-parachain-system",
@@ -2972,9 +2972,12 @@ dependencies = [
  "pallet-encointer-ceremonies-rpc-runtime-api",
  "pallet-encointer-communities",
  "pallet-encointer-communities-rpc-runtime-api",
+ "pallet-encointer-democracy",
  "pallet-encointer-faucet",
  "pallet-encointer-reputation-commitments",
  "pallet-encointer-scheduler",
+ "pallet-encointer-treasuries",
+ "pallet-encointer-treasuries-rpc-runtime-api",
  "pallet-insecure-randomness-collective-flip",
  "pallet-membership",
  "pallet-message-queue",
@@ -2986,6 +2989,7 @@ dependencies = [
  "pallet-transaction-payment-rpc-runtime-api",
  "pallet-utility",
  "pallet-xcm",
+ "pallet-xcm-benchmarks",
  "parachains-common",
  "parity-scale-codec",
  "polkadot-core-primitives",
@@ -2993,6 +2997,7 @@ dependencies = [
  "polkadot-primitives",
  "polkadot-runtime-common",
  "scale-info",
+ "serde_json",
  "smallvec",
  "sp-api",
  "sp-block-builder",
@@ -3011,6 +3016,8 @@ dependencies = [
  "staging-xcm-builder",
  "staging-xcm-executor",
  "substrate-wasm-builder",
+ "system-parachains-constants",
+ "xcm-runtime-apis",
 ]
 
 [[package]]
@@ -3029,9 +3036,9 @@ dependencies = [
 
 [[package]]
 name = "encointer-primitives"
-version = "13.2.0"
+version = "13.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29aaceec9b0e69c648b760ffdf6b52e21e7a95dc3a3dbae2a0de0745ad43ea00"
+checksum = "66f3cfb30d32e288aee27656132ebac5cc30b82ffb7e82eba92e568cdd0b1f25"
 dependencies = [
  "bs58 0.5.1",
  "crc",
@@ -4421,7 +4428,7 @@ dependencies = [
  "iana-time-zone-haiku",
  "js-sys",
  "wasm-bindgen",
- "windows-core 0.52.0",
+ "windows-core",
 ]
 
 [[package]]
@@ -4907,6 +4914,21 @@ name = "keystream"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c33070833c9ee02266356de0c43f723152bd38bd96ddf52c82b3af10c9138b28"
+
+[[package]]
+name = "kusama-runtime-constants"
+version = "1.0.0"
+source = "git+https://github.com/encointer/runtimes.git?tag=v1.3.4#3b18d942c766c7f358da50608b44edbe218284a4"
+dependencies = [
+ "frame-support",
+ "polkadot-primitives",
+ "polkadot-runtime-common",
+ "smallvec",
+ "sp-core",
+ "sp-runtime",
+ "sp-weights",
+ "staging-xcm-builder",
+]
 
 [[package]]
 name = "kvdb"
@@ -7209,6 +7231,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-encointer-democracy"
+version = "13.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a85ffc73a3a0f927873ff96116cb994bc68f9fac509a556eb0b053265232724"
+dependencies = [
+ "encointer-primitives",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-ceremonies",
+ "pallet-encointer-communities",
+ "pallet-encointer-reputation-commitments",
+ "pallet-encointer-scheduler",
+ "pallet-encointer-treasuries",
+ "pallet-timestamp",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-application-crypto",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
 name = "pallet-encointer-faucet"
 version = "13.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7268,6 +7316,41 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-treasuries"
+version = "13.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65f42991fce5d96f04106e5d27d4c12c77250d70da9ac95497e8fb17a3ebe99f"
+dependencies = [
+ "approx",
+ "encointer-primitives",
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "pallet-encointer-communities",
+ "pallet-encointer-reputation-commitments",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-treasuries-rpc-runtime-api"
+version = "13.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b8bcfc738dde3b75aba337d33ffb9cc109ac5c9f3fed24ce32f1f8c0ee39ab0"
+dependencies = [
+ "encointer-primitives",
+ "frame-support",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-api",
  "sp-std",
 ]
 
@@ -9309,6 +9392,21 @@ dependencies = [
  "staging-xcm-builder",
  "staging-xcm-executor",
  "static_assertions",
+]
+
+[[package]]
+name = "polkadot-runtime-constants"
+version = "1.0.0"
+source = "git+https://github.com/encointer/runtimes.git?tag=v1.3.4#3b18d942c766c7f358da50608b44edbe218284a4"
+dependencies = [
+ "frame-support",
+ "polkadot-primitives",
+ "polkadot-runtime-common",
+ "smallvec",
+ "sp-core",
+ "sp-runtime",
+ "sp-weights",
+ "staging-xcm-builder",
 ]
 
 [[package]]
@@ -14009,6 +14107,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "system-parachains-constants"
+version = "1.0.0"
+source = "git+https://github.com/encointer/runtimes.git?tag=v1.3.4#3b18d942c766c7f358da50608b44edbe218284a4"
+dependencies = [
+ "frame-support",
+ "kusama-runtime-constants",
+ "parachains-common",
+ "polkadot-core-primitives",
+ "polkadot-primitives",
+ "polkadot-runtime-constants",
+ "smallvec",
+ "sp-core",
+ "sp-runtime",
+ "sp-std",
+ "staging-xcm",
+]
+
+[[package]]
 name = "tap"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -15511,7 +15627,7 @@ version = "0.51.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca229916c5ee38c2f2bc1e9d8f04df975b4bd93f9955dc69fabb5d91270045c9"
 dependencies = [
- "windows-core 0.51.1",
+ "windows-core",
  "windows-targets 0.48.5",
 ]
 
@@ -15522,15 +15638,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1f8cf84f35d2db49a46868f947758c7a1138116f7fac3bc844f43ade1292e64"
 dependencies = [
  "windows-targets 0.48.5",
-]
-
-[[package]]
-name = "windows-core"
-version = "0.52.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33ab640c8d7e35bf8ba19b884ba838ceb4fba93a4e8c65a9059d08afcfc683d9"
-dependencies = [
- "windows-targets 0.52.4",
 ]
 
 [[package]]

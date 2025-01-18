@@ -25,19 +25,10 @@ smallvec = "1.11.2"
 tempfile = "3.8.1"
 
 # encointer deps
-encointer-balances-tx-payment = { default-features = false, version = "~13.1.0" }
 encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "~13.1.0" }
-encointer-primitives = { default-features = false, version = "~13.1.0" }
-pallet-encointer-balances = { default-features = false, version = "~13.1.0" }
-pallet-encointer-bazaar = { default-features = false, version = "~13.1.0" }
 pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "~13.1.0" }
-pallet-encointer-ceremonies = { default-features = false, version = "~13.1.0" }
 pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~13.1.0" }
-pallet-encointer-communities = { default-features = false, version = "~13.1.0" }
 pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~13.1.0" }
-pallet-encointer-faucet = { default-features = false, version = "~13.2.0" }
-pallet-encointer-reputation-commitments = { default-features = false, version = "~13.1.0" }
-pallet-encointer-scheduler = { default-features = false, version = "~13.1.0" }
 # rpc [std]
 pallet-encointer-bazaar-rpc = "~13.1.0"
 pallet-encointer-ceremonies-rpc = "~13.1.0"
@@ -46,7 +37,7 @@ encointer-balances-tx-payment-rpc = "~13.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
 kusama-runtime-constants = { default-features = false, git = "https://github.com/encointer/runtimes.git", branch = "polkadot-v1.14.0" }
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "polkadot-v1.14.0" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", tag = "v1.3.4" }
 
 # polkadot-sdk [no_std]
 cumulus-pallet-aura-ext = { version = "0.15.0", default-features = false }
