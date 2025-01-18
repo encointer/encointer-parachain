@@ -130,7 +130,7 @@ jobs:
   integration-test:
     #      name: ${{ matrix.test }}
     name: integration-test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     #    needs: build_primary_binaries
     strategy:
       fail-fast: false
