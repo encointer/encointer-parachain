@@ -56,7 +56,7 @@ impl WellKnownKeys {
 	}
 
 	pub fn council() -> Vec<AccountId> {
-		vec![Alice.to_account_id()]
+		vec![Bob.to_account_id()]
 	}
 }
 
