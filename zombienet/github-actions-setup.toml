@@ -12,16 +12,6 @@ name = "alice"
 validator = true
 ws_port = 9999
 
-[[relaychain.nodes]]
-name = "bob"
-validator = true
-ws_port = 9988
-
-[[relaychain.nodes]]
-name = "charlie"
-validator = true
-ws_port = 9977
-
 [[parachains]]
 id = 1003
 addToGenesis = true
@@ -36,12 +26,3 @@ args = [
     "-lencointer=debug,xcm=trace",
 ]
 ws_port = 9944
-
-[[parachains.collators]]
-name = "encointer-collator02"
-command = "zombienet-tests/bin/encointer-collator"
-args = [
-    "--enable-offchain-indexing=true",
-    "-lencointer=debug,xcm=trace",
-]
-ws_port = 9945
