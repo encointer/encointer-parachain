@@ -40,6 +40,7 @@ pallet-encointer-communities-rpc-runtime-api = { workspace = true, features = ["
 # Substrate dependencies
 frame-benchmarking = { workspace = true, features = ["std"] }
 frame-benchmarking-cli = { workspace = true }
+prometheus-endpoint = { workspace = true }
 sc-basic-authorship = { workspace = true }
 sc-chain-spec = { workspace = true }
 sc-cli = { workspace = true }
@@ -63,7 +64,6 @@ sp-keyring = { workspace = true }
 sp-keystore = { workspace = true, features = ["std"] }
 sp-runtime = { workspace = true }
 sp-timestamp = { workspace = true, features = ["std"] }
-prometheus-endpoint = { workspace = true }
 
 # RPC related dependencies
 pallet-transaction-payment-rpc = { workspace = true }
