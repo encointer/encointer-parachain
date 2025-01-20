@@ -26,15 +26,10 @@ use frame_benchmarking_cli::{BenchmarkCmd, SUBSTRATE_REFERENCE_HARDWARE};
 use log::info;
 use parachains_common::opaque::Block;
 use sc_cli::{
-	CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams, NetworkParams,
-	Result, SharedParams, SubstrateCli,
+	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
+	NetworkParams, Result, RpcEndpoint, SharedParams, SubstrateCli,
 };
-use sc_service::{
-	config::{BasePath, PrometheusConfig},
-	ChainSpec,
-};
-use sp_runtime::traits::AccountIdConversion;
-use std::net::SocketAddr;
+use sc_service::config::{BasePath, PrometheusConfig};
 
 // If we don't skipp here, each cmd expands to 5 lines. I think we have better overview like this.
 #[rustfmt::skip]
@@ -97,8 +92,8 @@ impl SubstrateCli for Cli {
 		format!(
 			"Encointer collator\n\nThe command-line arguments provided first will be \
 		passed to the parachain node, while the arguments provided after -- will be passed \
-		to the relaychain node.\n\n\
-		{} [parachain-args] -- [relaychain-args]",
+		to the relay chain node.\n\n\
+		{} <parachain-args> -- <relay-chain-args>",
 			Self::executable_name()
 		)
 	}
@@ -112,10 +107,10 @@ impl SubstrateCli for Cli {
 	}
 
 	fn copyright_start_year() -> i32 {
-		2017
+		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
 		load_spec(id)
 	}
 }
@@ -134,7 +129,7 @@ impl SubstrateCli for RelayChainCli {
 			"Encointer collator\n\nThe command-line arguments provided first will be \
 		passed to the parachain node, while the arguments provided after -- will be passed \
 		to the relay chain node.\n\n\
-		{} [parachain-args] -- [relay_chain-args]",
+		{} <parachain-args> -- <relay-chain-args>",
 			Self::executable_name()
 		)
 	}
@@ -148,10 +143,10 @@ impl SubstrateCli for RelayChainCli {
 	}
 
 	fn copyright_start_year() -> i32 {
-		2017
+		2020
 	}
 
-	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
+	fn load_spec(&self, id: &str) -> std::result::Result<Box<dyn sc_service::ChainSpec>, String> {
 		polkadot_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
 	}
 }
@@ -252,13 +247,11 @@ pub fn run() -> Result<()> {
 					cmd.run(partials.client)
 				}),
 				#[cfg(not(feature = "runtime-benchmarks"))]
-				BenchmarkCmd::Storage(_) =>
-					return Err(sc_cli::Error::Input(
-						"Compile with --features=runtime-benchmarks \
+				BenchmarkCmd::Storage(_) => Err(sc_cli::Error::Input(
+					"Compile with --features=runtime-benchmarks \
 						to enable storage benchmarks."
-							.into(),
-					)
-					.into()),
+						.into(),
+				)),
 				#[cfg(feature = "runtime-benchmarks")]
 				BenchmarkCmd::Storage(cmd) => runner.sync_run(|config| {
 					let partials = new_partial(&config)?;
@@ -282,7 +275,10 @@ pub fn run() -> Result<()> {
 				let hwbench = (!cli.no_hardware_benchmarks)
 					.then_some(config.database.path().map(|database_path| {
 						let _ = std::fs::create_dir_all(database_path);
-						sc_sysinfo::gather_hwbench(Some(database_path))
+						sc_sysinfo::gather_hwbench(
+							Some(database_path),
+							&SUBSTRATE_REFERENCE_HARDWARE,
+						)
 					}))
 					.flatten();
 
@@ -297,17 +293,11 @@ pub fn run() -> Result<()> {
 
 				let id = ParaId::from(para_id);
 
-				let parachain_account =
-					AccountIdConversion::<polkadot_primitives::AccountId>::into_account_truncating(
-						&id,
-					);
-
 				let tokio_handle = config.tokio_handle.clone();
 				let polkadot_config =
 					SubstrateCli::create_configuration(&polkadot_cli, &polkadot_cli, tokio_handle)
 						.map_err(|err| format!("Relay chain argument error: {}", err))?;
 
-				info!("Parachain Account: {parachain_account}");
 				info!("Is collating: {}", if config.role.is_authority() { "yes" } else { "no" });
 
 				crate::service::start_parachain_node(
@@ -363,7 +353,7 @@ impl CliConfiguration<Self> for RelayChainCli {
 			.or_else(|| self.base_path.clone().map(Into::into)))
 	}
 
-	fn rpc_addr(&self, default_listen_port: u16) -> Result<Option<SocketAddr>> {
+	fn rpc_addr(&self, default_listen_port: u16) -> Result<Option<Vec<RpcEndpoint>>> {
 		self.base.base.rpc_addr(default_listen_port)
 	}
 
@@ -375,15 +365,9 @@ impl CliConfiguration<Self> for RelayChainCli {
 		self.base.base.prometheus_config(default_listen_port, chain_spec)
 	}
 
-	fn init<F>(
-		&self,
-		_support_url: &String,
-		_impl_version: &String,
-		_logger_hook: F,
-		_config: &sc_service::Configuration,
-	) -> Result<()>
+	fn init<F>(&self, _support_url: &String, _impl_version: &String, _logger_hook: F) -> Result<()>
 	where
-		F: FnOnce(&mut sc_cli::LoggerBuilder, &sc_service::Configuration),
+		F: FnOnce(&mut sc_cli::LoggerBuilder),
 	{
 		unreachable!("PolkadotCli is never initialized; qed");
 	}
