@@ -1813,30 +1813,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cumulus-client-consensus-relay-chain"
-version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7520a6aa8dcfdf89cc68324ef1dab4bf237911641ce109093483d690d1520feb"
-dependencies = [
- "async-trait",
- "cumulus-client-consensus-common",
- "cumulus-primitives-core",
- "cumulus-relay-chain-interface",
- "futures 0.3.30",
- "parking_lot 0.12.3",
- "sc-consensus",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "substrate-prometheus-endpoint",
- "tracing",
-]
-
-[[package]]
 name = "cumulus-client-network"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2815,7 +2791,6 @@ name = "encointer-collator"
 version = "1.16.0"
 dependencies = [
  "assert_cmd",
- "async-trait",
  "clap",
  "color-print",
  "cumulus-client-cli",
@@ -2823,14 +2798,9 @@ dependencies = [
  "cumulus-client-consensus-aura",
  "cumulus-client-consensus-common",
  "cumulus-client-consensus-proposer",
- "cumulus-client-consensus-relay-chain",
- "cumulus-client-network",
  "cumulus-client-service",
  "cumulus-primitives-core",
- "cumulus-primitives-parachain-inherent",
- "cumulus-relay-chain-inprocess-interface",
  "cumulus-relay-chain-interface",
- "cumulus-relay-chain-rpc-interface",
  "docify",
  "encointer-balances-tx-payment-rpc",
  "encointer-balances-tx-payment-rpc-runtime-api",
@@ -2838,7 +2808,6 @@ dependencies = [
  "frame-benchmarking",
  "frame-benchmarking-cli",
  "futures 0.3.30",
- "hex-literal",
  "jsonrpsee",
  "log",
  "nix 0.24.3",
@@ -2852,8 +2821,6 @@ dependencies = [
  "parachains-common",
  "parity-scale-codec",
  "polkadot-cli",
- "polkadot-parachain-primitives",
- "polkadot-primitives 16.0.0",
  "polkadot-service",
  "sc-basic-authorship",
  "sc-chain-spec",
@@ -2862,10 +2829,7 @@ dependencies = [
  "sc-consensus",
  "sc-executor",
  "sc-network",
- "sc-network-common",
- "sc-network-sync",
  "sc-offchain",
- "sc-rpc",
  "sc-service",
  "sc-sysinfo",
  "sc-telemetry",
@@ -2880,15 +2844,10 @@ dependencies = [
  "sp-consensus",
  "sp-consensus-aura",
  "sp-core",
- "sp-inherents",
- "sp-io",
  "sp-keyring",
  "sp-keystore",
- "sp-offchain",
  "sp-runtime",
- "sp-session",
  "sp-timestamp",
- "sp-transaction-pool",
  "staging-xcm",
  "substrate-build-script-utils",
  "substrate-frame-rpc-system",
