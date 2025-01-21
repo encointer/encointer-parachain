@@ -147,6 +147,7 @@ fn encointer_genesis(
 					)
 				})
 				.collect(),
+			non_authority_keys: vec![],
 		},
 		"membership": {
 			"members": encointer_council,
