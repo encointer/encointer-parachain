@@ -24,6 +24,5 @@ command = "zombienet-tests/bin/encointer-collator"
 args = [
     "--enable-offchain-indexing=true",
     "-lencointer=debug,xcm=trace",
-    "--pool-type=fork-aware",
 ]
 ws_port = 9944
