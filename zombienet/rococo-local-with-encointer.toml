@@ -3,24 +3,24 @@ timeout = 10000
 
 [relaychain]
 default_command = "~/bin/polkadot"
-default_args = [ "-lparachain=debug,xcm=trace" ]
+default_args = ["-lparachain=debug,xcm=trace"]
 
 chain = "rococo-local"
 
-    [[relaychain.nodes]]
-    name = "alice"
-    validator = true
-    ws_port = 9999
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+ws_port = 9999
 
-    [[relaychain.nodes]]
-    name = "bob"
-    validator = true
-    ws_port = 9988
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+ws_port = 9988
 
-    [[relaychain.nodes]]
-    name = "charlie"
-    validator = true
-    ws_port = 9977
+[[relaychain.nodes]]
+name = "charlie"
+validator = true
+ws_port = 9977
 
 [[parachains]]
 id = 1003
@@ -28,21 +28,23 @@ addToGenesis = true
 cumulus_based = true
 chain = "encointer-rococo-local-dev"
 
-    [[parachains.collators]]
-    name = "encointer-collator01"
-    command = "./target/release/encointer-collator"
-    args = [
-        "--enable-offchain-indexing=true",
-        "-lencointer=debug,xcm=trace",
-    ]
-    ws_port = 9944
+[[parachains.collators]]
+name = "encointer-collator01"
+command = "./target/release/encointer-collator"
+args = [
+    "--enable-offchain-indexing=true",
+    "-lencointer=debug,xcm=trace",
+    "--pool-type=fork-aware",
+]
+ws_port = 9944
 
-    [[parachains.collators]]
-    name = "encointer-collator02"
-    command = "./target/release/encointer-collator"
-    args = [
-        "--enable-offchain-indexing=true",
-        "-lencointer=debug,xcm=trace",
-    ]
-    ws_port = 9945
+[[parachains.collators]]
+name = "encointer-collator02"
+command = "./target/release/encointer-collator"
+args = [
+    "--enable-offchain-indexing=true",
+    "-lencointer=debug,xcm=trace",
+    "--pool-type=fork-aware",
+]
+ws_port = 9945
 
