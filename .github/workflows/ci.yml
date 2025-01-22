@@ -174,7 +174,7 @@ jobs:
       - name: Get Omni-Node
         run: |
           cd zombienet-tests/bin
-          wget -q "https://github.com/paritytech/zombienet/releases/download/${{ env.POLKADOT_VERSION }}/polkadot-omni-node"
+          wget -q "https://github.com/paritytech/polkadot-sdk/releases/download/${{ env.POLKADOT_VERSION }}/polkadot-omni-node"
           chmod +x zombienet-linux-x64
           chmod +x polkadot-omni-node
           ./polkadot-omni-node --version
