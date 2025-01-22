@@ -155,7 +155,7 @@ jobs:
     env:
       ZOMBIENET_VERSION: v1.3.116
       POLKADOT_VERSION: polkadot-stable2412
-      ENCOINTER_CLIENT_DOCKER_TAG: 1.16.1
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.16.2
     steps:
       - uses: actions/checkout@v4
 
