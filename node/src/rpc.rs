@@ -10,7 +10,6 @@ use std::sync::Arc;
 use parachain_runtime::{AccountId, AssetBalance, AssetId, Balance, BlockNumber, Moment, Nonce};
 use parachains_common::opaque::Block;
 
-pub use sc_rpc::DenyUnsafe;
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::ProvideRuntimeApi;
 use sp_block_builder::BlockBuilder;
@@ -29,8 +28,6 @@ pub struct FullDeps<C, P, Backend> {
 	pub backend: Arc<Backend>,
 	/// whether offchain-indexing is enabled (added by encointer).
 	pub offchain_indexing_enabled: bool,
-	/// Whether to deny unsafe calls
-	pub deny_unsafe: DenyUnsafe,
 }
 
 /// Instantiate all RPC extensions.
@@ -69,9 +66,9 @@ where
 	use substrate_frame_rpc_system::{System, SystemApiServer};
 
 	let mut module = RpcExtension::new(());
-	let FullDeps { client, pool, backend, offchain_indexing_enabled, deny_unsafe } = deps;
+	let FullDeps { client, pool, backend, offchain_indexing_enabled } = deps;
 
-	module.merge(System::new(client.clone(), pool, deny_unsafe).into_rpc())?;
+	module.merge(System::new(client.clone(), pool).into_rpc())?;
 	module.merge(TransactionPayment::new(client.clone()).into_rpc())?;
 	module.merge(BalancesTxPaymentRpc::new(client.clone()).into_rpc())?;
 	module.merge(BazaarRpc::new(client.clone()).into_rpc())?;
