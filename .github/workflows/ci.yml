@@ -30,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-22.04 ]
         rust: [ stable ]
         binary: [ release ]
     env:
@@ -69,7 +69,7 @@ jobs:
           path: target/release/encointer-collator
 
   cargo-toml-fmt:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: "tamasfe/taplo:0.7.0-alpine"
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
 
   create_artifacts:
     needs: [ build_primary_binaries ]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CHAIN_SPEC: ${{ matrix.chain }}-${{ matrix.config }}
     strategy:
@@ -126,6 +126,109 @@ jobs:
             ${{ env.CHAIN_SPEC }}.json
             ${{ env.CHAIN_SPEC }}.json.state
 
+  integration-test:
+    #      name: ${{ matrix.test }}
+    name: integration-test
+    runs-on: ubuntu-22.04
+    needs: build_primary_binaries
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test cc-fee-payment
+            # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
+            needs_phase_and_faucet: false
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test faucet
+            needs_phase_and_faucet: false
+            # Fixme #232: Script does not support purging a community for the parachain, as root is required.
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test reputation-caching
+            # needs_phase_and_faucet: false
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test endorsement
+            needs_phase_and_faucet: false
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test unregister-and-upgrade-registration
+            needs_phase_and_faucet: false
+            # Fixme #232: Democracy params are runtime constants we cannot change, hence the democracy cycle takes too long to execute for the CI.
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test democracy
+            # needs_phase_and_faucet: false
+            # Fixme #232: Consistently fails at some random point due to:
+            #               1. wrong phase in the beginning (phase.py switches phase due to long idle times as we wait for a few blocks).
+            #               2. due to a nonce collision with Alice in phase/faucet.
+            # - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
+            # needs_phase_and_faucet: true
+    env:
+      ZOMBIENET_VERSION: v1.3.116
+      POLKADOT_VERSION: polkadot-stable2412
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.16.2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create testing directories
+        run: mkdir -p zombienet-tests/bin
+
+      - name: Setup zombienet binaries
+        run: |
+          mkdir -p zombienet-tests/bin
+          cd zombienet-tests/bin
+          wget -q "https://github.com/paritytech/zombienet/releases/download/${{ env.ZOMBIENET_VERSION }}/zombienet-linux-x64"
+          chmod +x zombienet-linux-x64
+          ./zombienet-linux-x64 setup polkadot -y || :
+          ./zombienet-linux-x64 version
+
+      - name: Get Omni-Node
+        run: |
+          cd zombienet-tests/bin
+          wget -q "https://github.com/paritytech/polkadot-sdk/releases/download/${{ env.POLKADOT_VERSION }}/polkadot-omni-node"
+          chmod +x polkadot-omni-node
+          ./polkadot-omni-node --version
+
+      - name: Download Encointer Collator
+        uses: actions/download-artifact@v4
+        with:
+          name: encointer-collator-${{ github.sha }}
+          # for debugging the integration tests, we can just download an image from a previous run
+      #          name: encointer-collator-859e7ba3e64e971a91b1174a4d9423bb854be9d9
+      #          github-token: ${{ github.token }}
+      #          run-id: 12904591738
+
+      - name: fix permissions of artifacts and move to test directory
+        run: |
+          chmod +x encointer-collator 
+          cp encointer-collator zombienet-tests/bin
+
+      - name: Start zombienet-setup and sleep until the parachain produces blocks (approx 100 seconds)
+        run: |
+          zombienet-tests/bin/zombienet-linux-x64 spawn --provider native zombienet/github-actions-setup.toml &
+          echo "setup zombienet, sleep for 100 secs until parachain produces blocks"
+          sleep 90
+
+      - name: start faucet service
+        if: ${{ matrix.needs_phase_and_faucet }}
+        run: |
+          docker run -p 5000:5000 \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} faucet.py \
+            -u ws://host.docker.internal \
+            --port 9944 &
+
+      - name: start phase accelerator service
+        if: ${{ matrix.needs_phase_and_faucet }}
+        # 5 idle blocks needed, which is more than the solochain because fewer extrinsics fit into a block
+        run: |
+          docker run \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} phase.py \
+            -u ws://host.docker.internal \
+            --port 9944 --idle-blocks 5 &
+
+      - name: Test ${{ matrix.test }}
+        run: |
+          docker run \
+            --add-host host.docker.internal:host-gateway \
+            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} ${{ matrix.test }} \
+            -u ws://host.docker.internal \
+            --port 9944 \
+
+
   release:
     name: Draft Release
     if: startsWith(github.ref, 'refs/tags/')
@@ -137,7 +240,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Integritee Collator
+      - name: Download Encointer Collator
         uses: actions/download-artifact@v4
         with:
           name: encointer-collator-${{ github.sha }}
