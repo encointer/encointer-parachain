@@ -135,20 +135,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test cc-fee-payment
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test cc-fee-payment
             # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
             needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test faucet
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test faucet
             needs_phase_and_faucet: false
             # Fixme #232: Script does not support purging a community for the parachain as it is root
-            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test reputation-caching
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test reputation-caching
             # needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test endorsement
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test endorsement
             needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test unregister-and-upgrade-registration
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test unregister-and-upgrade-registration
             needs_phase_and_faucet: false
             # Fixme #232: Democracy params are runtime constants and take to look to execute
-            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test democracy
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test democracy
             # needs_phase_and_faucet: false
           - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
             needs_phase_and_faucet: true
