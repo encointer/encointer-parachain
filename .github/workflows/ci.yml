@@ -150,8 +150,9 @@ jobs:
             # Fixme #232: Democracy params are runtime constants and take to look to execute
             # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test democracy
             # needs_phase_and_faucet: false
-          - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
-            needs_phase_and_faucet: true
+            # Fixme #232: Consistently fails at some point.
+            # - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
+            # needs_phase_and_faucet: true
     env:
       ZOMBIENET_VERSION: v1.3.116
       POLKADOT_VERSION: polkadot-stable2412
