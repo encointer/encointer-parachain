@@ -17,9 +17,6 @@ on:
 
 env:
   VERBOSE: ${{ github.events.input.verbose }}
-  # If we want to skip the build to test integration tests only/
-  # Note: We also need to update the job dependency in the tests.
-  SKIP_BUILD: true
 
 # Cancel a currently running workflow from the same PR, branch or tag when a new workflow is
 # triggered (ref https://stackoverflow.com/a/72408109)
@@ -29,7 +26,6 @@ concurrency:
 
 jobs:
   build_primary_binaries:
-    if: ${{ env.SKIP_BUILD == false }}
     name: Primary build ${{ matrix.binary }} for ${{ matrix.rust-target }} on (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -86,7 +82,6 @@ jobs:
         uses: andymckay/cancel-action@0.2
 
   create_artifacts:
-    if: ${{ env.SKIP_BUILD == false }}
     needs: [ build_primary_binaries ]
     runs-on: ubuntu-22.04
     env:
@@ -135,7 +130,7 @@ jobs:
     #      name: ${{ matrix.test }}
     name: integration-test
     runs-on: ubuntu-22.04
-    #    needs: build_primary_binaries
+    needs: build_primary_binaries
     strategy:
       fail-fast: false
       matrix:
