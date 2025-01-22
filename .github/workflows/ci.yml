@@ -155,7 +155,7 @@ jobs:
             needs_phase_and_faucet: true
     env:
       ZOMBIENET_VERSION: v1.3.116
-      ENCOINTER_CLIENT_DOCKER_TAG: 1.14.5
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.16.1
       BOOTSTRAP_TEST_FLAGS: --signer //Alice -w collective --batch-size 7 --waiting-blocks 5
     steps:
       - uses: actions/checkout@v4
