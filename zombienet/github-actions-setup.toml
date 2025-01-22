@@ -12,6 +12,16 @@ name = "alice"
 validator = true
 ws_port = 9999
 
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+ws_port = 9988
+
+[[relaychain.nodes]]
+name = "charlie"
+validator = true
+ws_port = 9977
+
 [[parachains]]
 id = 1003
 addToGenesis = true
