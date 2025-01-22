@@ -137,7 +137,7 @@ jobs:
       matrix:
         include:
           - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test cc-fee-payment
-          - # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
+            # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
           - needs_phase_and_faucet: false
           - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --test faucet
             needs_phase_and_faucet: false
