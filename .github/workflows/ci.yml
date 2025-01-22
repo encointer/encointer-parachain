@@ -154,6 +154,7 @@ jobs:
             needs_phase_and_faucet: true
     env:
       ZOMBIENET_VERSION: v1.3.116
+      POLKADOT_VERSION: polkadot-stable2412
       ENCOINTER_CLIENT_DOCKER_TAG: 1.16.1
     steps:
       - uses: actions/checkout@v4
@@ -170,14 +171,22 @@ jobs:
           ./zombienet-linux-x64 setup polkadot -y || :
           ./zombienet-linux-x64 version
 
+      - name: Get Omni-Node
+        run: |
+          cd zombienet-tests/bin
+          wget -q "https://github.com/paritytech/zombienet/releases/download/${{ env.POLKADOT_VERSION }}/polkadot-omni-node"
+          chmod +x zombienet-linux-x64
+          chmod +x polkadot-omni-node
+          ./polkadot-omni-node --version
+
       - name: Download Encointer Collator
         uses: actions/download-artifact@v4
         with:
-          name: encointer-collator-${{ github.sha }}
+          #          name: encointer-collator-${{ github.sha }}
           # for debugging the integration tests, we can just download an image from a previous run
-      #          name: encointer-collator-df76f5ef098cb52bc24b1e085d9db716c02e4220
-      #          github-token: ${{ github.token }}
-      #          run-id: 12786706739
+          name: encointer-collator-859e7ba3e64e971a91b1174a4d9423bb854be9d9
+          github-token: ${{ github.token }}
+          run-id: 12904591738
 
       - name: fix permissions of artifacts and move to test directory
         run: |
