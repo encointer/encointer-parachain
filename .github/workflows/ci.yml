@@ -140,17 +140,19 @@ jobs:
             needs_phase_and_faucet: false
           - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test faucet
             needs_phase_and_faucet: false
-            # Fixme #232: Script does not support purging a community for the parachain as it is root
+            # Fixme #232: Script does not support purging a community for the parachain, as root is required.
             # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test reputation-caching
             # needs_phase_and_faucet: false
           - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test endorsement
             needs_phase_and_faucet: false
           - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test unregister-and-upgrade-registration
             needs_phase_and_faucet: false
-            # Fixme #232: Democracy params are runtime constants and take to look to execute
+            # Fixme #232: Democracy params are runtime constants we cannot change, hence the democracy cycle takes too long to execute for the CI.
             # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test democracy
             # needs_phase_and_faucet: false
-            # Fixme #232: Consistently fails at some point.
+            # Fixme #232: Consistently fails at some random point due to:
+            #               1. wrong phase in the beginning (phase.py switches phase due to long idle times as we wait for a few blocks).
+            #               2. due to a nonce collision with Alice in phase/faucet.
             # - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
             # needs_phase_and_faucet: true
     env:
