@@ -198,16 +198,6 @@ jobs:
           echo "setup zombienet, sleep for 100 secs until parachain produces blocks"
           sleep 90
 
-      - name: start dev node
-        run: |
-          docker run -p 30333:30333 -p 9944:9944 -p 9615:9615 \
-            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} \
-            --dev \
-            --enable-offchain-indexing=true \
-            --rpc-methods=unsafe \
-            -lencointer=debug,parity_ws=warn \
-            --rpc-external &
-
       - name: start faucet service
         if: ${{ matrix.needs_phase_and_faucet }}
         run: |
