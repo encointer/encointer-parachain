@@ -135,20 +135,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test cc-fee-payment
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test cc-fee-payment
             # Don't start phase/faucet. It is not needed and there might be occasional nonce collisions with Alice.
             needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test faucet
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test faucet
             needs_phase_and_faucet: false
             # Fixme #232: Script does not support purging a community for the parachain, as root is required.
-            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test reputation-caching
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test reputation-caching
             # needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test endorsement
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test endorsement
             needs_phase_and_faucet: false
-          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test unregister-and-upgrade-registration
+          - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test unregister-and-upgrade-registration
             needs_phase_and_faucet: false
             # Fixme #232: Democracy params are runtime constants we cannot change, hence the democracy cycle takes too long to execute for the CI.
-            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 5 --is-parachain --test democracy
+            # - test: bootstrap_demo_community.py --signer //Alice -w collective --batch-size 7 --waiting-blocks 7 --is-parachain --test democracy
             # needs_phase_and_faucet: false
             # Fixme #232: Consistently fails at some random point due to:
             #               1. wrong phase in the beginning (phase.py switches phase due to long idle times as we wait for a few blocks).
