@@ -3058,7 +3058,7 @@ dependencies = [
 [[package]]
 name = "encointer-kusama-runtime"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#85649d9e93274e4abc12b5caee15dfcd6de55537"
+source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#71da63ef43ea9fa34b7b3b87119afc378e0277a0"
 dependencies = [
  "cumulus-pallet-aura-ext",
  "cumulus-pallet-parachain-system",
@@ -5482,7 +5482,7 @@ checksum = "c33070833c9ee02266356de0c43f723152bd38bd96ddf52c82b3af10c9138b28"
 [[package]]
 name = "kusama-runtime-constants"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#85649d9e93274e4abc12b5caee15dfcd6de55537"
+source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#71da63ef43ea9fa34b7b3b87119afc378e0277a0"
 dependencies = [
  "frame-support",
  "polkadot-primitives",
@@ -9832,7 +9832,7 @@ dependencies = [
 [[package]]
 name = "polkadot-runtime-constants"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#85649d9e93274e4abc12b5caee15dfcd6de55537"
+source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#71da63ef43ea9fa34b7b3b87119afc378e0277a0"
 dependencies = [
  "frame-support",
  "polkadot-primitives",
@@ -14989,7 +14989,7 @@ dependencies = [
 [[package]]
 name = "system-parachains-constants"
 version = "1.0.0"
-source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#85649d9e93274e4abc12b5caee15dfcd6de55537"
+source = "git+https://github.com/encointer/runtimes.git?branch=cl%2Fencointer-202412#71da63ef43ea9fa34b7b3b87119afc378e0277a0"
 dependencies = [
  "frame-support",
  "kusama-runtime-constants",
