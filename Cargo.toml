@@ -37,7 +37,7 @@ pallet-encointer-communities-rpc = "~15.1.0"
 encointer-balances-tx-payment-rpc = "~15.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "cl/encointer-202412" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "polkadot-stable2024012" }
 
 # polkadot-sdk [no_std]
 cumulus-primitives-core = { version = "0.17.0", default-features = false }
