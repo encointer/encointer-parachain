@@ -10,17 +10,17 @@ chain = "rococo-local"
 [[relaychain.nodes]]
 name = "alice"
 validator = true
-ws_port = 9999
+rpc_port = 9999
 
 [[relaychain.nodes]]
 name = "bob"
 validator = true
-ws_port = 9988
+rpc_port = 9988
 
 [[relaychain.nodes]]
 name = "charlie"
 validator = true
-ws_port = 9977
+rpc_port = 9977
 
 [[parachains]]
 id = 1003
@@ -36,7 +36,7 @@ args = [
     "-lencointer=debug,xcm=trace",
     "--pool-type=fork-aware"
 ]
-ws_port = 9944
+rpc_port = 9944
 
 [[parachains.collators]]
 name = "encointer-collator02"
@@ -44,4 +44,4 @@ command = "zombienet-tests/bin/polkadot-omni-node"
 args = [
     "--pool-type=fork-aware"
 ]
-ws_port = 9945
+rpc_port = 9945
