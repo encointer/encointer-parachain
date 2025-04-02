@@ -1,7 +1,7 @@
 [package]
 name = "encointer-collator"
 # align major.minor revision with the polkadot-sdk release. bump patch revision ad lib. make this the github release tag
-version = "1.16.0"
+version = "1.16.1"
 authors = ["Encointer <info@encointer.org>"]
 build = "build.rs"
 edition = "2021"
@@ -36,7 +36,8 @@ pallet-encointer-ceremonies-rpc = { workspace = true }
 pallet-encointer-ceremonies-rpc-runtime-api = { workspace = true, features = ["std"] }
 pallet-encointer-communities-rpc = { workspace = true }
 pallet-encointer-communities-rpc-runtime-api = { workspace = true, features = ["std"] }
-
+pallet-encointer-treasuries-rpc = { workspace = true }
+pallet-encointer-treasuries-rpc-runtime-api = { workspace = true, features = ["std"] }
 # Substrate dependencies
 frame-benchmarking = { workspace = true, features = ["std"] }
 frame-benchmarking-cli = { workspace = true }

@@ -2988,7 +2988,7 @@ dependencies = [
 
 [[package]]
 name = "encointer-collator"
-version = "1.16.0"
+version = "1.16.1"
 dependencies = [
  "assert_cmd",
  "clap",
@@ -3017,6 +3017,8 @@ dependencies = [
  "pallet-encointer-ceremonies-rpc-runtime-api",
  "pallet-encointer-communities-rpc",
  "pallet-encointer-communities-rpc-runtime-api",
+ "pallet-encointer-treasuries-rpc",
+ "pallet-encointer-treasuries-rpc-runtime-api",
  "pallet-transaction-payment-rpc",
  "parachains-common",
  "parity-scale-codec",
@@ -4562,7 +4564,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "socket2 0.4.10",
+ "socket2 0.5.8",
  "tokio",
  "tower-service",
  "tracing",
@@ -7808,6 +7810,29 @@ dependencies = [
  "sp-core",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-encointer-treasuries-rpc"
+version = "15.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0be7ab8135557780e66fc615bd8b4c7ebe6f2a0e48be37fb5ec73864e914b32d"
+dependencies = [
+ "encointer-primitives",
+ "encointer-rpc",
+ "jsonrpsee 0.24.7",
+ "log",
+ "pallet-encointer-treasuries-rpc-runtime-api",
+ "parity-scale-codec",
+ "parking_lot 0.12.3",
+ "sc-rpc",
+ "sc-rpc-api",
+ "sp-api",
+ "sp-blockchain",
+ "sp-core",
+ "sp-rpc",
+ "sp-runtime",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
