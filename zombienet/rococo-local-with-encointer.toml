@@ -10,17 +10,17 @@ chain = "rococo-local"
 [[relaychain.nodes]]
 name = "alice"
 validator = true
-rpc_port = 9999
+ws_port = 9999
 
 [[relaychain.nodes]]
 name = "bob"
 validator = true
-rpc_port = 9988
+ws_port = 9988
 
 [[relaychain.nodes]]
 name = "charlie"
 validator = true
-rpc_port = 9977
+ws_port = 9977
 
 [[parachains]]
 id = 1003
@@ -35,7 +35,7 @@ args = [
     "--enable-offchain-indexing=true",
     "-lencointer=debug,xcm=trace",
 ]
-rpc_port = 9944
+ws_port = 9944
 
 [[parachains.collators]]
 name = "encointer-collator02"
@@ -43,5 +43,5 @@ command = "~/bin/polkadot-omni-node"
 args = [
     "--pool-type=fork-aware"
 ]
-rpc_port = 9945
+ws_port = 9945
 
