@@ -30,10 +30,13 @@ pallet-encointer-ceremonies = { default-features = false, version = "~15.1.0" }
 pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~15.1.0" }
 pallet-encointer-communities = { default-features = false, version = "~15.1.0" }
 pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~15.1.0" }
+pallet-encointer-treasuries = { default-features = false, version = "~15.4.1" }
+pallet-encointer-treasuries-rpc-runtime-api = { default-features = false, version = "~15.3.0" }
 # rpc [std]
 pallet-encointer-bazaar-rpc = "~15.1.0"
 pallet-encointer-ceremonies-rpc = "~15.1.0"
 pallet-encointer-communities-rpc = "~15.1.0"
+pallet-encointer-treasuries-rpc = "~15.3.0"
 encointer-balances-tx-payment-rpc = "~15.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
