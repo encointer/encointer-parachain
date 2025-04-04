@@ -249,7 +249,7 @@ jobs:
           chmod +x encointer-collator 
 
       - name: Docker build
-        run: Docker build .
+        run: docker build .
 
   release:
     name: Draft Release
