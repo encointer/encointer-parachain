@@ -2,7 +2,7 @@ FROM phusion/baseimage:focal-1.0.0
 LABEL description="This is the 2nd stage: a very small image where we copy the Substrate binary."
 
 RUN apt-get update && \
-apt-get install -y jq
+apt-get install -y jq ca-certificates
 
 RUN mv /usr/share/ca* /tmp && \
 	rm -rf /usr/share/*  && \
