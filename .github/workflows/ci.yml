@@ -228,6 +228,28 @@ jobs:
             -u ws://host.docker.internal \
             --port 9944 \
 
+  docker-build:
+    name: docker-build
+    runs-on: ubuntu-22.04
+    needs: build_primary_binaries
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Encointer Collator
+        uses: actions/download-artifact@v4
+        with:
+          name: encointer-collator-${{ github.sha }}
+          # for debugging the integration tests, we can just download an image from a previous run
+      #          name: encointer-collator-859e7ba3e64e971a91b1174a4d9423bb854be9d9
+      #          github-token: ${{ github.token }}
+      #          run-id: 12904591738
+
+      - name: fix permissions of artifacts
+        run: |
+          chmod +x encointer-collator 
+
+      - name: Docker build
+        run: docker build .
 
   release:
     name: Draft Release
