@@ -1,0 +1,29 @@
+endpoint: wss://kusama-asset-hub-rpc.polkadot.io
+mock-signature-host: true
+block: ${env.KUSAMA_ASSET_HUB_BLOCK_NUMBER}
+db: ./chopsticks/asset-hub-db.sqlite
+
+import-storage:
+  System:
+    Account:
+      - - - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
+        - providers: 1
+          data:
+            free: 1000000000000000
+      # Global Encointer Treasury and MTA Treasury
+      - - - 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem
+        - providers: 1
+          data:
+            free: 1000000000000000
+      - - - 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ
+        - providers: 1
+          data:
+            free: 1000000000000000
+  Assets:
+    Account:
+      - [
+        [ 1984, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], { balance: 1000000000 },
+        # Global Encointer Treasury and MTA Treasury
+        [ 1984, 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem ], { balance: 1000000000 },
+        [ 1984, 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ ], { balance: 1000000000 },
+      ]
