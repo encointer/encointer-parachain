@@ -8,7 +8,7 @@ mock-signature-host: true
 block: ${env.ENCOINTER_PARACHAIN_BLOCK_NUMBER}
 db: ./chopsticks/encointer-parachain.db.sqlite
 runtime-log-level: 5
-wasm-override: target/release/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.compact.compressed.wasm
+wasm-override: ../runtimes/target/release/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.compact.compressed.wasm
 
 import-storage:
   System:
@@ -28,3 +28,12 @@ import-storage:
   Collective:
     Members:
       - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
+  PolkadotXcm:
+    SafeXcmVersion:
+      - 5
+    SupportedVersion:
+      - [
+        [ 5, { V4: { parents: 1, interior: "Here" } } ],  5 ,
+        [ 5, { V4: { parents: 1, interior: { Parachain: 1000 } } } ],  5 ,
+      ]
+

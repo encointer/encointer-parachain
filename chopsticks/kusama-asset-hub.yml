@@ -2,6 +2,9 @@ endpoint: wss://kusama-asset-hub-rpc.polkadot.io
 mock-signature-host: true
 block: ${env.KUSAMA_ASSET_HUB_BLOCK_NUMBER}
 db: ./chopsticks/asset-hub-db.sqlite
+runtime-log-level: 5
+
+wasm-override: ../runtimes/target/release/wbuild/asset-hub-kusama-runtime/asset_hub_kusama_runtime.compact.compressed.wasm
 
 import-storage:
   System:
@@ -11,6 +14,14 @@ import-storage:
           data:
             free: 1000000000000000
       # Global Encointer Treasury and MTA Treasury
+      - - - 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem
+        - providers: 1
+          data:
+            free: 1000000000000000
+      - - - 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ
+        - providers: 1
+          data:
+            free: 1000000000000000
       - - - 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem
         - providers: 1
           data:
