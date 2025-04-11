@@ -22,11 +22,13 @@ import-storage:
         - providers: 1
           data:
             free: 1000000000000000
-      - - - 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem
+      # Global Encointer Treasury
+      - - - 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ
         - providers: 1
           data:
             free: 1000000000000000
-      - - - 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ
+      # MTA community treasury
+      - - - 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem
         - providers: 1
           data:
             free: 1000000000000000
@@ -34,7 +36,8 @@ import-storage:
     Account:
       - [
         [ 1984, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], { balance: 1000000000 },
-        # Global Encointer Treasury and MTA Treasury
-        [ 1984, 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem ], { balance: 1000000000 },
+        # Global Encointer Treasury
         [ 1984, 5FU79FVXdN3RYSj8857XjNT2SgeRrhk8iUzjb75X1yc8YDkZ ], { balance: 1000000000 },
+        # MTA community treasury
+        [ 1984, 5CWoc3mGF9VEnuZzBbPWxhKPvY743AGwxUbvkYQHS8yWZbem ], { balance: 1000000000 },
       ]
