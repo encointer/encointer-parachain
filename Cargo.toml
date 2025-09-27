@@ -55,6 +55,7 @@ sp-runtime = { version = "43.0.0", default-features = false }
 xcm = { version = "18.0.0", package = "staging-xcm", default-features = false }
 
 # std stuff
+cumulus-client-bootnodes = "0.4.0"
 cumulus-client-cli = "0.25.0"
 cumulus-client-collator = "0.25.0"
 cumulus-client-consensus-aura = "0.25.0"

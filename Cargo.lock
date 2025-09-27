@@ -3566,6 +3566,7 @@ dependencies = [
  "assert_cmd",
  "clap",
  "color-print",
+ "cumulus-client-bootnodes",
  "cumulus-client-cli",
  "cumulus-client-collator",
  "cumulus-client-consensus-aura",
