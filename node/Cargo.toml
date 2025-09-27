@@ -77,6 +77,7 @@ polkadot-service = { workspace = true }
 xcm = { workspace = true, features = ["std"] }
 
 # Cumulus
+cumulus-client-bootnodes = { workspace = true }
 cumulus-client-cli = { workspace = true }
 cumulus-client-collator = { workspace = true }
 cumulus-client-consensus-aura = { workspace = true }
