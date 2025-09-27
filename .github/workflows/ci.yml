@@ -156,8 +156,8 @@ jobs:
             # - test: bot-community-test -f http://host.docker.internal:5000/api -w collective --batch-size 7 --waiting-blocks 3
             # needs_phase_and_faucet: true
     env:
-      ZOMBIENET_VERSION: v1.3.116
-      POLKADOT_VERSION: polkadot-stable2412
+      ZOMBIENET_VERSION: v1.3.133
+      POLKADOT_VERSION: polkadot-stable2506
       ENCOINTER_CLIENT_DOCKER_TAG: 1.16.2
     steps:
       - uses: actions/checkout@v4
