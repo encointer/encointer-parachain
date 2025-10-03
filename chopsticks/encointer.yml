@@ -28,6 +28,14 @@ import-storage:
   Collective:
     Members:
       - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
+  EncointerBalances:
+    Balance:
+      # Give Alice some Leu
+      - [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ],
+        { principal: { bits: "18446744073709551616000" },
+          # Needs to be kind of recent
+          lastUpdate: 10000000
+        } ]
   EncointerScheduler:
     # We mostly want to test proposal enactement, which is on Registering->Assigning
     CurrentPhase: Registering
