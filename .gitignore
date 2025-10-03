@@ -10,3 +10,5 @@ rococo-local-raw.json
 *.log
 
 /chain_dumps
+
+/chopsticks/*db.*
