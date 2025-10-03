@@ -34,6 +34,13 @@ import-storage:
     # Set CeremonyIndex so we can create usable reputation
     CurrentCeremonyIndex: 3
   EncointerCeremonies:
+    # Needed to get electorate size
+    ReputationCount:
+      - [
+        [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 1 ] ], 1,
+        [ [ { geohash: "kygch", digest: "0xb9d21492" }, 1 ] ], 1,
+        [ [ { geohash: "s1vrq", digest: "0x0fbc3042" }, 1 ] ], 1,
+      ]
     ParticipantReputation:
       - [
         # Give Alice reputation in all communities
