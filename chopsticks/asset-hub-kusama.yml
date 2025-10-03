@@ -1,0 +1,43 @@
+endpoint: wss://kusama-asset-hub-rpc.polkadot.io
+mock-signature-host: true
+block: ${env.KUSAMA_ASSET_HUB_BLOCK_NUMBER}
+db: ./chopsticks/asset-hub-db.sqlite
+runtime-log-level: 5
+
+wasm-override: ../runtimes/target/debug/wbuild/asset-hub-kusama-runtime/asset_hub_kusama_runtime.wasm
+
+import-storage:
+  System:
+    Account:
+      # Alice
+      - - - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
+        - providers: 1
+          data:
+            free: 1000000000000000
+      # Leu community treasury
+      - - - DgdA9qwXxBAtdy9veCR4LZpcbYuMgCSL9XpV7gbELFncV2t
+        - providers: 1
+          data:
+            free: 1000000000000000
+  Assets:
+    Account:
+      - [
+        # USDC
+        # Alice
+        [ 1337, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], { balance: 1000000000 },
+        # Leu community treasury
+        [ 1337, DgdA9qwXxBAtdy9veCR4LZpcbYuMgCSL9XpV7gbELFncV2t ], { balance: 1000000000 },
+        # Paynuq community treasury
+        [ 1337, CqCAXF5M51M7xttMuK47TmyuSos8iusFm524ZzaAZnNiner ], { balance: 1000000000 },
+        # Nyota
+        [ 1337, G8yWL9B48XnbwC5aYpotqUk7ZTcpP7SGQcykoo7TVQTkhwJ ], { balance: 1000000000 },
+        # USDT
+        # Alice
+        [ 1984, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], { balance: 1000000000 },
+        # Leu community treasury
+        [ 1984, DgdA9qwXxBAtdy9veCR4LZpcbYuMgCSL9XpV7gbELFncV2t ], { balance: 1000000000 },
+        # Paynuq community treasury
+        [ 1984, DgdA9qwXxBAtdy9veCR4LZpcbYuMgCSL9XpV7gbELFncV2t ], { balance: 1000000000 },
+        # Paynuq community treasury
+        [ 1984, CqCAXF5M51M7xttMuK47TmyuSos8iusFm524ZzaAZnNiner ], { balance: 1000000000 },
+      ]
