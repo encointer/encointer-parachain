@@ -30,7 +30,7 @@ import-storage:
       - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
   EncointerBalances:
     Balance:
-      # Give Alice some Leu
+      # Give Alice 1000 Leu
       - [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ],
         { principal: { bits: "18446744073709551616000" },
           # Needs to be kind of recent
