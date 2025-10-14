@@ -4,6 +4,7 @@
 use std::{sync::Arc, time::Duration};
 
 // Local Runtime Types
+use crate::chain_spec::Extensions;
 use parachain_runtime::{Hash, RuntimeApi};
 use parachains_common::opaque::Block;
 
@@ -37,7 +38,7 @@ use sc_network::{NetworkBackend, NetworkBlock};
 use sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
-use sp_api::ProvideRuntimeApi;
+use sp_api::{ApiExt, ProvideRuntimeApi};
 use sp_keystore::KeystorePtr;
 
 #[docify::export(wasm_executor)]
@@ -272,12 +273,31 @@ pub async fn start_parachain_node(
 	let transaction_pool = params.transaction_pool.clone();
 	let import_queue_service = params.import_queue.service();
 
-	// Take parachain id from runtime.
+	// Take parachain id from runtime or fall back to the old mechanism fetching it from the `Extension`.
+	//
+	// The fallback is needed if some old chain syncs from scratch, where the runtime
+	// api does not yet implement
 	let best_hash = client.chain_info().best_hash;
-	let para_id = client
-        .runtime_api()
-        .parachain_id(best_hash)
-        .map_err(|_| "Failed to retrieve parachain id from runtime. Make sure you implement `cumulus_primitives_core::GetParachaiNidentity` runtime API.")?;
+	let para_id = if client
+		.runtime_api()
+		.has_api::<dyn GetParachainInfo<Block>>(best_hash)
+		.ok()
+		.filter(|has_api| *has_api)
+		.is_some()
+	{
+		client.runtime_api().parachain_id(best_hash).map_err(|err| {
+			format!(
+				"`cumulus_primitives_core::GetParachainInfo` runtime API call errored with {}",
+				err
+			)
+		})?
+	} else {
+		ParaId::from(
+			Extensions::try_get(&*parachain_config.chain_spec)
+				.map(|ext| ext.para_id)
+				.ok_or_else(|| "Failed to retrieve parachain id from Extensions")?,
+		)
+	};
 
 	// NOTE: because we use Aura here explicitly, we can use `CollatorSybilResistance::Resistant`
 	// when starting the network.
