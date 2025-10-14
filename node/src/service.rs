@@ -273,8 +273,10 @@ pub async fn start_parachain_node(
 	let transaction_pool = params.transaction_pool.clone();
 	let import_queue_service = params.import_queue.service();
 
-	// Take parachain id from runtime or fall back to the old extensions one.
-	// This is needed if the chain syncs from scratch.
+	// Take parachain id from runtime or fall back to the old mechanism fetching it from the `Extension`.
+	//
+	// The fallback is needed if some old chain syncs from scratch, where the runtime
+	// api does not yet implement
 	let best_hash = client.chain_info().best_hash;
 	let para_id = if client
 		.runtime_api()
