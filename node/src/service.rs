@@ -284,17 +284,17 @@ pub async fn start_parachain_node(
 		.is_some()
 	{
 		client.runtime_api().parachain_id(best_hash).map_err(|err| {
-			log::error!(
+			format!(
 				"`cumulus_primitives_core::GetParachainInfo` runtime API call errored with {}",
 				err
-			);
-			"Could not get para-id from runtime"
+			)
 		})?
 	} else {
 		ParaId::from(
-            Extensions::try_get(&*parachain_config.chain_spec).map(|ext| ext.para_id)
-                .ok_or_else(|| "Failed to retrieve parachain id from runtime. Make sure you implement `cumulus_primitives_core::GetParachaiNidentity` runtime API.")?
-        )
+			Extensions::try_get(&*parachain_config.chain_spec)
+				.map(|ext| ext.para_id)
+				.ok_or_else(|| "Failed to retrieve parachain id from Extensions")?,
+		)
 	};
 
 	// NOTE: because we use Aura here explicitly, we can use `CollatorSybilResistance::Resistant`
