@@ -4,7 +4,7 @@ block: ${env.KUSAMA_ASSET_HUB_BLOCK_NUMBER}
 db: ./chopsticks/asset-hub-db.sqlite
 runtime-log-level: 5
 
-wasm-override: ../runtimes/target/debug/wbuild/asset-hub-kusama-runtime/asset_hub_kusama_runtime.wasm
+#wasm-override: ../runtimes/target/debug/wbuild/asset-hub-kusama-runtime/asset_hub_kusama_runtime.wasm
 
 import-storage:
   System:
