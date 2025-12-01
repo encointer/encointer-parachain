@@ -5,6 +5,7 @@ endpoint:
   - wss://rpc-encointer-kusama.luckyfriday.io
 
 mock-signature-host: true
+# In case we want to replay a certain block. Will take latest block if unset.
 block: ${env.ENCOINTER_PARACHAIN_BLOCK_NUMBER}
 db: ./chopsticks/encointer-parachain.db.sqlite
 runtime-log-level: 5
