@@ -11,9 +11,10 @@ The chopstick config does:
 ## Preliminaries
 
 1. Build this encointer runtime with adapted democracy
-   params: https://github.com/encointer/runtimes/tree/cl/fast-encointer-runtime:
+   params (Note: the plan is to upstream this, so we do not need to maintain this
+   branch): https://github.com/encointer/runtimes/tree/cl/fast-encointer-runtime:
    ` cargo build -p encointer-kusama-runtime --features fast-runtime`
-2. `@acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
+2. `npx @acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
 
 ### Test SpendAsset
 
@@ -25,7 +26,9 @@ The chopstick config does:
 4. go to next phase
    with [collectivePropose(encointerScheduler.nextPhase)](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2Flocalhost%3A8000#/extrinsics/decode/0x3202043c00419c)
 
-Successfully XCM Events: ![events.png](democracy_successful_xcm_send.png)
+Successfully XCM Events:
+
+![events.png](democracy_successful_xcm_send.png)
 
 ### Test IssueSwapAssetOption
 
@@ -43,6 +46,10 @@ Successfully XCM Events: ![events.png](democracy_successful_xcm_send.png)
 7. Correctly burned 6.4 Leu to get 10 USD
 
 See events on
-encointer: ![events.png](assets_spent_events.png)
+encointer:
 
-See events on Asset Hub: ![events_ahk.png](assets_spent_events_ahk.png)
+![events.png](assets_spent_events.png)
+
+See events on Asset Hub:
+
+![events_ahk.png](assets_spent_events_ahk.png)
