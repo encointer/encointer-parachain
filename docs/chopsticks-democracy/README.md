@@ -25,6 +25,7 @@ The chopstick config does:
 3. We can immediately update the proposal states as the electorate is 1, and the confrim period 0.
 4. go to next phase
    with [collectivePropose(encointerScheduler.nextPhase)](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2Flocalhost%3A8000#/extrinsics/decode/0x3202043c00419c)
+5. Double check events (See the end of the document to see what it should look like)
 
 ### Test IssueSwapAssetOption
 
@@ -40,6 +41,8 @@ The chopstick config does:
    a [encointerTreasuries.swapAsset](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2Flocalhost%3A8000#/extrinsics/decode/0x44017530716a3977f79df70a000000000000000000000000000000)
    call
 7. Correctly burned 6.4 Leu to get 10 USD
+
+### Events Emitted during testing
 
 Encointer (SpendAsset and IssueSwapOptionEvents):
 
