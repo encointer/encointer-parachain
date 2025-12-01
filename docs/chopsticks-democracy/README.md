@@ -26,10 +26,6 @@ The chopstick config does:
 4. go to next phase
    with [collectivePropose(encointerScheduler.nextPhase)](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2Flocalhost%3A8000#/extrinsics/decode/0x3202043c00419c)
 
-Successfully XCM Events:
-
-![events.png](democracy_successful_xcm_send.png)
-
 ### Test IssueSwapAssetOption
 
 1. [Submit an IssueSwapAssetOption proposal](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2Flocalhost%3A8000#/extrinsics/decode/0x43000a7530716a3977f79df7d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d7530716a3977f79df705010100a10f0204090200a10f043205e51400e1f5050000000000000000000000000100d8a3703d0ad7a30000000000000000010000)
@@ -45,11 +41,10 @@ Successfully XCM Events:
    call
 7. Correctly burned 6.4 Leu to get 10 USD
 
-See events on
-encointer:
+Encointer (SpendAsset and IssueSwapOptionEvents):
 
 ![events.png](assets_spent_events.png)
 
-See events on Asset Hub:
+Asset Hub Kusama (Transfer Assets Event):
 
 ![events_ahk.png](assets_spent_events_ahk.png)
