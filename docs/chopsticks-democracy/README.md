@@ -10,11 +10,9 @@ The chopstick config does:
 
 ## Preliminaries
 
-1. Build this encointer runtime with adapted democracy
-   params (Note: the plan is to upstream this, so we do not need to maintain this
-   branch): https://github.com/encointer/runtimes/tree/cl/fast-encointer-runtime:
+1. Build the encointer runtime with the `fast-runtime` feature:
    ` cargo build -p encointer-kusama-runtime --features fast-runtime`
-2. `npx @acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
+   2.`npx @acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
 
 ### Test SpendAsset
 

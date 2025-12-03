@@ -10,8 +10,9 @@ block: ${env.ENCOINTER_PARACHAIN_BLOCK_NUMBER}
 db: ./chopsticks/encointer-parachain.db.sqlite
 runtime-log-level: 5
 
-# For the democracy testing use: https://github.com/encointer/runtimes/tree/cl/fast-encointer-runtime
+# For the democracy testing build it with `--features fast-runtime`
 wasm-override: ../runtimes/target/debug/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.wasm
+#wasm-override: ./target/debug/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.wasm
 
 import-storage:
   System:
