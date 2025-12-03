@@ -11,8 +11,8 @@ The chopstick config does:
 ## Preliminaries
 
 1. Build the encointer runtime with the `fast-runtime` feature:
-   ` cargo build -p encointer-kusama-runtime --features fast-runtime`
-   2.`npx @acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
+   `cargo build -p encointer-kusama-runtime --features fast-runtime`
+2. `npx @acala-network/chopsticks@latest xcm --p=./chopsticks/encointer.yml --p=./chopsticks/asset-hub-kusama.yml`
 
 ### Test SpendAsset
 
