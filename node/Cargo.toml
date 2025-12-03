@@ -97,6 +97,9 @@ tempfile = { workspace = true }
 
 [features]
 default = []
+fast-runtime = [
+    'parachain-runtime/fast-runtime',
+]
 runtime-benchmarks = [
     'polkadot-service/runtime-benchmarks',
     'parachain-runtime/runtime-benchmarks',

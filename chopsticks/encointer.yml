@@ -1,0 +1,71 @@
+endpoint:
+  - wss://kusama.api.encointer.org
+  - wss://sys.ibp.network/encointer-kusama
+  - wss://encointer-kusama.dotters.network
+  - wss://rpc-encointer-kusama.luckyfriday.io
+
+mock-signature-host: true
+# In case we want to replay a certain block. Will take latest block if unset.
+block: ${env.ENCOINTER_PARACHAIN_BLOCK_NUMBER}
+db: ./chopsticks/encointer-parachain.db.sqlite
+runtime-log-level: 5
+
+# For the democracy testing build it with `--features fast-runtime`
+wasm-override: ../runtimes/target/debug/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.wasm
+#wasm-override: ./target/debug/wbuild/encointer-kusama-runtime/encointer_kusama_runtime.wasm
+
+import-storage:
+  System:
+    Account: # Give our dev accounts some funds
+      - - - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY # Alice
+        - providers: 1
+          data:
+            free: 1000000000000000
+      - - - 5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty # Bob
+        - providers: 1
+          data:
+            free: 1000000000000000
+      - - - 5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y # Charlie
+        - providers: 1
+          data:
+            free: 1000000000000000
+  Collective:
+    Members:
+      - 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
+  EncointerBalances:
+    Balance:
+      # Give Alice 1000 Leu
+      - [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ],
+        { principal: { bits: "18446744073709551616000" },
+          # Needs to be kind of recent
+          lastUpdate: 10000000
+        } ]
+  EncointerScheduler:
+    # We mostly want to test proposal enactement, which is on Registering->Assigning
+    CurrentPhase: Registering
+    # Set CeremonyIndex so we can create usable reputation
+    CurrentCeremonyIndex: 3
+  EncointerCeremonies:
+    # Needed to get electorate size
+    ReputationCount:
+      - [
+        [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 1 ] ], 1,
+        [ [ { geohash: "kygch", digest: "0xb9d21492" }, 1 ] ], 1,
+        [ [ { geohash: "s1vrq", digest: "0x0fbc3042" }, 1 ] ], 1,
+      ]
+    ParticipantReputation:
+      - [
+        # Give Alice reputation in all communities
+        [ [ { geohash: "u0qj9", digest: "0x77f79df7" }, 1 ], 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], VerifiedUnlinked,
+        [ [ { geohash: "kygch", digest: "0xb9d21492" }, 1 ], 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], VerifiedUnlinked,
+        [ [ { geohash: "s1vrq", digest: "0x0fbc3042" }, 1 ], 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY ], VerifiedUnlinked,
+      ]
+  PolkadotXcm:
+    SafeXcmVersion:
+      - 5
+    SupportedVersion:
+      - [
+        [ 5, { V4: { parents: 1, interior: "Here" } } ],  5 ,
+        [ 5, { V4: { parents: 1, interior: { Parachain: 1000 } } } ],  5 ,
+      ]
+

@@ -1,6 +1,6 @@
 # Encointer Parachain:
 
-This is the repository for the encointer collator to operate a parachain. 
+This is the repository for the encointer collator to operate a parachain.
 It is forked from the [Cumulus](https://github.com/paritytech/cumulus) repository.
 
 ## Demos
@@ -8,11 +8,16 @@ It is forked from the [Cumulus](https://github.com/paritytech/cumulus) repositor
 * [Sybil Defense Demo](docs/sybil-demo)
 * [Native Downward-/ Upward Token Tx Demo](docs/downward-upward-native-token-tx)
 
+## Docs
+
+* [Chopsticks Democracy](docs/chopsticks-democracy)
+
 ## Zombienet
 
 1. Download zombienet from the releases in the [zombienet](https://github.com/paritytech/zombienet) repository.
 2. Copy it to `~/.local/bin/`
 3. Launch it in your terminal
+
 ```
 zombienet-linux-x64 spawn --provider native zombienet/rococo-local-with-encointer.toml
 ```
@@ -51,14 +56,17 @@ cargo build --release
 ```
 
 ### Register the Parachain
-Go to [Polkadot Apps](https://polkadot.js.org/apps/) connect to the default local port (Alice) and register the parachain via the `paraSudoWrapper` pallet. After registering, the collator should start producing blocks when the next era starts.
+
+Go to [Polkadot Apps](https://polkadot.js.org/apps/) connect to the default local port (Alice) and register the
+parachain via the `paraSudoWrapper` pallet. After registering, the collator should start producing blocks when the next
+era starts.
 
 **Note:** Change the `ParaId` to 1862 when registering the parachain.
 
 ![image](https://user-images.githubusercontent.com/2915325/99548884-1be13580-2987-11eb-9a8b-20be658d34f9.png)
 
-
 ### Test Encointer Client
+
 ```bash
 git clone https://github.com/encointer/encointer-node.git
 cargo build --release
@@ -84,9 +92,11 @@ Prepare genesis state and wasm as follows:
 ./target/release/encointer-collator export-genesis-wasm --chain encointer-rococo > encointer-rococo-genesis.wasm
 
 ```
+
 then propose the parachain on rococo relay-chain
 
 run collator
+
 ```
 encointer-collator \
         --collator \
@@ -99,12 +109,18 @@ encointer-collator \
 ```
 
 ### Caveats
-* Don't forget to enable file upload if you perform drag and drop for the `genesisHead` and `validationCode`. If it is not enabled, Polkadot-js will interpret the path as a string and won't complain but the registration will fail.
-* Don't forget to add the argument `--chain encointer-rococo` for the custom chain config. This argument is omitted in the [Cumulus Workshop](https://substrate.dev/cumulus-workshop/).
-* The relay chain and the collator need to be about equally recent. This might require frequent rebasing of this repository on the `rococo-v1` branch.
-* Sanity check: The genesis state is printed when starting the collator. Make sure it matches the one from the `genesis.state` file.
+
+* Don't forget to enable file upload if you perform drag and drop for the `genesisHead` and `validationCode`. If it is
+  not enabled, Polkadot-js will interpret the path as a string and won't complain but the registration will fail.
+* Don't forget to add the argument `--chain encointer-rococo` for the custom chain config. This argument is omitted in
+  the [Cumulus Workshop](https://substrate.dev/cumulus-workshop/).
+* The relay chain and the collator need to be about equally recent. This might require frequent rebasing of this
+  repository on the `rococo-v1` branch.
+* Sanity check: The genesis state is printed when starting the collator. Make sure it matches the one from the
+  `genesis.state` file.
 
 ## Test state migrations on live data
+
 Compile the node with
 
 ```bash
@@ -122,36 +138,45 @@ Then run the state migrations with live data from the encointer-kusama parachain
 ```
 
 ## Benchmark the runtimes
+
 In `./scripts` we have two scripts for benchmarking the runtimes.
 
 ### Current benchmark
+
 The current weights have been benchmarked with the following reference hardware:
 
     2.3 GHz 8-Core Intel Core i9
     16 GB 2400 MHz DDR4
 
 ### Running benchmark
+
 1. Compile the node with: `cargo build --release --features runtime-benchmarks`
 2. run: `./scripts/benchmark_launch_runtime.sh` and `./scripts/benchmark_encointer_runtime.sh`.
 3. If changed, update the reference hardware above.
 
 ### Adding new pallets to be benchmarked
+
 Every pallet with a `type WeightInfo` parameter in its config must be benchmarked.
 
 1. [Cargo.toml] add `<new_pallet>/runtime-benchmarks` in the `runtime-benchmarks` feature section.
 2. [runtime] Add the new pallet to be benchmarked to the `define_benchmarks!` macro in the runtime.
 3. Run the benchmark as advised above.
 4. [runtime/src/weights] add the new file to the modules
-4. [runtime] replace the placeholder `type WeightInfo = ()` with `type WeightInfo = weights::<new_pallet>::WeightInfo<Runtime>`
+4. [runtime] replace the placeholder `type WeightInfo = ()` with
+   `type WeightInfo = weights::<new_pallet>::WeightInfo<Runtime>`
 
 ### Update hardcoded chain-specs
+
 We have some hardcoded chain-specs to be sure that independent binaries can work with the same `genesis_hash`. However,
-sometimes we need to update the nodes' (i.e. the client's) spec, when we perform a substrate update. The following script
+sometimes we need to update the nodes' (i.e. the client's) spec, when we perform a substrate update. The following
+script
 creates new hard-coded chain-specs while migrating relevant data.
 
 `./scripts/update_hardcoded_chain_specs.py --migrate-genesis`
 
-
 ### More Resources
-* Thorough Readme about Rococo and Collators in general in the original [repository](https://github.com/paritytech/cumulus) of this fork.
-* Parachains on Rococo in the [Polkadot Wiki](https://wiki.polkadot.network/docs/en/build-parachains-rococo#rococo-v1-parachain-requirements)
+
+* Thorough Readme about Rococo and Collators in general in the
+  original [repository](https://github.com/paritytech/cumulus) of this fork.
+* Parachains on Rococo in
+  the [Polkadot Wiki](https://wiki.polkadot.network/docs/en/build-parachains-rococo#rococo-v1-parachain-requirements)
