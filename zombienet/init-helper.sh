@@ -22,74 +22,34 @@ function ensure_binaries() {
     echo "*** All required binaries are present"
 }
 
-#function ensure_polkadot_js_api() {
-#    echo "*** Checking for required polkadot-js-api"
-#    if ! which polkadot-js-api &>/dev/null; then
-#        echo ''
-#        echo 'Required command `polkadot-js-api` not in PATH, please, install, e.g.:'
-#        echo "npm install -g @polkadot/api-cli"
-#        echo "      or"
-#        echo "yarn global add @polkadot/api-cli"
-#        echo ''
-#        exit 1
-#    fi
-#}
-#
-#function open_hrmp_channels() {
-#    local relay_url=$1
-#    local relay_chain_seed=$2
-#    local sender_para_id=$3
-#    local recipient_para_id=$4
-#    local max_capacity=$5
-#    local max_message_size=$6
-#    echo "  calling open_hrmp_channels:"
-#    echo "      relay_url: ${relay_url}"
-#    echo "      relay_chain_seed: ${relay_chain_seed}"
-#    echo "      sender_para_id: ${sender_para_id}"
-#    echo "      recipient_para_id: ${recipient_para_id}"
-#    echo "      max_capacity: ${max_capacity}"
-#    echo "      max_message_size: ${max_message_size}"
-#    echo "      params:"
-#    echo "--------------------------------------------------"
-#    polkadot-js-api \
-#        --ws "${relay_url?}" \
-#        --seed "${relay_chain_seed?}" \
-#        --sudo \
-#        tx.hrmp.forceOpenHrmpChannel \
-#        ${sender_para_id} \
-#        ${recipient_para_id} \
-#        ${max_capacity} \
-#        ${max_message_size}
-#}
-
 # Check for binaries
 ensure_binaries
 
 # Check for polkadot-js-api cli
 ensure_polkadot_js_api
 
-## HRMP: NCTR - Asset Hub
-#open_hrmp_channels \
-#    "ws://127.0.0.1:9999" \
-#    "//Alice" \
-#    1003 1000 4 524288
-#
-## HRMP: Asset Hub - NCTR
-#open_hrmp_channels \
-#    "ws://127.0.0.1:9999" \
-#    "//Alice" \
-#    1000 1003 4 524288
-#
-## create USDC.p asset with Alice as owner
-#force_create_foreign_asset \
-#    "ws://127.0.0.1:9999" \
-#    "//Alice" \
-#    1000 \
-#    "ws://127.0.0.1:9010" \
-#    "$(jq --null-input '{ "parents": 2, "interior": { "X4": [ { "GlobalConsensus": "Polkadot" }, { "Parachain": 1000 }, { "PalletInstance": 50 }, { "GeneralIndex": 1337 } ] } }')" \
-#    "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY" \
-#    10000 \
-#    true
+# HRMP: NCTR - Asset Hub
+open_hrmp_channels \
+    "ws://127.0.0.1:9999" \
+    "//Alice" \
+    1003 1000 4 524288
+
+# HRMP: Asset Hub - NCTR
+open_hrmp_channels \
+    "ws://127.0.0.1:9999" \
+    "//Alice" \
+    1000 1003 4 524288
+
+# create USDC.p asset with Alice as owner
+force_create_foreign_asset \
+    "ws://127.0.0.1:9999" \
+    "//Alice" \
+    1000 \
+    "ws://127.0.0.1:9010" \
+    "$(jq --null-input '{ "parents": 2, "interior": { "X4": [ { "GlobalConsensus": "Polkadot" }, { "Parachain": 1000 }, { "PalletInstance": 50 }, { "GeneralIndex": 1337 } ] } }')" \
+    "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY" \
+    10000 \
+    true
 
 # set metadata for USDC.p asset
 polkadot-js-api \
@@ -134,4 +94,3 @@ polkadot-js-api \
     tx.balances.transferKeepAlive \
     "FyioZqQFj4MJ6YZtmvadKp2bGvffNZKArqUymMUVmpdHEFQ" \
     12000000000000
-
