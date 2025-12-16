@@ -23,10 +23,11 @@ validator = true
 rpc_port = 9977
 
 [[parachains]]
-id = 1003
+# has to be 1001, that's why we mix encointer-kusama with rococo
+id = 1001
 addToGenesis = true
 cumulus_based = true
-chain = "encointer-rococo-local-dev"
+chain = "encointer-kusama-local-dev"
 
 [[parachains.collators]]
 name = "encointer-collator01"

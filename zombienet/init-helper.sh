@@ -32,13 +32,13 @@ ensure_polkadot_js_api
 open_hrmp_channels \
     "ws://127.0.0.1:9999" \
     "//Alice" \
-    1003 1000 4 524288
+    1001 1000 4 524288
 
 # HRMP: Asset Hub - NCTR
 open_hrmp_channels \
     "ws://127.0.0.1:9999" \
     "//Alice" \
-    1000 1003 4 524288
+    1000 1001 4 524288
 
 # create USDC.p asset with Alice as owner
 force_create_foreign_asset \
@@ -94,3 +94,11 @@ polkadot-js-api \
     tx.balances.transferKeepAlive \
     "FyioZqQFj4MJ6YZtmvadKp2bGvffNZKArqUymMUVmpdHEFQ" \
     12000000000000
+
+# put 1 KSM into MTA treasury on AH. enough to pay fees
+polkadot-js-api \
+    --ws "ws://127.0.0.1:9010" \
+    --seed "//Alice" \
+    tx.balances.transferKeepAlive \
+    "Cpm6kN65xUxgxn5s1F4Sszo3ux5qQNoX6LW7qGBpy48CDCD" \
+    1000000000000
