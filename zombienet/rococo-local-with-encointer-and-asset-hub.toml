@@ -1,0 +1,65 @@
+[settings]
+timeout = 10000
+
+[relaychain]
+default_command = "~/bin/polkadot"
+default_args = ["-lparachain=debug,xcm=trace"]
+
+chain = "rococo-local"
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+rpc_port = 9999
+
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+rpc_port = 9988
+
+[[relaychain.nodes]]
+name = "charlie"
+validator = true
+rpc_port = 9977
+
+[[parachains]]
+# has to be 1001, that's why we mix encointer-kusama with rococo
+id = 1001
+addToGenesis = true
+cumulus_based = true
+chain = "encointer-kusama-local-dev"
+
+[[parachains.collators]]
+name = "encointer-collator01"
+command = "./target/release/encointer-collator"
+args = [
+    "--unsafe-rpc-external",
+    "--enable-offchain-indexing=true",
+    "-lencointer=debug,xcm=trace",
+    "--pool-type=fork-aware"
+]
+rpc_port = 9944
+
+[[parachains.collators]]
+name = "encointer-collator02"
+command = "~/bin/polkadot-omni-node"
+args = [
+    "--pool-type=fork-aware"
+]
+rpc_port = 9945
+
+[[parachains]]
+id = 1000
+chain = "asset-hub-rococo-local"
+cumulus_based = true
+
+[[parachains.collators]]
+name = "asset-hub-rococo-collator-1"
+rpc_port = 9010
+command = "~/bin/polkadot-parachain"
+args = ["-lparachain=debug,xcm=trace,runtime::bridge-transfer=trace"]
+
+[[parachains.collators]]
+name = "asset-hub-rococo-collator-2"
+command = "~/bin/polkadot-parachain"
+args = ["-lparachain=debug,xcm=trace,runtime::bridge-transfer=trace"]
