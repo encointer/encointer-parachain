@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Helper script to open HRMP channels between Encointer and Asset Hub.
 # This script is meant to be run after the relay chain and parachains are spawned.
 
@@ -28,19 +30,19 @@ ensure_binaries
 # Check for polkadot-js-api cli
 ensure_polkadot_js_api
 
-# HRMP: NCTR - Asset Hub
+echo "*** Opening HRMP: NCTR -> Asset Hub channel"
 open_hrmp_channels \
     "ws://127.0.0.1:9999" \
     "//Alice" \
     1001 1000 4 524288
 
-# HRMP: Asset Hub - NCTR
+echo "*** Opening HRMP: Asset Hub -> NCTR channel"
 open_hrmp_channels \
     "ws://127.0.0.1:9999" \
     "//Alice" \
     1000 1001 4 524288
 
-# create USDC.p asset with Alice as owner
+echo "*** Creating USDC.p asset with Alice as owner"
 force_create_foreign_asset \
     "ws://127.0.0.1:9999" \
     "//Alice" \
@@ -51,7 +53,7 @@ force_create_foreign_asset \
     10000 \
     true
 
-# set metadata for USDC.p asset
+echo "*** Set metadata for USDC.p asset"
 polkadot-js-api \
     --ws "ws://127.0.0.1:9010" \
     --seed "//Alice" \
@@ -61,7 +63,7 @@ polkadot-js-api \
     "USDC" \
     6
 
-# mint 2M USDC to Alice
+echo "*** Minting 2M USDC to Alice"
 polkadot-js-api \
     --ws "ws://127.0.0.1:9010" \
     --seed "//Alice" \
@@ -70,7 +72,7 @@ polkadot-js-api \
     "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY" \
     2000000000000
 
-# mint 1001 USDC to MTA treasury
+echo "*** Minting 1001 USDC to MTA treasury"
 polkadot-js-api \
     --ws "ws://127.0.0.1:9010" \
     --seed "//Alice" \
@@ -79,7 +81,8 @@ polkadot-js-api \
     "Cpm6kN65xUxgxn5s1F4Sszo3ux5qQNoX6LW7qGBpy48CDCD" \
     1001000000
 
-# put 1234 KSM into local MTA community treasury on NCTR. (use runtime API treasuriesApi to find accountId)
+echo "*** Putting 1234 KSM into local MTA community treasury on NCTR."
+# (use runtime API treasuriesApi to find accountId)
 polkadot-js-api \
     --ws "ws://127.0.0.1:9944" \
     --seed "//Alice" \
@@ -87,7 +90,8 @@ polkadot-js-api \
     "D2RGN78sWWAYZPRxJCZregQ58PHqq68QrSg9CgEuwC1Jkic" \
     1234000000000000
 
- # put 12 KSM into global treasury on NCTR. (use runtime API treasuriesApi to find accountId)
+echo "*** Putting 12 KSM into global treasury on NCTR."
+# (use runtime API treasuriesApi to find accountId)
 polkadot-js-api \
     --ws "ws://127.0.0.1:9944" \
     --seed "//Alice" \
@@ -95,7 +99,7 @@ polkadot-js-api \
     "FyioZqQFj4MJ6YZtmvadKp2bGvffNZKArqUymMUVmpdHEFQ" \
     12000000000000
 
-# put 1 KSM into MTA treasury on AH. enough to pay fees
+echo "*** Put 1 KSM into MTA treasury on AH (enough to pay fees)."
 polkadot-js-api \
     --ws "ws://127.0.0.1:9010" \
     --seed "//Alice" \
