@@ -22,74 +22,73 @@ serde_json = { version = "1.0.127", features = ["arbitrary_precision"] }
 tempfile = "3.8.1"
 
 # encointer deps
-encointer-balances-tx-payment = { default-features = false, version = "~20.1.0" }
-encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "~20.1.0" }
-pallet-encointer-bazaar = { default-features = false, version = "~20.1.0" }
-pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "~20.1.0" }
-pallet-encointer-ceremonies = { default-features = false, version = "~20.1.0" }
-pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~20.1.0" }
-pallet-encointer-communities = { default-features = false, version = "~20.1.0" }
-pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~20.1.0" }
-pallet-encointer-treasuries = { default-features = false, version = "~20.7.0" }
-pallet-encointer-treasuries-rpc-runtime-api = { default-features = false, version = "~20.3.0" }
+encointer-balances-tx-payment = { default-features = false, version = "~21.1.0" }
+encointer-balances-tx-payment-rpc-runtime-api = { default-features = false, version = "~21.1.0" }
+pallet-encointer-bazaar = { default-features = false, version = "~21.1.0" }
+pallet-encointer-bazaar-rpc-runtime-api = { default-features = false, version = "~21.1.0" }
+pallet-encointer-ceremonies = { default-features = false, version = "~21.1.0" }
+pallet-encointer-ceremonies-rpc-runtime-api = { default-features = false, version = "~21.1.0" }
+pallet-encointer-communities = { default-features = false, version = "~21.1.0" }
+pallet-encointer-communities-rpc-runtime-api = { default-features = false, version = "~21.1.0" }
+pallet-encointer-treasuries = { default-features = false, version = "~21.7.0" }
+pallet-encointer-treasuries-rpc-runtime-api = { default-features = false, version = "~21.3.0" }
 # rpc [std]
-pallet-encointer-bazaar-rpc = "~20.1.0"
-pallet-encointer-ceremonies-rpc = "~20.1.0"
-pallet-encointer-communities-rpc = "~20.1.0"
-pallet-encointer-treasuries-rpc = "~20.3.0"
-encointer-balances-tx-payment-rpc = "~20.1.0"
+pallet-encointer-bazaar-rpc = "~21.1.0"
+pallet-encointer-ceremonies-rpc = "~21.1.0"
+pallet-encointer-communities-rpc = "~21.1.0"
+pallet-encointer-treasuries-rpc = "~21.3.0"
+encointer-balances-tx-payment-rpc = "~21.1.0"
 
 # fellowship runtimes. do not depend on fellow-runtimes directly, so we can upgrade at our own pace
-# Todo: Switch back to main branch once fast-runtime is merged to master
-parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "cl/fast-encointer-runtime" }
+parachain-runtime = { package = "encointer-kusama-runtime", git = "https://github.com/encointer/runtimes.git", branch = "cl/bump-psdk-and-encointer-to-2512" }
 
 # polkadot-sdk [no_std]
-cumulus-primitives-core = { version = "0.20.0", default-features = false }
-frame-benchmarking = { version = "42.0.0", default-features = false }
-pallet-transaction-payment = { version = "42.0.0", default-features = false }
-parachains-common = { version = "24.0.0", default-features = false }
-sp-api = { version = "38.0.0", default-features = false }
-sp-block-builder = { version = "38.0.0", default-features = false }
-sp-consensus-aura = { version = "0.44.0", default-features = false }
-sp-core = { version = "38.0.0", default-features = false }
-sp-runtime = { version = "43.0.0", default-features = false }
-xcm = { version = "18.0.0", package = "staging-xcm", default-features = false }
+cumulus-primitives-core = { version = "0.23.0", default-features = false }
+frame-benchmarking = { version = "45.0.1", default-features = false }
+pallet-transaction-payment = { version = "45.0.0", default-features = false }
+parachains-common = { version = "27.1.0", default-features = false }
+sp-api = { version = "40.0.0", default-features = false }
+sp-block-builder = { version = "40.0.0", default-features = false }
+sp-consensus-aura = { version = "0.46.0", default-features = false }
+sp-core = { version = "39.0.0", default-features = false }
+sp-runtime = { version = "45.0.0", default-features = false }
+xcm = { version = "21.0.0", package = "staging-xcm", default-features = false }
 
 # std stuff
-cumulus-client-bootnodes = "0.4.0"
-cumulus-client-cli = "0.25.0"
-cumulus-client-collator = "0.25.0"
-cumulus-client-consensus-aura = "0.25.0"
-cumulus-client-consensus-common = "0.25.0"
-cumulus-client-consensus-proposer = "0.21.0"
-cumulus-client-service = "0.27.0"
-cumulus-relay-chain-interface = "0.25.0"
-frame-benchmarking-cli = "50.0.0"
-pallet-transaction-payment-rpc = "45.0.0"
-polkadot-cli = "27.0.0"
-polkadot-service = "27.0.0"
-sc-basic-authorship = "0.51.0"
-sc-chain-spec = "45.0.0"
-sc-cli = "0.54.0"
-sc-client-api = "41.0.0"
-sc-consensus = "0.51.0"
-sc-executor = "0.44.0"
-sc-network = "0.52.0"
-sc-offchain = "47.0.0"
-sc-service = "0.53.0"
-sc-sysinfo = "44.0.0"
+cumulus-client-bootnodes = "0.7.0"
+cumulus-client-cli = "0.28.0"
+cumulus-client-collator = "0.28.0"
+cumulus-client-consensus-aura = "0.28.0"
+cumulus-client-consensus-common = "0.28.0"
+cumulus-client-consensus-proposer = "0.24.0"
+cumulus-client-service = "0.31.0"
+cumulus-relay-chain-interface = "0.28.0"
+frame-benchmarking-cli = "53.0.0"
+pallet-transaction-payment-rpc = "48.0.0"
+polkadot-cli = "31.0.0"
+polkadot-service = "31.0.0"
+sc-basic-authorship = "0.53.0"
+sc-chain-spec = "48.0.0"
+sc-cli = "0.57.0"
+sc-client-api = "44.0.0"
+sc-consensus = "0.54.0"
+sc-executor = "0.47.0"
+sc-network = "0.55.1"
+sc-offchain = "50.0.0"
+sc-service = "0.56.0"
+sc-sysinfo = "46.0.0"
 sc-telemetry = "30.0.0"
-sc-tracing = "41.0.0"
-sc-transaction-pool = "41.0.0"
-sc-transaction-pool-api = "41.0.0"
-sp-blockchain = "41.0.0"
-sp-consensus = "0.44.0"
-sp-keyring = "43.0.0"
-sp-keystore = "0.44.0"
-sp-timestamp = "38.0.0"
+sc-tracing = "44.0.0"
+sc-transaction-pool = "44.1.0"
+sc-transaction-pool-api = "43.0.0"
+sp-blockchain = "43.0.0"
+sp-consensus = "0.46.0"
+sp-keyring = "45.0.0"
+sp-keystore = "0.45.0"
+sp-timestamp = "40.0.0"
 substrate-build-script-utils = "11.0.0"
-substrate-frame-rpc-system = "46.0.0"
-prometheus-endpoint = { version = "0.17.2", package = "substrate-prometheus-endpoint" }
+substrate-frame-rpc-system = "49.0.0"
+prometheus-endpoint = { version = "0.17.7", package = "substrate-prometheus-endpoint" }
 
 # ### only while debugging/developping
 # [patch."https://github.com/encointer/runtimes"]
