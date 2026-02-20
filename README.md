@@ -70,11 +70,11 @@ era starts.
 ```bash
 git clone https://github.com/encointer/encointer-node.git
 cargo build --release
-./target/release/encointer-client-notee -p 9946 get-phase
+./target/release/encointer-cli -p 9946 ceremony phase
 # should print the phase
-./target/release/encointer-client-notee -p 9946 next-phase
+./target/release/encointer-cli -p 9946 ceremony next-phase
 # should progress phase
-./target/release/encointer-client-notee -p 9946 list-communities
+./target/release/encointer-cli -p 9946 community list
 # should print 0 communities, if `--enable-offchain-indexing` is `true` or panic otherwise
 
 ```

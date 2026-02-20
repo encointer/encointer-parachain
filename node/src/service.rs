@@ -15,11 +15,10 @@ use cumulus_client_collator::service::CollatorService;
 #[docify::export(lookahead_collator)]
 use cumulus_client_consensus_aura::collators::lookahead::{self as aura, Params as AuraParams};
 use cumulus_client_consensus_common::ParachainBlockImport as TParachainBlockImport;
-use cumulus_client_consensus_proposer::Proposer;
 use cumulus_client_service::{
 	build_network, build_relay_chain_interface, prepare_node_config, start_relay_chain_tasks,
 	BuildNetworkParams, CollatorSybilResistance, DARecoveryProfile, ParachainHostFunctions,
-	StartRelayChainTasksParams,
+	ParachainTracingExecuteBlock, StartRelayChainTasksParams,
 };
 #[docify::export(cumulus_primitives)]
 use cumulus_primitives_core::{
@@ -34,7 +33,7 @@ use prometheus_endpoint::Registry;
 use sc_client_api::Backend;
 use sc_consensus::ImportQueue;
 use sc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
-use sc_network::{NetworkBackend, NetworkBlock};
+use sc_network::{NetworkBackend, NetworkBlock, PeerId};
 use sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
 use sc_transaction_pool_api::OffchainTransactionPoolFactory;
@@ -180,6 +179,7 @@ fn start_consensus(
 	relay_chain_slot_duration: Duration,
 	para_id: ParaId,
 	collator_key: CollatorPair,
+	collator_peer_id: PeerId,
 	overseer_handle: OverseerHandle,
 	announce_block: Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>,
 ) -> Result<(), sc_service::Error> {
@@ -190,8 +190,6 @@ fn start_consensus(
 		prometheus_registry,
 		telemetry.clone(),
 	);
-
-	let proposer = Proposer::new(proposer_factory);
 
 	let collator_service = CollatorService::new(
 		client.clone(),
@@ -211,10 +209,11 @@ fn start_consensus(
 		},
 		keystore,
 		collator_key,
+		collator_peer_id,
 		para_id,
 		overseer_handle,
 		relay_chain_slot_duration,
-		proposer,
+		proposer: proposer_factory,
 		collator_service,
 		authoring_duration: Duration::from_millis(2000),
 		reinitialize: false,
@@ -373,6 +372,7 @@ pub async fn start_parachain_node(
 		system_rpc_tx,
 		tx_handler_controller,
 		telemetry: telemetry.as_mut(),
+		tracing_execute_block: Some(Arc::new(ParachainTracingExecuteBlock::new(client.clone()))),
 	})?;
 
 	if let Some(hwbench) = hwbench {
@@ -429,6 +429,8 @@ pub async fn start_parachain_node(
 		prometheus_registry: prometheus_registry.as_ref(),
 	})?;
 
+	let local_peer_id = network.local_peer_id();
+
 	start_bootnode_tasks(StartBootnodeTasksParams {
 		embedded_dht_bootnode: collator_options.embedded_dht_bootnode,
 		dht_bootnode_discovery: collator_options.dht_bootnode_discovery,
@@ -440,7 +442,7 @@ pub async fn start_parachain_node(
 		request_receiver: paranode_rx,
 		parachain_network: network,
 		advertise_non_global_ips,
-		parachain_genesis_hash: client.chain_info().genesis_hash,
+		parachain_genesis_hash: client.chain_info().genesis_hash.as_ref().to_vec(),
 		parachain_fork_id,
 		parachain_public_addresses,
 	});
@@ -459,6 +461,7 @@ pub async fn start_parachain_node(
 			relay_chain_slot_duration,
 			para_id,
 			collator_key.expect("Command line arguments do not allow this. qed"),
+			local_peer_id,
 			overseer_handle,
 			announce_block,
 		)?;
