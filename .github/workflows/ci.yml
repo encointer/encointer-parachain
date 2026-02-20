@@ -41,8 +41,8 @@ jobs:
       RELEASE_NAME: debug
     steps:
       - uses: actions/checkout@v4
-      - name: Install protoc
-        run: sudo apt-get install protobuf-compiler
+      - name: Install system dependencies
+        run: sudo apt-get install -y protobuf-compiler libclang-dev
 
       - name: Print env
         run: |
