@@ -157,8 +157,8 @@ jobs:
             # needs_phase_and_faucet: true
     env:
       ZOMBIENET_VERSION: v1.3.133
-      POLKADOT_VERSION: polkadot-stable2506
-      ENCOINTER_CLIENT_DOCKER_TAG: 1.16.2
+      POLKADOT_VERSION: polkadot-stable2512-1
+      ENCOINTER_CLIENT_DOCKER_TAG: 1.21.2
     steps:
       - uses: actions/checkout@v4
 
@@ -207,7 +207,7 @@ jobs:
           docker run -p 5000:5000 \
             -e PYTHONUNBUFFERED=1 \
             --add-host host.docker.internal:host-gateway \
-            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} faucet.py \
+            encointer/encointer-cli:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} faucet.py \
             -u ws://host.docker.internal \
             --port 9944 &
 
@@ -218,7 +218,7 @@ jobs:
           docker run \
             -e PYTHONUNBUFFERED=1 \
             --add-host host.docker.internal:host-gateway \
-            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} phase.py \
+            encointer/encointer-cli:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} phase.py \
             -u ws://host.docker.internal \
             --port 9944 --idle-blocks 5 &
 
@@ -227,7 +227,7 @@ jobs:
           docker run \
             -e PYTHONUNBUFFERED=1 \
             --add-host host.docker.internal:host-gateway \
-            encointer/encointer-client-notee:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} ${{ matrix.test }} \
+            encointer/encointer-cli:${{ env.ENCOINTER_CLIENT_DOCKER_TAG }} ${{ matrix.test }} \
             -u ws://host.docker.internal \
             --port 9944 \
 
